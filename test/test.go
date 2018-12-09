@@ -19,9 +19,8 @@ func Formula(f string) (res float64) {
 }
 
 func formula(data []string) (res float64, level int) {
-	ln := len(data)
-	for i := 0; i < ln; i++ {
-		if ln < i+2 {
+	for i := 0; i < len(data); i++ {
+		if len(data) < i+2 {
 			break
 		}
 		switch data[i] {
