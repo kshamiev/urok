@@ -3,6 +3,15 @@
 // точка входа в программу
 package main
 
+import (
+	"fmt"
+	_ "urok/pkg"
+)
+
+func init() {
+	fmt.Println("main")
+}
+
 func main() {
 
 }

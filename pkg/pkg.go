@@ -1,5 +1,5 @@
 // пример инициализации программы во время запуска программы
-package sampleinit
+package pkg
 
 import (
 	"fmt"
@@ -10,8 +10,8 @@ import (
 // (последний вложенный пакет первым и первый вложенный последним)
 // перед входом в функцию main
 func init() {
-	fmt.Println("sampleinit")
 	fmt.Println(Num)
+	fmt.Println("_ import pkg\n")
 }
 
 var Num = int64(254)
