@@ -102,20 +102,16 @@ func sampleSWITCH() {
 
 // LABEL
 func sampleLABEL() {
-
-MyLopp:
 	for _, v := range HashControl {
-
 		switch {
 		case v == "yuiop11":
 			fmt.Println("switch qqqq, yuiop11 OK")
-			break MyLopp // выход будет на следующую команду после цикла FOR (то есть на следующий оператор после label)
+			goto MyLopp // выход будет на следующую команду после цикла FOR (то есть на следующий оператор после label)
 		case v == "fffff":
 			fmt.Println("switch fffff OK")
 		default:
 			fmt.Println("switch default OK")
 		}
-
 	}
-
+MyLopp:
 }
