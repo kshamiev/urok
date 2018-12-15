@@ -5,54 +5,69 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"gopkg.in/kshamiev/sungora.v2/lg"
+
+	"accounter/models"
+	"gopkg.in/sungora/app.v1/core"
+	"gopkg.in/sungora/app.v1/lg"
 )
 
 func main() {
-	db, err := gorm.Open("mysql", "root:root@/world?charset=utf8&parseTime=True&loc=Local")
+	var err error
+	core.DB, err = gorm.Open("mysql", "service:GeFI4613qBfm@tcp(db-ug.hostkey.ru:3306)/service?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
-		lg.Dumper(db, err.Error())
+		lg.Dumper(err.Error())
 	}
-	defer db.Close()
+	defer core.DB.Close()
 
-	//db.CreateTable(&User{})
+	s := models.NewService(12)
+
+	test := s.UpdatedAt.Add(time.Duration(20) * time.Hour)
+
+	//err = core.DB.Model(s).Update("updated_at", test).Error
+	err = core.DB.Model(s).UpdateColumn("updated_at", test).Error
+	err = core.DB.Model(s).UpdateColumn("deleted_at", test).Error
+	lg.Dumper(err)
+	// err = core.DB.Model(s).Updates(map[string]interface{}{"billing_code": "RU", "updated_at": test}).Error
+	//lg.Dumper(err)
+
+	// db.CreateTable(&User{})
 
 	// create
-	//u := new(User)
-	//u.Name = "Вася 1"
-	//u.Age = 2365
-	//u.Birthday = time.Now().Add(time.Hour * 5)
-	//u.Description = "Описание 1"
-	//lg.Dumper(u)
+	// u := new(User)
+	// u.Name = "Вася 1"
+	// u.Age = 2365
+	// u.Birthday = time.Now().Add(time.Hour * 5)
+	// u.Description = "Описание 1"
+	// lg.Dumper(u)
 	// db.Create(u)
-	//db.Table("users_copy").Create(u)
-	//lg.Dumper(u)
+	// db.Table("users_copy").Create(u)
+	// lg.Dumper(u)
 
 	// QUERY
 
 	// ORM
-	//var users []*User
-	//err = db.Find(&users, "name = ? AND ID >= ?", "Вася", 3).Error
-	//lg.Dumper(users, err)
+	// var users []*User
+	// err = db.Find(&users, "name = ? AND ID >= ?", "Вася", 3).Error
+	// lg.Dumper(users, err)
 
-	//var users []*User
-	//var count int32
-	//err = db.Select("id, name").Table("users_copy").Where("ID > ?", 1056).Order("ID ASC").Limit(2).Find(&users).Error
-	//err = db.Select("id, name").Table("users_copy").Where("ID > ?", 10).Order("ID ASC").Find(&users).Count(&count).Error
-	//err = db.Select("id, name").Where("ID > ?", 10).Order("ID ASC").Find(&users).Count(&count).Error
-	//lg.Dumper(users, count, err)
+	// var users []*User
+	// var count int32
+	// err = db.Select("id, name").Table("users_copy").Where("ID > ?", 1056).Order("ID ASC").Limit(2).Find(&users).Error
+	// err = db.Select("id, name").Table("users_copy").Where("ID > ?", 10).Order("ID ASC").Find(&users).Count(&count).Error
+	// err = db.Select("id, name").Where("ID > ?", 10).Order("ID ASC").Find(&users).Count(&count).Error
+	// lg.Dumper(users, count, err)
 
 	// получение только количества записей
-	//var count1 int32
-	//err = db.Model(&User{}).Count(&count1).Error
-	//lg.Dumper(count1, err)
-	//err = db.Table("users_copy").Count(&count1).Error
-	//lg.Dumper(count1, err)
+	// var count1 int32
+	// err = db.Model(&User{}).Count(&count1).Error
+	// lg.Dumper(count1, err)
+	// err = db.Table("users_copy").Count(&count1).Error
+	// lg.Dumper(count1, err)
 
 	// если нужно получить данные из одной колонки в срез
-	//var names []string
-	//db.Model(&User{}).Pluck("name", &names)
-	//lg.Dumper(names)
+	// var names []string
+	// db.Model(&User{}).Pluck("name", &names)
+	// lg.Dumper(names)
 
 	// если нужно создать объект с учетом наличия его в БД по условиям
 	// var user User
@@ -61,18 +76,18 @@ func main() {
 	// lg.Dumper(user)
 
 	// Raw SQL 1
-	//type Result struct {
-	//	Name string
-	//	Age  int
-	//}
-	//var result []Result
-	//db.Select("name, age").Table("users").Where("name = ?", "Вася").Scan(&result)
-	//lg.Dumper(result, err)
+	// type Result struct {
+	// 	Name string
+	// 	Age  int
+	// }
+	// var result []Result
+	// db.Select("name, age").Table("users").Where("name = ?", "Вася").Scan(&result)
+	// lg.Dumper(result, err)
 
 	// Raw SQL 2
-	//var users []*User
-	//db.Raw("SELECT c.name, c.age FROM users as c WHERE c.name = ?", "Вася").Scan(&users)
-	//lg.Dumper(users)
+	// var users []*User
+	// db.Raw("SELECT c.name, c.age FROM users as c WHERE c.name = ?", "Вася").Scan(&users)
+	// lg.Dumper(users)
 
 	// транзакции
 	// db.Set("gorm:query_option", "FOR UPDATE").First(&user, 10)
@@ -80,7 +95,7 @@ func main() {
 }
 
 type User struct {
-	//	gorm.Model
+	// 	gorm.Model
 	ID          uint64    `gorm:"primary_key"`
 	Name        string    `gorm:"default:NULL"`                      // если значение может быть NULL
 	Age         int64     ``                                         // если ничего - для форматирвоания
