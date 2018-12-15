@@ -10,9 +10,8 @@ var arr2 = [...]int{3, 5, 6, 7, 9} // вместо точек можно нап�
 
 func main() {
 	arr0[2] = 999
-	arr3 := [...]int{3, 5, 6, 7, 9}
 
-	fmt.Println(arr0, arr1, arr2, arr3)
+	fmt.Println(arr0, arr1, arr2)
 
 	sampleArr(arr1)
 	fmt.Println(arr1)
