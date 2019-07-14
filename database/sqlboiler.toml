@@ -1,0 +1,13 @@
+[psql]
+dbname = "funtik"
+user = "postgres"
+pass = "postgres"
+host = "localhost"
+
+[mysql]
+dbname  = "test"
+host    = "localhost"
+port    = 3306
+user    = "root"
+pass    = "root"
+sslmode = "false"
