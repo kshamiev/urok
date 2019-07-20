@@ -9,5 +9,16 @@ dbname  = "test"
 host    = "localhost"
 port    = 3306
 user    = "root"
-pass    = "root"
+pass    = "qwerty"
 sslmode = "false"
+
+[[types]]
+
+[types.match]
+full_db_type = "binary(16)"
+
+[types.replace]
+type = "types.UUID"
+
+[types.imports]
+third_party = ['"urok/database/types"']
