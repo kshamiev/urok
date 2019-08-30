@@ -4,11 +4,13 @@
 package most
 
 var TableNames = struct {
-	Customers      string
-	CustomersRoles string
-	Roles          string
+	Orders     string
+	Roles      string
+	Users      string
+	UsersRoles string
 }{
-	Customers:      "customers",
-	CustomersRoles: "customers_roles",
-	Roles:          "roles",
+	Orders:     "orders",
+	Roles:      "roles",
+	Users:      "users",
+	UsersRoles: "users_roles",
 }

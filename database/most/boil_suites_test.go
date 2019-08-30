@@ -12,70 +12,85 @@ import "testing"
 // It does NOT run each operation group in parallel.
 // Separating the tests thusly grants avoidance of Postgres deadlocks.
 func TestParent(t *testing.T) {
-	t.Run("Customers", testCustomers)
+	t.Run("Orders", testOrders)
 	t.Run("Roles", testRoles)
+	t.Run("Users", testUsers)
 }
 
 func TestDelete(t *testing.T) {
-	t.Run("Customers", testCustomersDelete)
+	t.Run("Orders", testOrdersDelete)
 	t.Run("Roles", testRolesDelete)
+	t.Run("Users", testUsersDelete)
 }
 
 func TestQueryDeleteAll(t *testing.T) {
-	t.Run("Customers", testCustomersQueryDeleteAll)
+	t.Run("Orders", testOrdersQueryDeleteAll)
 	t.Run("Roles", testRolesQueryDeleteAll)
+	t.Run("Users", testUsersQueryDeleteAll)
 }
 
 func TestSliceDeleteAll(t *testing.T) {
-	t.Run("Customers", testCustomersSliceDeleteAll)
+	t.Run("Orders", testOrdersSliceDeleteAll)
 	t.Run("Roles", testRolesSliceDeleteAll)
+	t.Run("Users", testUsersSliceDeleteAll)
 }
 
 func TestExists(t *testing.T) {
-	t.Run("Customers", testCustomersExists)
+	t.Run("Orders", testOrdersExists)
 	t.Run("Roles", testRolesExists)
+	t.Run("Users", testUsersExists)
 }
 
 func TestFind(t *testing.T) {
-	t.Run("Customers", testCustomersFind)
+	t.Run("Orders", testOrdersFind)
 	t.Run("Roles", testRolesFind)
+	t.Run("Users", testUsersFind)
 }
 
 func TestBind(t *testing.T) {
-	t.Run("Customers", testCustomersBind)
+	t.Run("Orders", testOrdersBind)
 	t.Run("Roles", testRolesBind)
+	t.Run("Users", testUsersBind)
 }
 
 func TestOne(t *testing.T) {
-	t.Run("Customers", testCustomersOne)
+	t.Run("Orders", testOrdersOne)
 	t.Run("Roles", testRolesOne)
+	t.Run("Users", testUsersOne)
 }
 
 func TestAll(t *testing.T) {
-	t.Run("Customers", testCustomersAll)
+	t.Run("Orders", testOrdersAll)
 	t.Run("Roles", testRolesAll)
+	t.Run("Users", testUsersAll)
 }
 
 func TestCount(t *testing.T) {
-	t.Run("Customers", testCustomersCount)
+	t.Run("Orders", testOrdersCount)
 	t.Run("Roles", testRolesCount)
+	t.Run("Users", testUsersCount)
 }
 
 func TestHooks(t *testing.T) {
-	t.Run("Customers", testCustomersHooks)
+	t.Run("Orders", testOrdersHooks)
 	t.Run("Roles", testRolesHooks)
+	t.Run("Users", testUsersHooks)
 }
 
 func TestInsert(t *testing.T) {
-	t.Run("Customers", testCustomersInsert)
-	t.Run("Customers", testCustomersInsertWhitelist)
+	t.Run("Orders", testOrdersInsert)
+	t.Run("Orders", testOrdersInsertWhitelist)
 	t.Run("Roles", testRolesInsert)
 	t.Run("Roles", testRolesInsertWhitelist)
+	t.Run("Users", testUsersInsert)
+	t.Run("Users", testUsersInsertWhitelist)
 }
 
 // TestToOne tests cannot be run in parallel
 // or deadlocks can occur.
-func TestToOne(t *testing.T) {}
+func TestToOne(t *testing.T) {
+	t.Run("OrderToUserUsingUser", testOrderToOneUserUsingUser)
+}
 
 // TestOneToOne tests cannot be run in parallel
 // or deadlocks can occur.
@@ -84,17 +99,22 @@ func TestOneToOne(t *testing.T) {}
 // TestToMany tests cannot be run in parallel
 // or deadlocks can occur.
 func TestToMany(t *testing.T) {
-	t.Run("CustomerToRoles", testCustomerToManyRoles)
-	t.Run("RoleToCustomers", testRoleToManyCustomers)
+	t.Run("RoleToUsers", testRoleToManyUsers)
+	t.Run("UserToOrders", testUserToManyOrders)
+	t.Run("UserToRoles", testUserToManyRoles)
 }
 
 // TestToOneSet tests cannot be run in parallel
 // or deadlocks can occur.
-func TestToOneSet(t *testing.T) {}
+func TestToOneSet(t *testing.T) {
+	t.Run("OrderToUserUsingOrders", testOrderToOneSetOpUserUsingUser)
+}
 
 // TestToOneRemove tests cannot be run in parallel
 // or deadlocks can occur.
-func TestToOneRemove(t *testing.T) {}
+func TestToOneRemove(t *testing.T) {
+	t.Run("OrderToUserUsingOrders", testOrderToOneRemoveOpUserUsingUser)
+}
 
 // TestOneToOneSet tests cannot be run in parallel
 // or deadlocks can occur.
@@ -107,45 +127,53 @@ func TestOneToOneRemove(t *testing.T) {}
 // TestToManyAdd tests cannot be run in parallel
 // or deadlocks can occur.
 func TestToManyAdd(t *testing.T) {
-	t.Run("CustomerToRoles", testCustomerToManyAddOpRoles)
-	t.Run("RoleToCustomers", testRoleToManyAddOpCustomers)
+	t.Run("RoleToUsers", testRoleToManyAddOpUsers)
+	t.Run("UserToOrders", testUserToManyAddOpOrders)
+	t.Run("UserToRoles", testUserToManyAddOpRoles)
 }
 
 // TestToManySet tests cannot be run in parallel
 // or deadlocks can occur.
 func TestToManySet(t *testing.T) {
-	t.Run("CustomerToRoles", testCustomerToManySetOpRoles)
-	t.Run("RoleToCustomers", testRoleToManySetOpCustomers)
+	t.Run("RoleToUsers", testRoleToManySetOpUsers)
+	t.Run("UserToOrders", testUserToManySetOpOrders)
+	t.Run("UserToRoles", testUserToManySetOpRoles)
 }
 
 // TestToManyRemove tests cannot be run in parallel
 // or deadlocks can occur.
 func TestToManyRemove(t *testing.T) {
-	t.Run("CustomerToRoles", testCustomerToManyRemoveOpRoles)
-	t.Run("RoleToCustomers", testRoleToManyRemoveOpCustomers)
+	t.Run("RoleToUsers", testRoleToManyRemoveOpUsers)
+	t.Run("UserToOrders", testUserToManyRemoveOpOrders)
+	t.Run("UserToRoles", testUserToManyRemoveOpRoles)
 }
 
 func TestReload(t *testing.T) {
-	t.Run("Customers", testCustomersReload)
+	t.Run("Orders", testOrdersReload)
 	t.Run("Roles", testRolesReload)
+	t.Run("Users", testUsersReload)
 }
 
 func TestReloadAll(t *testing.T) {
-	t.Run("Customers", testCustomersReloadAll)
+	t.Run("Orders", testOrdersReloadAll)
 	t.Run("Roles", testRolesReloadAll)
+	t.Run("Users", testUsersReloadAll)
 }
 
 func TestSelect(t *testing.T) {
-	t.Run("Customers", testCustomersSelect)
+	t.Run("Orders", testOrdersSelect)
 	t.Run("Roles", testRolesSelect)
+	t.Run("Users", testUsersSelect)
 }
 
 func TestUpdate(t *testing.T) {
-	t.Run("Customers", testCustomersUpdate)
+	t.Run("Orders", testOrdersUpdate)
 	t.Run("Roles", testRolesUpdate)
+	t.Run("Users", testUsersUpdate)
 }
 
 func TestSliceUpdateAll(t *testing.T) {
-	t.Run("Customers", testCustomersSliceUpdateAll)
+	t.Run("Orders", testOrdersSliceUpdateAll)
 	t.Run("Roles", testRolesSliceUpdateAll)
+	t.Run("Users", testUsersSliceUpdateAll)
 }

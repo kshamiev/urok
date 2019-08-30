@@ -13,14 +13,21 @@ func main() {
 	obj.ID = 67
 	obj.Name = "Popcorn"
 	obj.Price = 56.78
+	obj.Control.ID = 6767
+	obj.Control.Name = "Popcorn control"
+	obj.Control.Price = 5556.78
+
 	obj.Calc()
 	obj.Design()
 	obj.Names()
+
+	Dumper("")
+
 	obj.Control.Calc()
 	obj.Control.Design()
 	obj.Control.Names()
 
-	Dumper()
+
 }
 
 type MyControl struct {
@@ -30,9 +37,8 @@ type MyControl struct {
 	Control
 }
 
-func (ctr MyControl) Names() {
+func (ctr *MyControl) Names() {
 	fmt.Println("Names", ctr.ID, ctr.Name, ctr.Price)
-	fmt.Println("Names", ctr.Control.ID, ctr.Control.Name, ctr.Control.Price)
 	fmt.Println("Names", ctr.Control.ID, ctr.Control.Name, ctr.Control.Price)
 }
 
@@ -46,11 +52,11 @@ func (ctr *Control) Design() {
 	fmt.Println("Design", ctr.ID, ctr.Name, ctr.Price)
 }
 
-func (ctr Control) Calc() {
+func (ctr *Control) Calc() {
 	fmt.Println("Calc", ctr.ID, ctr.Name, ctr.Price)
 }
 
-func (ctr Control) Names() {
+func (ctr *Control) Names() {
 	fmt.Println("Names", ctr.ID, ctr.Name, ctr.Price)
 }
 

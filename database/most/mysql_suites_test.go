@@ -6,7 +6,9 @@ package most
 import "testing"
 
 func TestUpsert(t *testing.T) {
-	t.Run("Customers", testCustomersUpsert)
+	t.Run("Orders", testOrdersUpsert)
 
 	t.Run("Roles", testRolesUpsert)
+
+	t.Run("Users", testUsersUpsert)
 }

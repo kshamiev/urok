@@ -5,11 +5,11 @@ pass = "postgres"
 host = "localhost"
 
 [mysql]
-dbname  = "test"
+dbname  = "sample"
 host    = "localhost"
 port    = 3306
 user    = "root"
-pass    = "qwerty"
+pass    = "omega_75"
 sslmode = "false"
 
 [[types]]

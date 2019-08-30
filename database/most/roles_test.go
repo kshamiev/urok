@@ -494,14 +494,14 @@ func testRolesInsertWhitelist(t *testing.T) {
 	}
 }
 
-func testRoleToManyCustomers(t *testing.T) {
+func testRoleToManyUsers(t *testing.T) {
 	var err error
 	ctx := context.Background()
 	tx := MustTx(boil.BeginTx(ctx, nil))
 	defer func() { _ = tx.Rollback() }()
 
 	var a Role
-	var b, c Customer
+	var b, c User
 
 	seed := randomize.NewSeed()
 	if err = randomize.Struct(seed, &a, roleDBTypes, true, roleColumnsWithDefault...); err != nil {
@@ -512,10 +512,10 @@ func testRoleToManyCustomers(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if err = randomize.Struct(seed, &b, customerDBTypes, false, customerColumnsWithDefault...); err != nil {
+	if err = randomize.Struct(seed, &b, userDBTypes, false, userColumnsWithDefault...); err != nil {
 		t.Fatal(err)
 	}
-	if err = randomize.Struct(seed, &c, customerDBTypes, false, customerColumnsWithDefault...); err != nil {
+	if err = randomize.Struct(seed, &c, userDBTypes, false, userColumnsWithDefault...); err != nil {
 		t.Fatal(err)
 	}
 
@@ -526,16 +526,16 @@ func testRoleToManyCustomers(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, err = tx.Exec("insert into `customers_roles` (`roles_id`, `customers_id`) values (?, ?)", a.ID, b.ID)
+	_, err = tx.Exec("insert into `users_roles` (`roles_id`, `users_id`) values (?, ?)", a.ID, b.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = tx.Exec("insert into `customers_roles` (`roles_id`, `customers_id`) values (?, ?)", a.ID, c.ID)
+	_, err = tx.Exec("insert into `users_roles` (`roles_id`, `users_id`) values (?, ?)", a.ID, c.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	check, err := a.Customers().All(ctx, tx)
+	check, err := a.Users().All(ctx, tx)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -558,18 +558,18 @@ func testRoleToManyCustomers(t *testing.T) {
 	}
 
 	slice := RoleSlice{&a}
-	if err = a.L.LoadCustomers(ctx, tx, false, (*[]*Role)(&slice), nil); err != nil {
+	if err = a.L.LoadUsers(ctx, tx, false, (*[]*Role)(&slice), nil); err != nil {
 		t.Fatal(err)
 	}
-	if got := len(a.R.Customers); got != 2 {
+	if got := len(a.R.Users); got != 2 {
 		t.Error("number of eager loaded records wrong, got:", got)
 	}
 
-	a.R.Customers = nil
-	if err = a.L.LoadCustomers(ctx, tx, true, &a, nil); err != nil {
+	a.R.Users = nil
+	if err = a.L.LoadUsers(ctx, tx, true, &a, nil); err != nil {
 		t.Fatal(err)
 	}
-	if got := len(a.R.Customers); got != 2 {
+	if got := len(a.R.Users); got != 2 {
 		t.Error("number of eager loaded records wrong, got:", got)
 	}
 
@@ -578,7 +578,7 @@ func testRoleToManyCustomers(t *testing.T) {
 	}
 }
 
-func testRoleToManyAddOpCustomers(t *testing.T) {
+func testRoleToManyAddOpUsers(t *testing.T) {
 	var err error
 
 	ctx := context.Background()
@@ -586,15 +586,15 @@ func testRoleToManyAddOpCustomers(t *testing.T) {
 	defer func() { _ = tx.Rollback() }()
 
 	var a Role
-	var b, c, d, e Customer
+	var b, c, d, e User
 
 	seed := randomize.NewSeed()
 	if err = randomize.Struct(seed, &a, roleDBTypes, false, strmangle.SetComplement(rolePrimaryKeyColumns, roleColumnsWithoutDefault)...); err != nil {
 		t.Fatal(err)
 	}
-	foreigners := []*Customer{&b, &c, &d, &e}
+	foreigners := []*User{&b, &c, &d, &e}
 	for _, x := range foreigners {
-		if err = randomize.Struct(seed, x, customerDBTypes, false, strmangle.SetComplement(customerPrimaryKeyColumns, customerColumnsWithoutDefault)...); err != nil {
+		if err = randomize.Struct(seed, x, userDBTypes, false, strmangle.SetComplement(userPrimaryKeyColumns, userColumnsWithoutDefault)...); err != nil {
 			t.Fatal(err)
 		}
 	}
@@ -609,13 +609,13 @@ func testRoleToManyAddOpCustomers(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	foreignersSplitByInsertion := [][]*Customer{
+	foreignersSplitByInsertion := [][]*User{
 		{&b, &c},
 		{&d, &e},
 	}
 
 	for i, x := range foreignersSplitByInsertion {
-		err = a.AddCustomers(ctx, tx, i != 0, x...)
+		err = a.AddUsers(ctx, tx, i != 0, x...)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -630,14 +630,14 @@ func testRoleToManyAddOpCustomers(t *testing.T) {
 			t.Error("relationship was not added properly to the slice")
 		}
 
-		if a.R.Customers[i*2] != first {
+		if a.R.Users[i*2] != first {
 			t.Error("relationship struct slice not set to correct value")
 		}
-		if a.R.Customers[i*2+1] != second {
+		if a.R.Users[i*2+1] != second {
 			t.Error("relationship struct slice not set to correct value")
 		}
 
-		count, err := a.Customers().Count(ctx, tx)
+		count, err := a.Users().Count(ctx, tx)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -647,7 +647,7 @@ func testRoleToManyAddOpCustomers(t *testing.T) {
 	}
 }
 
-func testRoleToManySetOpCustomers(t *testing.T) {
+func testRoleToManySetOpUsers(t *testing.T) {
 	var err error
 
 	ctx := context.Background()
@@ -655,15 +655,15 @@ func testRoleToManySetOpCustomers(t *testing.T) {
 	defer func() { _ = tx.Rollback() }()
 
 	var a Role
-	var b, c, d, e Customer
+	var b, c, d, e User
 
 	seed := randomize.NewSeed()
 	if err = randomize.Struct(seed, &a, roleDBTypes, false, strmangle.SetComplement(rolePrimaryKeyColumns, roleColumnsWithoutDefault)...); err != nil {
 		t.Fatal(err)
 	}
-	foreigners := []*Customer{&b, &c, &d, &e}
+	foreigners := []*User{&b, &c, &d, &e}
 	for _, x := range foreigners {
-		if err = randomize.Struct(seed, x, customerDBTypes, false, strmangle.SetComplement(customerPrimaryKeyColumns, customerColumnsWithoutDefault)...); err != nil {
+		if err = randomize.Struct(seed, x, userDBTypes, false, strmangle.SetComplement(userPrimaryKeyColumns, userColumnsWithoutDefault)...); err != nil {
 			t.Fatal(err)
 		}
 	}
@@ -678,12 +678,12 @@ func testRoleToManySetOpCustomers(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	err = a.SetCustomers(ctx, tx, false, &b, &c)
+	err = a.SetUsers(ctx, tx, false, &b, &c)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	count, err := a.Customers().Count(ctx, tx)
+	count, err := a.Users().Count(ctx, tx)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -691,12 +691,12 @@ func testRoleToManySetOpCustomers(t *testing.T) {
 		t.Error("count was wrong:", count)
 	}
 
-	err = a.SetCustomers(ctx, tx, true, &d, &e)
+	err = a.SetUsers(ctx, tx, true, &d, &e)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	count, err = a.Customers().Count(ctx, tx)
+	count, err = a.Users().Count(ctx, tx)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -721,15 +721,15 @@ func testRoleToManySetOpCustomers(t *testing.T) {
 		t.Error("relationship was not added properly to the slice")
 	}
 
-	if a.R.Customers[0] != &d {
+	if a.R.Users[0] != &d {
 		t.Error("relationship struct slice not set to correct value")
 	}
-	if a.R.Customers[1] != &e {
+	if a.R.Users[1] != &e {
 		t.Error("relationship struct slice not set to correct value")
 	}
 }
 
-func testRoleToManyRemoveOpCustomers(t *testing.T) {
+func testRoleToManyRemoveOpUsers(t *testing.T) {
 	var err error
 
 	ctx := context.Background()
@@ -737,15 +737,15 @@ func testRoleToManyRemoveOpCustomers(t *testing.T) {
 	defer func() { _ = tx.Rollback() }()
 
 	var a Role
-	var b, c, d, e Customer
+	var b, c, d, e User
 
 	seed := randomize.NewSeed()
 	if err = randomize.Struct(seed, &a, roleDBTypes, false, strmangle.SetComplement(rolePrimaryKeyColumns, roleColumnsWithoutDefault)...); err != nil {
 		t.Fatal(err)
 	}
-	foreigners := []*Customer{&b, &c, &d, &e}
+	foreigners := []*User{&b, &c, &d, &e}
 	for _, x := range foreigners {
-		if err = randomize.Struct(seed, x, customerDBTypes, false, strmangle.SetComplement(customerPrimaryKeyColumns, customerColumnsWithoutDefault)...); err != nil {
+		if err = randomize.Struct(seed, x, userDBTypes, false, strmangle.SetComplement(userPrimaryKeyColumns, userColumnsWithoutDefault)...); err != nil {
 			t.Fatal(err)
 		}
 	}
@@ -754,12 +754,12 @@ func testRoleToManyRemoveOpCustomers(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	err = a.AddCustomers(ctx, tx, true, foreigners...)
+	err = a.AddUsers(ctx, tx, true, foreigners...)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	count, err := a.Customers().Count(ctx, tx)
+	count, err := a.Users().Count(ctx, tx)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -767,12 +767,12 @@ func testRoleToManyRemoveOpCustomers(t *testing.T) {
 		t.Error("count was wrong:", count)
 	}
 
-	err = a.RemoveCustomers(ctx, tx, foreigners[:2]...)
+	err = a.RemoveUsers(ctx, tx, foreigners[:2]...)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	count, err = a.Customers().Count(ctx, tx)
+	count, err = a.Users().Count(ctx, tx)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -793,15 +793,15 @@ func testRoleToManyRemoveOpCustomers(t *testing.T) {
 		t.Error("relationship was not added properly to the foreign struct")
 	}
 
-	if len(a.R.Customers) != 2 {
+	if len(a.R.Users) != 2 {
 		t.Error("should have preserved two relationships")
 	}
 
 	// Removal doesn't do a stable deletion for performance so we have to flip the order
-	if a.R.Customers[1] != &d {
+	if a.R.Users[1] != &d {
 		t.Error("relationship to d should have been preserved")
 	}
-	if a.R.Customers[0] != &e {
+	if a.R.Users[0] != &e {
 		t.Error("relationship to e should have been preserved")
 	}
 }
@@ -880,7 +880,7 @@ func testRolesSelect(t *testing.T) {
 }
 
 var (
-	roleDBTypes = map[string]string{`ID`: `binary`, `Name`: `varchar`}
+	roleDBTypes = map[string]string{`ID`: `int`, `Name`: `varchar`}
 	_           = bytes.MinRead
 )
 
