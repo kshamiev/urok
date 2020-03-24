@@ -55,3 +55,15 @@ func deffer() {
 
 	fmt.Println("Stop def")
 }
+
+//
+func closure() {
+	// Функции захватывают переменные в области видимости
+	// Но, чтобы передавать значение, требуется явно передавать его в функцию
+	for i := 0; i < 10; i++ {
+		go func(i int) {
+			fmt.Println("Got", i)
+		}(i)
+	}
+	fmt.Scanln()
+}
