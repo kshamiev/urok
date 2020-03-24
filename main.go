@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Test struct {
 	Cnt int
@@ -20,11 +22,6 @@ func (obj *Test) String() string {
 
 func main() {
 
-	var self Test
 
-	self.Add(5)
-	self.Del(10)
-
-	fmt.Println(self)
 
 }
