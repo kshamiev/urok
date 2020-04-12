@@ -35,8 +35,8 @@ func main() {
 
 	logsSave(string(data))
 
-	//var result = []Item{}
-	//for i:=0; i < 10; i++ {
+	// var result = []Item{}
+	// for i:=0; i < 10; i++ {
 	//	res := Item{
 	//		ID:      45 + uint64(i),
 	//		Name:    "Popcorn",
@@ -44,16 +44,16 @@ func main() {
 	//		Price:   65.34 + float64(i),
 	//	}
 	//	result = append(result, res)
-	//}
+	// }
 	//
 	//
-	//var data []byte
-	//var err error
-	//if data, err = json.Marshal(result); err != nil {
+	// var data []byte
+	// var err error
+	// if data, err = json.Marshal(result); err != nil {
 	//	panic(err)
-	//}
+	// }
 	//
-	//logsSave(string(data))
+	// logsSave(string(data))
 
 }
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -21,7 +22,30 @@ func (obj *Test) String() string {
 }
 
 func main() {
+	action()
+	fmt.Println("finish")
+}
 
+// action выполнение задачи
+func action() {
 
+	defer func() {
+		if rvr := recover(); rvr != nil {
+			fmt.Printf("panic: %+v", rvr)
+		}
+	}()
+
+	err := Action()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+}
+
+func Action() error {
+
+	// return nil
+	panic("PANICA")
+
+	return errors.New("oshibka")
 
 }
