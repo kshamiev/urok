@@ -3,8 +3,8 @@ package main
 import (
 	"reflect"
 	"testing"
+
 	"github.com/pkg/errors"
-	"time"
 )
 
 func TestSum(t *testing.T) {
@@ -81,7 +81,6 @@ func TestTable(t *testing.T) {
 			Err:    errors.New("Division by zero"),
 		},
 	}
-
 
 	for _, testCase := range data {
 		res, err := TrueDivision(testCase.A, testCase.B)

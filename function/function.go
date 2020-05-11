@@ -12,7 +12,7 @@ func Function() {
 	fmt.Println(average(xs))
 
 	fz := []int{1, 54, 87, 34}
-	fmt.Println(add(fz...))
+	fmt.Println(Add(fz...))
 
 	fmt.Println(factorial(3))
 
@@ -29,7 +29,7 @@ func average(xs []float64) float64 {
 }
 
 // пример переменного числа аргументов одного типа (строго указывается в конце)
-func add(args ...int) int {
+func Add(args ...int) int {
 	total := 0
 	for _, v := range args {
 		total += v
@@ -65,5 +65,5 @@ func closure() {
 			fmt.Println("Got", i)
 		}(i)
 	}
-	fmt.Scanln()
+	_, _ = fmt.Scanln()
 }
