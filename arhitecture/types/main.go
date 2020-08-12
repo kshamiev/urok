@@ -19,8 +19,7 @@ func (obj *TestNativeDB) Load() {
 
 // тип реализующий взаимодействие по GRPC и какие-то общие методы (валидации полей п осценарию к примеру)
 type TestBase struct {
-	TestNativeDB
-	Fio string
+	*TestNativeDB
 }
 
 // метод сопоставление с типом для работы по GRPC
@@ -32,17 +31,13 @@ func (obj *TestBase) Convert() {
 
 // конечная бизнес модель
 type Test struct {
-	TestBase
+	*TestBase
 	env string
 }
 
 //
 func main() {
-	// obj := &Test{TestBase: &TestBase{TestNativeDB: &TestNativeDB{}}}
-	obj := &Test{}
+	obj := &Test{TestBase: &TestBase{TestNativeDB: &TestNativeDB{}}}
 	obj.Load()
 	obj.Convert()
-
-	fmt.Println(obj.Name)
-
 }

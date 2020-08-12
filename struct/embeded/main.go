@@ -27,12 +27,11 @@ func main() {
 	obj.Control.Design()
 	obj.Control.Names()
 
-
 }
 
 type MyControl struct {
-	ID   uint64
-	Name string
+	ID    uint64
+	Name  string
 	Price float64
 	Control
 }
@@ -43,8 +42,8 @@ func (ctr *MyControl) Names() {
 }
 
 type Control struct {
-	ID   uint64
-	Name string
+	ID    uint64
+	Name  string
 	Price float64
 }
 
@@ -60,8 +59,7 @@ func (ctr *Control) Names() {
 	fmt.Println("Names", ctr.ID, ctr.Name, ctr.Price)
 }
 
-////////////////////////
-
+// //////////////////////
 
 // Dump all variables to STDOUT
 func Dumper(idl ...interface{}) string {

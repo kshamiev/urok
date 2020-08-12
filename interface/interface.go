@@ -4,8 +4,7 @@
 //
 // Структура хранит данные, но неповедение.
 // Интерфейс хранит поведение, но не данные.
-
-package structandface
+package main
 
 import (
 	"fmt"
@@ -57,7 +56,7 @@ func (o *Aircraft) Fly() {
 	fmt.Println("fly is *Aircraft: ", o.Name)
 }
 
-//////
+// ////
 
 // для понимания отображения в панели навигации
 type FlyingPub interface {
