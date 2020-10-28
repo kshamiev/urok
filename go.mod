@@ -19,6 +19,7 @@ require (
 	github.com/lib/pq v1.1.1
 	github.com/mailru/easyjson v0.0.0-20190626092158-b2ccc519800e
 	github.com/pkg/errors v0.8.1
+	github.com/shopspring/decimal v1.2.0
 	github.com/spf13/viper v1.4.0 // indirect
 	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
 	github.com/volatiletech/inflect v0.0.0-20170731032912-e7201282ae8d // indirect
