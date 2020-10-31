@@ -9,9 +9,9 @@ import (
 func main() {
 	obj := &Calc{
 		Percent: decimal.NewFromFloat(0.8),
-		Deposit: decimal.NewFromFloat(200000),
+		Deposit: decimal.NewFromFloat(250000),
 
-		InputDay: decimal.NewFromFloat(30000),
+		InputDay: decimal.NewFromFloat(35000),
 	}
 
 	_ = obj.Calc()
@@ -29,7 +29,7 @@ func (cal *Calc) Calc() decimal.Decimal {
 
 	fmt.Printf("START: balance: 0 incominday: %s\n", cal.InputDay.String())
 
-	for i := 1; i <= 100; i++ {
+	for i := 1; i <= 60; i++ {
 		sum = sum.Add(cal.InputDay)
 		fmt.Printf("balance: %s\n", sum.Floor().String())
 
@@ -45,11 +45,3 @@ func (cal *Calc) Calc() decimal.Decimal {
 
 	return sum
 }
-
-// 250 000 0.8
-// balance: 40000 incominday: 64000 day: 98
-// balance: 0 incominday: 64935 day: 99
-
-// 30 000 0.7
-// balance: 1039500 incominday: 51000
-// balance: 0 incominday: 60265 day: 100
