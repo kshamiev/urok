@@ -1,4 +1,4 @@
-	package main
+package main
 
 import (
 	"fmt"
@@ -38,4 +38,8 @@ func main() {
 		fmt.Printf("rune: %v at position %d\n", v, i)
 	}
 	fmt.Println()
+
+	for index, runeValue := range str {
+		fmt.Printf("Позиция '%d', руна: ---%#U--- [%d]\n", index, runeValue, runeValue)
+	}
 }

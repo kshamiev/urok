@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 )
 
 type Item struct {
@@ -58,17 +59,20 @@ func main() {
 }
 
 var fp *os.File
-var pathFile = "/home/konstantin/work/sampleSa/bin/file.json"
 
 // logsSave непосредственное сохранение лога
 func logsSave(msg string) {
 
+	_, pathFile, _, _ := runtime.Caller(0)
+
+	pathFile = filepath.Dir(pathFile) + "/file.json"
+
 	if fp == nil {
-		os.MkdirAll(filepath.Dir(pathFile), 0777)
+		_ = os.MkdirAll(filepath.Dir(pathFile), 0777)
 		fp, _ = os.OpenFile(pathFile, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0777)
 	}
 	if fp != nil {
-		fp.WriteString(msg + "\n")
+		_, _ = fp.WriteString(msg + "\n")
 	}
 	fmt.Println(msg)
 }

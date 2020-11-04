@@ -6,6 +6,8 @@ import (
 	"fmt"
 )
 
+type Sample func(s string) int
+
 // вызовы примеров функций
 func Function() {
 	xs := []float64{98, 93, 77, 82, 83}
