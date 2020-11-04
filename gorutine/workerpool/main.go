@@ -6,30 +6,25 @@ import (
 	"sync"
 )
 
-// Task - описание интрефейса работы
+// Task - описание интерфейса работы
 type Task interface {
 	Execute()
 }
 
-// Pool - структура, нам потребуется Мутекс, для гарантий атомарности изменений самого объекта
-// Канал входящих задач
-// Канал отмены, для завершения работы
-// WaitGroup для контроля завершнеия работ
+// Pool
 type Pool struct {
-	mu    sync.Mutex
-	size  int
-	tasks chan Task
-	kill  chan struct{}
-	wg    sync.WaitGroup
+	size  int            // количество одновременно работающих воркеров (лимит)
+	tasks chan Task      // Канал задач - буферизированный, чтобы основная программа не блокировалась при постановке задач
+	kill  chan struct{}  // канал отмены, для завершения работы воркеров
+	wg    sync.WaitGroup // WaitGroup для контроля полного завершения работ всех задач и каналов
+	mu    sync.Mutex     // мутекс для безопасного изменения
 }
 
-// Скроем внутреннее усройство за конструктором, пользователь может влиять только на размер пула
+// Скроем внутреннее устройство за конструктором, пользователь может влиять только на размер пула
 func NewPool(size int) *Pool {
 	pool := &Pool{
-		// Канал задач - буферизированный, чтобы основная программа не блокировалась при постановке задач
 		tasks: make(chan Task, 128),
-		// Канал kill для убийства "лишних воркеров"
-		kill: make(chan struct{}),
+		kill:  make(chan struct{}),
 	}
 	// Вызовем метод resize, чтобы установить соответствующий размер пула
 	pool.Resize(size)
@@ -37,7 +32,7 @@ func NewPool(size int) *Pool {
 }
 
 func (p *Pool) Resize(n int) {
-	// Захватывам лок, чтобы избежать одновременного изменения состояния
+	// Захватываем лок, чтобы избежать одновременного изменения состояния
 	p.mu.Lock()
 	defer p.mu.Unlock()
 	for p.size < n {
@@ -89,25 +84,14 @@ func (e ExampleTask) Execute() {
 }
 
 func main() {
-
-	fmt.Println("!!!!")
-
 	pool := NewPool(5)
-
 	pool.TaskAdd(ExampleTask("foo"))
 	pool.TaskAdd(ExampleTask("bar"))
-
 	pool.Resize(3)
-
 	pool.Resize(6)
-
 	for i := 0; i < 20; i++ {
 		pool.TaskAdd(ExampleTask(fmt.Sprintf("additional_%d", i+1)))
 	}
-
 	pool.Wait()
-
-	fmt.Println("!!!!")
 	fmt.Println(pool.size)
-
 }

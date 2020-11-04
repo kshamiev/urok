@@ -6,8 +6,6 @@ package main
 
 import "fmt"
 
-var c chan int
-
 func main() {
 	// Создаем канал
 	c := make(chan string)

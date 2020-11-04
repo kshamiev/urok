@@ -1,3 +1,5 @@
+// Семафор это решение которое контролирует количество процессов - горутин
+// работающих с каким-либо ресурсом или выполняющих какую-то иную работу параллельно.
 package main
 
 import (
@@ -5,7 +7,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/kshamiev/urok/gorutine/semaphore/sem"
+	"urok/pattern/semaphore/sem"
 )
 
 func main() {

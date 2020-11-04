@@ -9,18 +9,15 @@ import (
 )
 
 func main() {
-
 	SampleRuntimeOnce()
-
 }
 
 // пример использование Once & atomic
-// выполенине содержимого только один раз (даже если в разных горутинах)
+// выполнение содержимого только один раз (даже если в разных горутинах)
 func SampleRuntimeOnce() {
-
 	var onc sync.Once
-
 	var T = int64(345)
+
 	for i := 0; i < 10; i++ {
 		go func() {
 			atomic.AddInt64(&T, 10)

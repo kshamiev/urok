@@ -44,14 +44,12 @@ func (a *Account) Withdraw(amount float64) {
 }
 
 func main() {
-
-	var controlGoRun = 0
 	var wg sync.WaitGroup
-	wg.Add(1000)
-
 	acc := Account{}
+
 	// запускаем отдельные программы
 	for i := 0; i < 1000; i++ {
+		wg.Add(1)
 		go func() {
 			// Каждая из которых, производит операции с аккаунтом
 			for j := 0; j < 100; j++ {
@@ -63,14 +61,11 @@ func main() {
 				// иногда кладет
 				acc.Deposit(50)
 			}
-			controlGoRun++
 			wg.Done()
 		}()
 	}
-
 	wg.Wait()
 
-	// Чтоже получится в результате
-	fmt.Println(acc.Balance(), controlGoRun)
-
+	// Что же получится в результате
+	fmt.Println(acc.Balance())
 }
