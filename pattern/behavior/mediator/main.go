@@ -1,13 +1,11 @@
 // Посредник (реализуется через интерфейс)
 // Это тип который является посредником между несколькими объектами
 // Его задача производить синхронизацию между ними
+// Для этого он содержит все объекты которые нужно синхронизировать
+// И имеет метод который принимает объект с которым необходимо синхронизироваться
 //
-// Посредник привязывается к объектам которые нужно синхронизировать между собой.
-// а также исходный объект добавляется в посредника.
-//
-//
-//
-//
+// Для удобства посредник может быть привязан к объекту через свойство
+
 package main
 
 import "fmt"
@@ -19,18 +17,10 @@ func main() {
 	switcher3 := NewSwitcher(mediator)
 
 	switcher1.State = true
-	state2 := switcher2.State
-	// state2 is false
-	state3 := switcher3.State
-	// state3 is false
-	fmt.Println(state2, state3)
+	fmt.Println(switcher2.State, switcher3.State)
 
-	switcher1.Sync()
-	state2 = switcher2.State
-	// state2 is true
-	state3 = switcher3.State
-	// state3 is true
-	fmt.Println(state2, state3)
+	mediator.Sync(switcher1)
+	fmt.Println(switcher2.State, switcher3.State)
 }
 
 // Mediator defines an interface for communicating with Colleague objects
@@ -41,37 +31,31 @@ type Mediator interface {
 
 // SyncMediator is ConcreteMediator
 type SyncMediator struct {
-	Switchers []*Switcher
+	switchers []*Switcher
 }
 
 // Sync synchronizes the state of all Colleague objects
 func (sm *SyncMediator) Sync(switcher *Switcher) {
-	for _, curSwitcher := range sm.Switchers {
+	for _, curSwitcher := range sm.switchers {
 		curSwitcher.State = switcher.State
 	}
 }
 
 // Add append Colleague to the Mediator list
 func (sm *SyncMediator) Add(switcher *Switcher) {
-	sm.Switchers = append(sm.Switchers, switcher)
+	sm.switchers = append(sm.switchers, switcher)
 }
 
 // ////
 
 // Switcher is Colleague
 type Switcher struct {
-	State     bool
-	_mediator Mediator
+	State bool
 }
 
 // NewSwitcher creates a new Switcher
 func NewSwitcher(mediator Mediator) *Switcher {
-	switcher := &Switcher{false, mediator}
+	switcher := &Switcher{false}
 	mediator.Add(switcher)
 	return switcher
-}
-
-// Sync starts the mediator Sync function
-func (s Switcher) Sync() {
-	s._mediator.Sync(&s)
 }
