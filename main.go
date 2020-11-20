@@ -1,17 +1,30 @@
 package main
 
 import (
+	"context"
 	"fmt"
 )
 
 func main() {
 
-	dd := make([]int, 3, 9)
+	// u := &User{Name: "popcorn"}
+	ctx := context.Background()
+	// ctx = context.WithValue(ctx, "test", u)
 
-	fmt.Println(len(dd), "OK")
+	uu, err := TokenFromContext(ctx)
 
-	x := [6]string{"a", "b", "c", "d", "e", "f"}
+	fmt.Println(uu, err)
 
-	fmt.Println(x[2:5])
+}
 
+func TokenFromContext(ctx context.Context) (*User, error) {
+	token, ok := ctx.Value("test").(*User)
+	if !ok {
+		return nil, fmt.Errorf("user not present in context")
+	}
+	return token, nil
+}
+
+type User struct {
+	Name string
 }
