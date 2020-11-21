@@ -25,6 +25,10 @@ func main() {
 
 	car.Accept(v1)
 	car.Accept(v2)
+
+	w := &Wheel{980}
+	w.Accept(v1)
+	w.Accept(v2)
 }
 
 // Element interface
@@ -62,6 +66,8 @@ func (c Car) Accept(v CarVisitor) {
 	}
 	v.visitCar(c)
 }
+
+// ////
 
 // CarVisitor is Visitor
 type CarVisitor interface {
