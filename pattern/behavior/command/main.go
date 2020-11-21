@@ -25,33 +25,6 @@ type Command interface {
 	Execute()
 }
 
-// BankClient is Invoker
-type BankClient struct {
-	putCommand Command
-	getCommand Command
-}
-
-// PutMoney runs the putCommand
-func (bc BankClient) PutMoney() {
-	bc.putCommand.Execute()
-}
-
-// GetMoney runs the getCommand
-func (bc BankClient) GetMoney() {
-	bc.getCommand.Execute()
-}
-
-// Bank is Receiver
-type Bank struct{}
-
-func (b Bank) giveMoney() {
-	fmt.Println("money to the client")
-}
-
-func (b Bank) receiveMoney() {
-	fmt.Println("money from the client")
-}
-
 // PutCommand is ConcreteCommand
 type PutCommand struct {
 	bank Bank
@@ -70,4 +43,33 @@ type GetCommand struct {
 // Execute command
 func (gc GetCommand) Execute() {
 	gc.bank.giveMoney()
+}
+
+// ////
+
+// Bank is Receiver
+type Bank struct{}
+
+func (b Bank) giveMoney() {
+	fmt.Println("money to the client")
+}
+
+func (b Bank) receiveMoney() {
+	fmt.Println("money from the client")
+}
+
+// BankClient is Invoker
+type BankClient struct {
+	putCommand Command
+	getCommand Command
+}
+
+// PutMoney runs the putCommand
+func (bc BankClient) PutMoney() {
+	bc.putCommand.Execute()
+}
+
+// GetMoney runs the getCommand
+func (bc BankClient) GetMoney() {
+	bc.getCommand.Execute()
 }
