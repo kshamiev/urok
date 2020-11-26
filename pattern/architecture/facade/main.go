@@ -1,5 +1,5 @@
 // Фасад
-//
+// Банальная хрень
 package main
 
 import "fmt"

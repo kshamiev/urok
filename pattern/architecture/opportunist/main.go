@@ -1,5 +1,5 @@
 // Приспособленец
-//
+// Банальная хрень
 package main
 
 import "fmt"
@@ -33,8 +33,7 @@ type Char struct {
 
 // PrintSpan is Operation(extrinsicState)
 func (c Char) PrintSpan(style string) {
-	fmt.Println("<span style=\"" +
-		style + "\">" + string(c.C) + "</span>")
+	fmt.Println("<span style=\"" + style + "\">" + string(c.C) + "</span>")
 }
 
 // CharFactory is FlyweightFactory
@@ -44,7 +43,7 @@ type CharFactory struct {
 
 // GetChar is GetFlyweight(key)
 func (cf *CharFactory) GetChar(c rune) Span {
-	if value, exists := cf.chars[c]; exists {
+	if value, ok := cf.chars[c]; ok {
 		return value
 	}
 	char := Char{c}
