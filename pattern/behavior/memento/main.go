@@ -51,7 +51,7 @@ func (s *Shape) Move(left, top int) {
 }
 
 func (s *Shape) getMemento() Memento {
-	return Memento{_state: Point{s.Position.X, s.Position.Y}}
+	return Memento{_state: s.Position}
 }
 
 func (s *Shape) setMemento(memento Memento) {
