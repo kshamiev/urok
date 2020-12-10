@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+option go_package = ".;pb";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+import "typs.proto";
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+    title: "Blink OEBS"
+    version: "1.0.0"
+    description: "Фирма веников не вяжет"
+    contact: {
+      name: "Шаша бесподобный"
+      url: "https://blink.mts.ru/"
+      email: "no-reply@mts.ru"
+    }
+  }
+  security_definitions: {
+    security: {
+      key: "cookieAuth"
+      value: {
+        in: IN_HEADER
+        type:TYPE_API_KEY
+        name: "JSESSIONID"
+      }
+    }
+  }
+  schemes: [HTTPS, HTTP]
+  consumes: "application/json"
+  produces: "application/json"
+};
+
+service Blank {
+  // проверка доступности сервиса
+  rpc Version (google.protobuf.Empty) returns (Test) {
+    option (google.api.http) = {
+      get: "/api/version"
+    };
+    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+      description: "Версия",
+      tags: "General"
+      security: [{security_requirement{key:"cookieAuth"}}]
+    };
+  }
+}

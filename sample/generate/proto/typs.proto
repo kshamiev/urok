@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option go_package = ".;pb";
+
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+message Test {
+  string text = 1;
+  map<string, Test> tests = 2;
+  google.protobuf.Timestamp created_at = 3;
+  int64 page = 4 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {type: INTEGER}];
+}
+
+// AFTER CODE GENERATED. DO NOT EDIT //
