@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+option go_package = ".;pb";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+import "typs.proto";
+
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+    title: "Million Report"
+    version: "1.0.0"
+    description: "Фирма веников не вяжет"
+    contact: {
+      name: "Шаша бесподобный"
+      url: "https://million.3click.mts.ru/"
+      email: "no-reply@mts.ru"
+    }
+  }
+  security_definitions: {
+    security: {
+      key: "cookieAuth"
+      value: {
+        in: IN_HEADER
+        type:TYPE_API_KEY
+        name: "million-dev"
+      }
+    }
+  }
+  schemes: [HTTPS, HTTP]
+  consumes: "application/json"
+  produces: "application/json"
+};
+
+service Reports {
+  // Версия
+  rpc GetVersion (google.protobuf.Empty) returns (Version) {
+    option (google.api.http) = {
+      get: "/api/v1/report/version",
+    };
+    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+      description: "Версия",
+      tags: "General"
+      security: [{security_requirement{key:"cookieAuth"}}]
+    };
+  }
+  // Версия для теста
+  rpc GetVersionTest (Version) returns (Version) {
+    option (google.api.http) = {
+      get: "/api/v1/report/version/{text}/page",
+    };
+    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+      description: "Версия для теста",
+      tags: "General"
+      security: [{security_requirement{key:"cookieAuth"}}]
+    };
+  }
+}

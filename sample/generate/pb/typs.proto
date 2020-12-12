@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option go_package = ".;pb";
+
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+message Version {
+  string text = 1;
+}
+
+// AFTER CODE GENERATED. DO NOT EDIT //
+
+message ReqSample {
+	int64 id = 1 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {type: INTEGER}];
+	string name = 2;
+	string status = 3;
+	google.protobuf.Timestamp date = 4;
+}
+
+message ResSample {
+	int64 id = 1 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {type: INTEGER}];
+	string name = 2;
+	string status = 3;
+	google.protobuf.Timestamp date = 4;
+}
