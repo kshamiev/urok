@@ -4,6 +4,9 @@
 // Особенности реализации:
 // Перемещать и копирвоать ветки и узлы в корень (верхний уровень) нельзя (в корне только корневые узлы отдельных деревьев)
 // При создании корневого узла возвращается уже существующий, если он уже был ранее создан
+//
+// Пример описания Nested Set
+// https://open2web.com.ua/blog/derevo-katalogov-nested-sets-vlozhennye-mnozhestva-i-upravlenie-im.html
 /*
 CREATE TABLE public.trees (
 	id serial NOT NULL,

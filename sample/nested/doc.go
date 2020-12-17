@@ -1,6 +1,9 @@
 // Nested Set
 // Реализация хранения и работы с деревьями в БД
 // Пакет реализует работу с одним деревом занимающим всю таблицу
+//
+// Пример описания Nested Set
+// https://open2web.com.ua/blog/derevo-katalogov-nested-sets-vlozhennye-mnozhestva-i-upravlenie-im.html
 /*
 CREATE TABLE public.tree (
 	id serial NOT NULL,
