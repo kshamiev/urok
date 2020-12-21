@@ -2,7 +2,7 @@
 //
 package sort
 
-// Time Complexity O(n log(n)))
+// Time Complexity O(n*log(n)))
 // Space Complexity O(n)
 func SortMerge(items []int) {
 	length := len(items)

@@ -11,7 +11,7 @@
 //
 package sort
 
-// Time Complexity from O(n log(n)) to O(n^2)
+// Time Complexity from O(n*log(n)) to O(n^2)
 // Space Complexity O(log(n))
 func SortQuick(items []int, fst int, lst int) {
 	if fst >= lst {
