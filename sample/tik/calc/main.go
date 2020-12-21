@@ -6,42 +6,42 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+type Calc struct {
+	DepositStart decimal.Decimal // начальный депозит
+	Deposit      decimal.Decimal // сумма нового депозита (реинвест)
+	Percent      decimal.Decimal // начисляемый процент в день для депозита
+	Period       int             // период для которого рассчитываем результат
+	InputDay     decimal.Decimal // приход в день со всех депозитов
+}
+
+// начальная сумма всех работающих депозитов не включена в вывод результата
 func main() {
 	obj := &Calc{
-		Percent: decimal.NewFromFloat(0.8),
-		Deposit: decimal.NewFromFloat(250000),
-
-		InputDay: decimal.NewFromFloat(35000),
+		DepositStart: decimal.NewFromFloat(4000000),
+		Deposit:      decimal.NewFromFloat(250000),
+		Percent:      decimal.NewFromFloat(0.8),
+		Period:       126,
 	}
-
-	_ = obj.Calc()
+	obj.Calc()
 }
 
-type Calc struct {
-	Percent decimal.Decimal // начисляемый процент в день для депозита
-	Deposit decimal.Decimal // минимальная сумма депозита
-
-	InputDay decimal.Decimal // приход в день
-}
-
-func (cal *Calc) Calc() decimal.Decimal {
-	var sum decimal.Decimal
-
+func (cal *Calc) Calc() {
+	cal.InputDay = cal.DepositStart.Div(decimal.NewFromInt(100)).Mul(cal.Percent)
 	fmt.Printf("START: balance: 0 incominday: %s\n", cal.InputDay.String())
 
-	for i := 1; i <= 60; i++ {
+	var sum decimal.Decimal
+	for i := 1; i <= cal.Period; i++ {
 		sum = sum.Add(cal.InputDay)
 		fmt.Printf("balance: %s\n", sum.Floor().String())
 
 		// проверяем накопилась ли достаточная сумма для нового депозита
 		if sum.GreaterThanOrEqual(cal.Deposit) {
+			cal.DepositStart = cal.DepositStart.Add(cal.Deposit)
+			sum = sum.Sub(cal.Deposit)
 			// увеличение доходности в день за вложенный депозит
-			cal.InputDay = cal.InputDay.Add(sum.Div(decimal.NewFromInt(100)).Mul(cal.Percent))
-			// вкладываем все
-			sum = decimal.Decimal{}
+			cal.InputDay = cal.InputDay.Add(cal.Deposit.Div(decimal.NewFromInt(100)).Mul(cal.Percent))
 			fmt.Printf("balance: %s incominday: %s day: %d\n", sum.Floor().String(), cal.InputDay.Floor().String(), i)
 		}
 	}
-
-	return sum
+	fmt.Printf("balance full: %s \n", cal.DepositStart.String())
 }

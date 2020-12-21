@@ -25,9 +25,9 @@ require (
 	github.com/volatiletech/sqlboiler v3.4.0+incompatible // indirect
 	github.com/volatiletech/sqlboiler/v4 v4.2.0
 	gitlab.com/rvasily/msu-go-11 v0.0.0-20180221070409-8df3536ebce0
-	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4 // indirect
-	golang.org/x/net v0.0.0-20190628185345-da137c7871d7
-	golang.org/x/sys v0.0.0-20190712062909-fae7ac547cb7 // indirect
+	golang.org/x/net v0.0.0-20201021035429-f5854403a974
+	golang.org/x/perf v0.0.0-20201207232921-bdcc6220ee90 // indirect
+	golang.org/x/tools v0.0.0-20201218024724-ae774e9781d2 // indirect
 	google.golang.org/grpc v1.28.1
 	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce
 	gopkg.in/telegram-bot-api.v4 v4.6.4
