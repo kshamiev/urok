@@ -1,16 +1,20 @@
 package test
 
-import "strconv"
+import (
+	"encoding/json"
+)
 
 type testStruct struct {
 	X int
 	Y string
 }
 
-// func (t *testStruct) ToJSON() ([]byte, error) {
-// 	return json.Marshal(t)
-// }
-
+// old.txt
 func (t *testStruct) ToJSON() ([]byte, error) {
-	return []byte(`{"X": ` + strconv.Itoa(t.X) + `, "Y": "` + t.Y + `"}`), nil
+	return json.Marshal(t)
 }
+
+// new.txt
+// func (t *testStruct) ToJSON() ([]byte, error) {
+// 	return []byte(`{"X": ` + strconv.Itoa(t.X) + `, "Y": "` + t.Y + `"}`), nil
+// }

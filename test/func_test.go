@@ -2,24 +2,14 @@
 // go test -bench=. -benchmem -cpuprofile=cpu.out -memprofile=mem.out bench_test.go ... > namefile.txt
 //
 // go test -bench=. > old.txt
-// change
+// change method
 // go test -bench=. > new.txt
-// benchstat -html -sort name old.txt new.txt > diff.html
+// benchstat -html -sort name old.txt new.txt > delta.html
 package test
 
 import (
-	"fmt"
 	"testing"
 )
-
-func BenchmarkSample(b *testing.B) {
-	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
-		if x := fmt.Sprintf("%d", 42); x != "42" {
-			b.Fatalf("Unexpected string: %s", x)
-		}
-	}
-}
 
 func BenchmarkToJSON(b *testing.B) {
 	tmp := &testStruct{X: 1, Y: "string"}
