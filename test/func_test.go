@@ -4,7 +4,7 @@
 // go test -bench=. > old.txt
 // change
 // go test -bench=. > new.txt
-// benchstat -html old.txt new.txt > diff.html
+// benchstat -html -sort name old.txt new.txt > diff.html
 package test
 
 import (
