@@ -1,0 +1,7 @@
+goos: linux
+goarch: amd64
+pkg: urok/test
+BenchmarkSample-8   	19273723	        63.1 ns/op	       2 B/op	       1 allocs/op
+BenchmarkToJSON-8   	 6486054	       185 ns/op	 108.13 MB/s	      32 B/op	       1 allocs/op
+PASS
+ok  	urok/test	2.670s
