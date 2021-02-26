@@ -4,8 +4,10 @@ go 1.12
 
 require (
 	cloud.google.com/go v0.41.0 // indirect
+	github.com/boombuler/barcode v1.0.1
 	github.com/bradfitz/gomemcache v0.0.0-20190329173943-551aad21a668
 	github.com/corpix/uarand v0.1.0 // indirect
+	github.com/disintegration/imaging v1.6.2
 	github.com/garyburd/redigo v1.6.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible // indirect
@@ -17,6 +19,7 @@ require (
 	github.com/jinzhu/gorm v1.9.10
 	github.com/kshamiev/urok v0.0.0-20201028183841-4a898baf2994
 	github.com/lib/pq v1.2.1-0.20191011153232-f91d3411e481
+	github.com/llgcode/draw2d v0.0.0-20200930101115-bfaf5d914d1e
 	github.com/mailru/easyjson v0.0.0-20190626092158-b2ccc519800e
 	github.com/pkg/errors v0.8.1
 	github.com/shopspring/decimal v1.2.0
