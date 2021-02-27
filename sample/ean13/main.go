@@ -6,6 +6,8 @@ import (
 	"image/color"
 	"image/draw"
 	"os"
+	"path/filepath"
+	"runtime"
 
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/ean"
@@ -47,7 +49,8 @@ func main() {
 	// Create an new image with text data
 	// From https://github.com/llgcode/draw2d.samples/tree/master/helloworld
 	// Set the global folder for searching fonts
-	draw2d.SetFontFolder(".")
+	_, filePath, _, _ := runtime.Caller(0)
+	draw2d.SetFontFolder(filepath.Dir(filePath))
 
 	// Initialize the graphic context on an RGBA image
 	img := image.NewRGBA(image.Rect(0, 0, 250, 50))
@@ -78,7 +81,7 @@ func main() {
 	// paste the text to the new blank image
 	newImg = imaging.Paste(newImg, img, image.Pt(50, 150))
 
-	err = draw2dimg.SaveToPngFile("./ean.png", newImg)
+	err = draw2dimg.SaveToPngFile(filepath.Dir(filePath)+"/ean.png", newImg)
 
 	if err != nil {
 		fmt.Println(err)
