@@ -1,8 +1,6 @@
 package test
 
-import (
-	"encoding/json"
-)
+import "encoding/json"
 
 type testStruct struct {
 	X int
