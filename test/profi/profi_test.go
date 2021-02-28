@@ -1,5 +1,5 @@
 // go test -bench=.
-// GOGC=off go test -bench=BenchmarkRegex -cpuprofile cpu.out
+// GOGC=off go test -bench=BenchmarkRegex -cpuprofile cpu.out -memprofile mem.out
 // go tool profi.test cpu.out
 // go tool http://localhost:8083/debug/pprof/heap
 // (pprof) svg
