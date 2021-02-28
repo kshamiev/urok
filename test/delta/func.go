@@ -1,4 +1,4 @@
-package test
+package delta
 
 import "encoding/json"
 

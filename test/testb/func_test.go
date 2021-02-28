@@ -6,9 +6,6 @@
 // C^N, C>1				// рекурсия (C - количество рекурсий)
 // N(N-1)! (факториал)	// N(N-1)! (3! = 6, 4! = 24, 6! = 720, ...)
 
-// go test -bench=. -benchmem -cpuprofile=cpu.out -memprofile=mem.out bench_test.go ... > namefile.txt
-// go test -bench=.
-
 // Сложность алгоритма зависит от:
 // 1) Объёма входных данных. // Как зависит скорость работы программы от количества входных данных
 package testb

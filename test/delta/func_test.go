@@ -1,11 +1,13 @@
 // sample full
-// go test -bench=. -benchmem -cpuprofile=cpu.out -memprofile=mem.out bench_test.go ... > namefile.txt
+// go test -bench=. -cpuprofile cpu.out -memprofile mem.out bench_test.go ... > namefile.txt
+// go test -bench=BenchmarkToJSON -cpuprofile cpu.out -memprofile mem.out bench_test.go ... > namefile.txt
 //
 // go test -bench=. > old.txt
 // change method
 // go test -bench=. > new.txt
+// delta
 // benchstat -html -sort name old.txt new.txt > delta.html
-package test
+package delta
 
 import (
 	"testing"
