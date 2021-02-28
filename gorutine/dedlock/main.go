@@ -37,4 +37,5 @@ func main() {
 
 	var input string
 	_, _ = fmt.Scanln(&input)
+	fmt.Println(input)
 }
