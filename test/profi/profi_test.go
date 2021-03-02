@@ -1,8 +1,11 @@
 // go test -bench=.
 // GOGC=off go test -bench=BenchmarkRegex -cpuprofile cpu.out -memprofile mem.out
-// go tool profi.test cpu.out
-// go tool http://localhost:8083/debug/pprof/heap
+// go tool pprof profi.test cpu.out
+// go tool pprof -alloc_space profi.test mem.out
+// go tool pprof -inuse_space memtest profi.test mem.out
 // (pprof) svg
+//
+// https://github.com/pkg/profile
 
 package profi
 
@@ -24,6 +27,10 @@ func BenchmarkSubstring(b *testing.B) {
 }
 
 func BenchmarkRegex(b *testing.B) {
+	// pprof.StartCPUProfile(...)
+	// pprof.StopCPUProfile()
+	// runtime.MemProfile(...)
+
 	for i := 0; i < b.N; i++ {
 		// _, _ = regexp.MatchString("auctor", haystack)
 		pattern.MatchString(haystack)
