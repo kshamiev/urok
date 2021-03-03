@@ -30,9 +30,12 @@
 // согласованность
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // пример гонок
+// go run -race ./doc.go
 func main() {
 	c := make(chan bool)
 	m := make(map[string]string)
