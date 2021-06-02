@@ -17,10 +17,10 @@ type Calc struct {
 // начальная сумма всех работающих депозитов не включена в вывод результата
 func main() {
 	obj := &Calc{
-		DepositStart: decimal.NewFromFloat(4000000),
+		DepositStart: decimal.NewFromFloat(11000000),
 		Deposit:      decimal.NewFromFloat(250000),
 		Percent:      decimal.NewFromFloat(0.8),
-		Period:       126,
+		Period:       60,
 	}
 	obj.Calc()
 }
