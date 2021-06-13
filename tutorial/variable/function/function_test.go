@@ -37,6 +37,7 @@ func Test_Add(t *testing.T) {
 		args args
 		want int
 	}{
+		{name: "1", args: args{args: []int{1}}, want: 1},
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
