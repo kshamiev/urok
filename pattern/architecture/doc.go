@@ -1,0 +1,3 @@
+// Архитектурные паттерны
+//
+package architecture
