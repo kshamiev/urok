@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sort"
 
-	"urok/nn/genetics/chrom"
-	"urok/nn/genetics/formula"
+	"github.com/kshamiev/urok/nn/genetics/chrom"
+	"github.com/kshamiev/urok/nn/genetics/formula"
 )
 
 type Evolution struct {
