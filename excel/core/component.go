@@ -13,7 +13,7 @@ import (
 
 const TplList = "template"
 
-type Component struct {
+type Builder struct {
 	fp           *excelize.File
 	StHeaderMain int
 	StHeader     int
@@ -24,8 +24,8 @@ type Component struct {
 	row          int
 }
 
-func NewComponent(fp *excelize.File) (*Component, error) {
-	comp := &Component{fp: fp, row: 1}
+func NewBuilder(fp *excelize.File) (*Builder, error) {
+	comp := &Builder{fp: fp, row: 1}
 	var err error
 
 	if comp.StHeaderMain, err = fp.GetCellStyle(TplList, "B1"); err != nil {
@@ -47,50 +47,50 @@ func NewComponent(fp *excelize.File) (*Component, error) {
 	return comp, nil
 }
 
-func (comp *Component) NewSheet(name string) int {
+func (comp *Builder) NewSheet(name string) int {
 	comp.sheetName = name
 	comp.row = 1
 	return comp.fp.NewSheet(name)
 }
 
-func (comp *Component) SetRow(row int) {
+func (comp *Builder) SetRow(row int) {
 	comp.row = row
 }
 
-func (comp *Component) SetRowHeight(h float64) error {
+func (comp *Builder) SetRowHeight(h float64) error {
 	return comp.fp.SetRowHeight(comp.sheetName, comp.row, h)
 }
 
-func (comp *Component) SetRowMove(row int) {
+func (comp *Builder) SetRowMove(row int) {
 	comp.row += row
 }
 
-func (comp *Component) SetColWidth(beg, end string, h float64) error {
+func (comp *Builder) SetColWidth(beg, end string, h float64) error {
 	return comp.fp.SetColWidth(comp.sheetName, beg, end, h)
 }
 
-func (comp *Component) SetCellStHeaderMain(beg, end string, value interface{}) error {
+func (comp *Builder) SetCellStHeaderMain(beg, end string, value interface{}) error {
 	_ = comp.SetRowHeight(21.0)
 	return comp.SetCellSt(beg, end, value, comp.StHeaderMain)
 }
-func (comp *Component) SetCellStHeader(beg, end string, value interface{}) error {
+func (comp *Builder) SetCellStHeader(beg, end string, value interface{}) error {
 	_ = comp.SetRowHeight(18.0)
 	return comp.SetCellSt(beg, end, value, comp.StHeader)
 }
-func (comp *Component) SetCellStHeaderSub(beg, end string, value interface{}) error {
+func (comp *Builder) SetCellStHeaderSub(beg, end string, value interface{}) error {
 	_ = comp.SetRowHeight(16.0)
 	return comp.SetCellSt(beg, end, value, comp.StHeaderSub)
 }
-func (comp *Component) SetCellStData(beg, end string, value interface{}) error {
+func (comp *Builder) SetCellStData(beg, end string, value interface{}) error {
 	_ = comp.SetRowHeight(16.0)
 	return comp.SetCellSt(beg, end, value, comp.StData)
 }
-func (comp *Component) SetCellStFooter(beg, end string, value interface{}) error {
+func (comp *Builder) SetCellStFooter(beg, end string, value interface{}) error {
 	_ = comp.SetRowHeight(16.0)
 	return comp.SetCellSt(beg, end, value, comp.StFooter)
 }
 
-func (comp *Component) SetCellSt(beg, end string, value interface{}, style int) error {
+func (comp *Builder) SetCellSt(beg, end string, value interface{}, style int) error {
 	beg = beg + strconv.Itoa(comp.row)
 	end = end + strconv.Itoa(comp.row)
 	if beg != end {

@@ -20,7 +20,7 @@ type InvoiceTC struct {
 	Type        string             `json:"type"`
 }
 
-func (inv InvoiceTC) HeaderMain(comp *core.Component, value interface{}) (err error) {
+func (inv InvoiceTC) HeaderMain(comp *core.Builder, value interface{}) (err error) {
 	if err := comp.SetCellStHeaderMain("B", "S", value); err != nil {
 		return err
 	}
@@ -28,7 +28,7 @@ func (inv InvoiceTC) HeaderMain(comp *core.Component, value interface{}) (err er
 	return nil
 }
 
-func (inv InvoiceTC) CargosA(comp *core.Component) (err error) {
+func (inv InvoiceTC) CargosA(comp *core.Builder) (err error) {
 	// header
 	if err := comp.SetCellStHeader("B", "S", "Информация о грузе"); err != nil {
 		return err
@@ -136,7 +136,7 @@ func (inv InvoiceTC) CargosA(comp *core.Component) (err error) {
 	return nil
 }
 
-func (inv InvoiceTC) CommentA(comp *core.Component) (err error) {
+func (inv InvoiceTC) CommentA(comp *core.Builder) (err error) {
 	// header
 	if err := comp.SetCellStHeader("B", "S", "Комментарий"); err != nil {
 		return err

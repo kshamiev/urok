@@ -13,7 +13,7 @@ func InvoiceTCTrucking(tplFilePath string, data []InvoiceTC) (*excelize.File, er
 	}
 	// defer fp.DeleteSheet(core.TplList)
 
-	comp, err := core.NewComponent(fp)
+	comp, err := core.NewBuilder(fp)
 	if err != nil {
 		return nil, err
 	}
