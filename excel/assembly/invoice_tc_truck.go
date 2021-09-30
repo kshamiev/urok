@@ -24,17 +24,16 @@ func InvoiceTCTrucking(tplFilePath string, data []InvoiceTC) (*excelize.File, er
 
 	for _, inv := range data {
 		comp.NewSheet(inv.Number)
+		comp.Row = 1
 		if err := inv.HeaderMain(comp, hMain1+inv.Number); err != nil {
 			return nil, err
 		}
 		if err := inv.CargosA(comp); err != nil {
 			return nil, err
 		}
-		comp.SetRowMove(1)
 		if err := inv.CommentA(comp); err != nil {
 			return nil, err
 		}
-		comp.SetRowMove(1)
 	}
 	return fp, nil
 }
