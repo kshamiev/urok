@@ -30,7 +30,7 @@ func NewBuilder(fp *excelize.File) (*Builder, error) {
 	if comp.stHeaderMain, err = fp.GetCellStyle(TplList, "B1"); err != nil {
 		return nil, err
 	}
-	if comp.stHeader, err = fp.GetCellStyle(TplList, "B2"); err != nil {
+	if comp.stHeader, err = fp.GetCellStyle(TplList, "B8"); err != nil {
 		return nil, err
 	}
 	if comp.stHeaderSub, err = fp.GetCellStyle(TplList, "B3"); err != nil {
@@ -62,7 +62,6 @@ func (comp *Builder) HeaderMain(colBeg, colEnd string, rowBeg, rowEnd int) *Buil
 		colEnd:    colEnd,
 		Err:       nil,
 	}
-	// _ = comp.SetRowHeight(21.0)
 }
 func (comp *Builder) Header(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 	return &Build{
@@ -75,7 +74,6 @@ func (comp *Builder) Header(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 		colEnd:    colEnd,
 		Err:       nil,
 	}
-	// _ = comp.SetRowHeight(18.0)
 }
 func (comp *Builder) HeaderSub(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 	return &Build{
@@ -88,7 +86,6 @@ func (comp *Builder) HeaderSub(colBeg, colEnd string, rowBeg, rowEnd int) *Build
 		colEnd:    colEnd,
 		Err:       nil,
 	}
-	// _ = comp.SetRowHeight(16.0)
 }
 func (comp *Builder) Data(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 	return &Build{
@@ -101,7 +98,6 @@ func (comp *Builder) Data(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 		colEnd:    colEnd,
 		Err:       nil,
 	}
-	// _ = comp.SetRowHeight(16.0)
 }
 func (comp *Builder) Footer(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 	return &Build{
@@ -114,7 +110,18 @@ func (comp *Builder) Footer(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 		colEnd:    colEnd,
 		Err:       nil,
 	}
-	// _ = comp.SetRowHeight(16.0)
+}
+func (comp *Builder) Cell(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
+	return &Build{
+		fp:        comp.fp,
+		style:     0,
+		sheetName: comp.sheetName,
+		rowBeg:    rowBeg,
+		rowEnd:    rowEnd,
+		colBeg:    colBeg,
+		colEnd:    colEnd,
+		Err:       nil,
+	}
 }
 
 // Dump all variables to STDOUT

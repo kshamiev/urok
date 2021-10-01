@@ -18,17 +18,27 @@ func InvoiceTCTrucking(tplFilePath string, data []InvoiceTC) (*excelize.File, er
 		return nil, err
 	}
 
-	const hMain1 = "Заявка на организацию транспортно-экспедиционного обслуживания № "
-
 	comp.NewSheet("main")
 
 	for _, inv := range data {
 		comp.NewSheet(inv.Number)
 		comp.Row = 1
-		if err := inv.HeaderMain(comp, hMain1+inv.Number); err != nil {
+		if err := inv.HeaderMain(comp); err != nil {
+			return nil, err
+		}
+		if err := inv.InitiatorA(comp); err != nil {
+			return nil, err
+		}
+		if err := inv.FromA(comp); err != nil {
+			return nil, err
+		}
+		if err := inv.ToA(comp); err != nil {
 			return nil, err
 		}
 		if err := inv.CargosA(comp); err != nil {
+			return nil, err
+		}
+		if err := inv.HeaderAdvanced(comp); err != nil {
 			return nil, err
 		}
 		if err := inv.CommentA(comp); err != nil {

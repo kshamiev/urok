@@ -20,11 +20,116 @@ type InvoiceTC struct {
 	Type        string             `json:"type"`
 }
 
-func (inv InvoiceTC) HeaderMain(b *core.Builder, value interface{}) (err error) {
-	if err := b.HeaderMain("B", "S", b.Row, b.Row).Height(21).Value(value); err != nil {
+func (inv InvoiceTC) HeaderMain(b *core.Builder) (err error) {
+	if err := b.HeaderMain("B", "S", b.Row, b.Row).Height(21).
+		Value("Заявка на организацию транспортно-экспедиционного обслуживания № " + inv.Number); err != nil {
 		return err
 	}
 	b.Row++
+	return nil
+}
+
+func (inv InvoiceTC) InitiatorA(b *core.Builder) error {
+	if err := b.Header("B", "S", b.Row, b.Row).Height(18).Value("Инициатор"); err != nil {
+		return err
+	}
+	b.Row++
+	if err := b.HeaderSub("B", "B", b.Row, b.Row).Height(16).Value("ФИО"); err != nil {
+		return err
+	}
+	if err := b.Data("C", "H", b.Row, b.Row).Value("${fullname}"); err != nil {
+		return err
+	}
+	if err := b.HeaderSub("I", "I", b.Row, b.Row).Value("Тел"); err != nil {
+		return err
+	}
+	if err := b.Data("J", "M", b.Row, b.Row).Value("${phone}"); err != nil {
+		return err
+	}
+	if err := b.HeaderSub("N", "N", b.Row, b.Row).Value("E-mail"); err != nil {
+		return err
+	}
+	if err := b.Data("O", "S", b.Row, b.Row).Value("${email}"); err != nil {
+		return err
+	}
+	b.Row += 2
+	return nil
+}
+
+func (inv InvoiceTC) FromA(b *core.Builder) error {
+	return inv.fromToA(b, false)
+}
+
+func (inv InvoiceTC) ToA(b *core.Builder) error {
+	return inv.fromToA(b, true)
+}
+
+func (inv InvoiceTC) fromToA(b *core.Builder, flag bool) error {
+	actor := "Грузоотправитель"
+	date := "Дата отправления"
+	if flag {
+		actor = "Грузополучатель"
+		date = "Дата получения"
+	}
+	if err := b.Header("B", "D", b.Row, b.Row).Height(18).Value(actor); err != nil {
+		return err
+	}
+	if err := b.Data("E", "O", b.Row, b.Row).Value("${company}"); err != nil {
+		return err
+	}
+	if err := b.Header("P", "Q", b.Row, b.Row).Value(date); err != nil {
+		return err
+	}
+	if err := b.Data("R", "S", b.Row, b.Row).Value("${date}"); err != nil {
+		return err
+	}
+	b.Row++
+	if err := b.Header("B", "D", b.Row, b.Row+1).Value("Пункт отправления"); err != nil {
+		return err
+	}
+	if err := b.HeaderSub("E", "J", b.Row, b.Row).Height(16).Value("Область/Республика/Край"); err != nil {
+		return err
+	}
+	if err := b.HeaderSub("K", "M", b.Row, b.Row).Value("Населенный пункт"); err != nil {
+		return err
+	}
+	if err := b.HeaderSub("N", "S", b.Row, b.Row).Value("Улица, дом, корп."); err != nil {
+		return err
+	}
+	b.Row++
+	if err := b.Data("E", "J", b.Row, b.Row).Height(16).Value("${province}"); err != nil {
+		return err
+	}
+	if err := b.Data("K", "M", b.Row, b.Row).Value("${city}"); err != nil {
+		return err
+	}
+	if err := b.Data("N", "S", b.Row, b.Row).Value("${house}"); err != nil {
+		return err
+	}
+	b.Row++
+	if err := b.Header("B", "D", b.Row, b.Row+1).Value("Ответственное лицо грузополучателя:"); err != nil {
+		return err
+	}
+	if err := b.HeaderSub("E", "J", b.Row, b.Row).Height(16).Value("ФИО"); err != nil {
+		return err
+	}
+	if err := b.HeaderSub("K", "M", b.Row, b.Row).Value("Телефон"); err != nil {
+		return err
+	}
+	if err := b.HeaderSub("N", "S", b.Row, b.Row).Value("e-mail"); err != nil {
+		return err
+	}
+	b.Row++
+	if err := b.Data("E", "J", b.Row, b.Row).Height(16).Value("${fullname}"); err != nil {
+		return err
+	}
+	if err := b.Data("K", "M", b.Row, b.Row).Value("${phone}"); err != nil {
+		return err
+	}
+	if err := b.Data("N", "S", b.Row, b.Row).Value("${email}"); err != nil {
+		return err
+	}
+	b.Row += 3
 	return nil
 }
 
@@ -125,8 +230,16 @@ func (inv InvoiceTC) CargosA(b *core.Builder) error {
 	if err := b.Footer("S", "S", b.Row, b.Row).Value("FF 5"); err != nil {
 		return err
 	}
-	b.Row++
-	b.Row++
+	b.Row += 2
+	return nil
+}
+
+func (inv InvoiceTC) HeaderAdvanced(b *core.Builder) (err error) {
+	if err := b.Cell("B", "S", b.Row, b.Row).Height(21).
+		Value("Дополнительные условия перевозки"); err != nil {
+		return err
+	}
+	b.Row += 2
 	return nil
 }
 
@@ -141,7 +254,6 @@ func (inv InvoiceTC) CommentA(b *core.Builder) (err error) {
 	if err := b.Data("B", "S", b.Row, b.Row).Height(h).Value(inv.Comment); err != nil {
 		return err
 	}
-	b.Row++
-	b.Row++
+	b.Row += 2
 	return nil
 }

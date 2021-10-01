@@ -41,8 +41,10 @@ func (b *Build) Value(value interface{}) error {
 			return err
 		}
 	}
-	if err := b.fp.SetCellStyle(b.sheetName, beg, end, b.style); err != nil {
-		return err
+	if 0 < b.style {
+		if err := b.fp.SetCellStyle(b.sheetName, beg, end, b.style); err != nil {
+			return err
+		}
 	}
 	if err := b.fp.SetCellValue(b.sheetName, beg, value); err != nil {
 		return err
