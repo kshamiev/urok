@@ -34,6 +34,20 @@ func (b *Build) Width(h float64) *Build {
 }
 
 func (b *Build) Value(value interface{}) error {
+	if err := b.cell(); err != nil {
+		return err
+	}
+	return b.fp.SetCellValue(b.sheetName, b.colBeg+strconv.Itoa(b.rowBeg), value)
+}
+
+func (b *Build) Formula(f string) error {
+	if err := b.cell(); err != nil {
+		return err
+	}
+	return b.fp.SetCellFormula(b.sheetName, b.colBeg+strconv.Itoa(b.rowBeg), f)
+}
+
+func (b *Build) cell() error {
 	beg := b.colBeg + strconv.Itoa(b.rowBeg)
 	end := b.colEnd + strconv.Itoa(b.rowEnd)
 	if beg != end {
@@ -42,20 +56,7 @@ func (b *Build) Value(value interface{}) error {
 		}
 	}
 	if 0 < b.style {
-		if err := b.fp.SetCellStyle(b.sheetName, beg, end, b.style); err != nil {
-			return err
-		}
-	}
-	if err := b.fp.SetCellValue(b.sheetName, beg, value); err != nil {
-		return err
+		return b.fp.SetCellStyle(b.sheetName, beg, end, b.style)
 	}
 	return nil
 }
-
-// func (comp *Builder) SetRow(row int) {
-// 	comp.row = row
-// }
-
-// func (comp *Builder) SetRowMove(row int) {
-// 	comp.row += row
-// }

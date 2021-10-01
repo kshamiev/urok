@@ -1,6 +1,8 @@
 package assembly
 
 import (
+	"fmt"
+	"strconv"
 	"unicode/utf8"
 
 	"github.com/kshamiev/urok/excel/core"
@@ -170,6 +172,7 @@ func (inv InvoiceTC) CargosA(b *core.Builder) error {
 	b.Row++
 	// data
 	for i := range inv.Cargos {
+		r := strconv.Itoa(b.Row)
 		if err := b.Data("B", "C", b.Row, b.Row).Height(16).Value(inv.Cargos[i].ID); err != nil {
 			return err
 		}
@@ -191,8 +194,10 @@ func (inv InvoiceTC) CargosA(b *core.Builder) error {
 		if err := b.Data("N", "N", b.Row, b.Row).Value(inv.Cargos[i].Amount); err != nil {
 			return err
 		}
-		if err := b.Data("O", "O", b.Row, b.Row).Value("F 1"); err != nil {
+		f := fmt.Sprintf("=K%s*L%s*M%s*N%s", r, r, r, r)
+		if err := b.Data("O", "O", b.Row, b.Row).Formula(f); err != nil {
 			return err
+
 		}
 		if err := b.Data("P", "P", b.Row, b.Row).Value("F 2"); err != nil {
 			return err
