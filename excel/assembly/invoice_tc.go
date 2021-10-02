@@ -136,6 +136,7 @@ func (inv InvoiceTC) fromToA(b *core.Builder, flag bool) error {
 }
 
 func (inv InvoiceTC) CargosA(b *core.Builder) error {
+	var formula string
 	// header
 	if err := b.Header("B", "S", b.Row, b.Row).Height(18).Value("Информация о грузе"); err != nil {
 		return err
@@ -171,6 +172,7 @@ func (inv InvoiceTC) CargosA(b *core.Builder) error {
 	}
 	b.Row++
 	// data
+	rStart := strconv.Itoa(b.Row)
 	for i := range inv.Cargos {
 		r := strconv.Itoa(b.Row)
 		if err := b.Data("B", "C", b.Row, b.Row).Height(16).Value(inv.Cargos[i].ID); err != nil {
@@ -194,45 +196,56 @@ func (inv InvoiceTC) CargosA(b *core.Builder) error {
 		if err := b.Data("N", "N", b.Row, b.Row).Value(inv.Cargos[i].Amount); err != nil {
 			return err
 		}
-		f := fmt.Sprintf("=K%s*L%s*M%s*N%s", r, r, r, r)
-		if err := b.Data("O", "O", b.Row, b.Row).Formula(f); err != nil {
+		formula = fmt.Sprintf("=K%s*L%s*M%s*N%s", r, r, r, r)
+		if err := b.Formula("O", "O", b.Row, b.Row).Formula(formula); err != nil {
 			return err
 
 		}
-		if err := b.Data("P", "P", b.Row, b.Row).Value("F 2"); err != nil {
+		formula = fmt.Sprintf("=O%s*1000/6*N%s", r, r)
+		if err := b.Formula("P", "P", b.Row, b.Row).Formula(formula); err != nil {
 			return err
 		}
-		if err := b.Data("Q", "Q", b.Row, b.Row).Value("F 3"); err != nil {
+		formula = fmt.Sprintf("=O%s*250", r)
+		if err := b.Formula("Q", "Q", b.Row, b.Row).Formula(formula); err != nil {
 			return err
 		}
 		if err := b.Data("R", "R", b.Row, b.Row).Value(inv.Cargos[i].Summ); err != nil {
 			return err
 		}
-		if err := b.Data("S", "S", b.Row, b.Row).Value("F 4"); err != nil {
+		formula = fmt.Sprintf("=N%s*J%s", r, r)
+		if err := b.Formula("S", "S", b.Row, b.Row).Formula(formula); err != nil {
 			return err
 		}
 		b.Row++
 	}
+	rStop := strconv.Itoa(b.Row - 1)
 	// footer
-	if err := b.Footer("B", "M", b.Row, b.Row).Height(16).Value("итого"); err != nil {
+	if err := b.HeaderSub("B", "M", b.Row, b.Row).Height(16).Value("итого"); err != nil {
 		return err
 	}
-	if err := b.Footer("N", "N", b.Row, b.Row).Value("FF 0"); err != nil {
+	formula = fmt.Sprintf("=SUM(N%s:N%s)", rStart, rStop)
+	if err := b.Formula("N", "N", b.Row, b.Row).Formula(formula); err != nil {
 		return err
 	}
-	if err := b.Footer("O", "O", b.Row, b.Row).Value("FF 1"); err != nil {
+	formula = fmt.Sprintf("=SUM(O%s:O%s)", rStart, rStop)
+	if err := b.Formula("O", "O", b.Row, b.Row).Formula(formula); err != nil {
 		return err
 	}
-	if err := b.Footer("P", "P", b.Row, b.Row).Value("FF 2"); err != nil {
+	formula = fmt.Sprintf("=IF(AND(SUM(Q%s:Q%s)>=0,SUM(Q%s:Q%s)<=0.5),0.5,ROUND(SUM(P%s:P%s),0))",
+		rStart, rStop, rStart, rStop, rStart, rStop)
+	if err := b.Formula("P", "P", b.Row, b.Row).Formula(formula); err != nil {
 		return err
 	}
-	if err := b.Footer("Q", "Q", b.Row, b.Row).Value("FF 3"); err != nil {
+	formula = fmt.Sprintf("=ROUND(SUM(Q%s:Q%s),0)", rStart, rStop)
+	if err := b.Formula("Q", "Q", b.Row, b.Row).Formula(formula); err != nil {
 		return err
 	}
-	if err := b.Footer("R", "R", b.Row, b.Row).Value("FF 4"); err != nil {
+	formula = fmt.Sprintf("=SUM(R%s:R%s)", rStart, rStop)
+	if err := b.Formula("R", "R", b.Row, b.Row).Formula(formula); err != nil {
 		return err
 	}
-	if err := b.Footer("S", "S", b.Row, b.Row).Value("FF 5"); err != nil {
+	formula = fmt.Sprintf("=SUM(S%s:S%s)", rStart, rStop)
+	if err := b.Formula("S", "S", b.Row, b.Row).Formula(formula); err != nil {
 		return err
 	}
 	b.Row += 2

@@ -19,6 +19,7 @@ type Builder struct {
 	stHeaderSub  int
 	stData       int
 	stFooter     int
+	stFormula    int
 	sheetName    string
 	Row          int
 }
@@ -36,10 +37,13 @@ func NewBuilder(fp *excelize.File) (*Builder, error) {
 	if comp.stHeaderSub, err = fp.GetCellStyle(TplList, "B3"); err != nil {
 		return nil, err
 	}
-	if comp.stData, err = fp.GetCellStyle(TplList, "B34"); err != nil {
+	if comp.stData, err = fp.GetCellStyle(TplList, "D19"); err != nil {
 		return nil, err
 	}
 	if comp.stFooter, err = fp.GetCellStyle(TplList, "B20"); err != nil {
+		return nil, err
+	}
+	if comp.stFormula, err = fp.GetCellStyle(TplList, "O19"); err != nil {
 		return nil, err
 	}
 
@@ -63,6 +67,7 @@ func (comp *Builder) HeaderMain(colBeg, colEnd string, rowBeg, rowEnd int) *Buil
 		Err:       nil,
 	}
 }
+
 func (comp *Builder) Header(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 	return &Build{
 		fp:        comp.fp,
@@ -75,6 +80,7 @@ func (comp *Builder) Header(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 		Err:       nil,
 	}
 }
+
 func (comp *Builder) HeaderSub(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 	return &Build{
 		fp:        comp.fp,
@@ -87,6 +93,7 @@ func (comp *Builder) HeaderSub(colBeg, colEnd string, rowBeg, rowEnd int) *Build
 		Err:       nil,
 	}
 }
+
 func (comp *Builder) Data(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 	return &Build{
 		fp:        comp.fp,
@@ -99,6 +106,7 @@ func (comp *Builder) Data(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 		Err:       nil,
 	}
 }
+
 func (comp *Builder) Footer(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 	return &Build{
 		fp:        comp.fp,
@@ -111,6 +119,20 @@ func (comp *Builder) Footer(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 		Err:       nil,
 	}
 }
+
+func (comp *Builder) Formula(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
+	return &Build{
+		fp:        comp.fp,
+		style:     comp.stFormula,
+		sheetName: comp.sheetName,
+		rowBeg:    rowBeg,
+		rowEnd:    rowEnd,
+		colBeg:    colBeg,
+		colEnd:    colEnd,
+		Err:       nil,
+	}
+}
+
 func (comp *Builder) Cell(colBeg, colEnd string, rowBeg, rowEnd int) *Build {
 	return &Build{
 		fp:        comp.fp,
