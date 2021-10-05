@@ -1,4 +1,4 @@
-package core
+package excelb
 
 import (
 	"strconv"
@@ -47,9 +47,6 @@ func (b *Build) Formula(f string) error {
 	if err := b.fp.SetCellFormula(b.sheetName, b.colBeg+strconv.Itoa(b.rowBeg), f); err != nil {
 		return err
 	}
-	// if err := b.fp.UpdateLinkedValue(); err != nil {
-	// 	return err
-	// }
 	return nil
 }
 

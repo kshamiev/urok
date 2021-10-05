@@ -19,5 +19,4 @@ func main() {
 	if err := fp.SaveAs("test.xlsx"); err != nil {
 		log.Fatal(err)
 	}
-
 }
