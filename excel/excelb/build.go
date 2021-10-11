@@ -58,7 +58,7 @@ func (b *Build) cell() error {
 			return err
 		}
 	}
-	if 0 < b.style {
+	if b.style > 0 {
 		return b.fp.SetCellStyle(b.sheetName, beg, end, b.style)
 	}
 	return nil

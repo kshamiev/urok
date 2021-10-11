@@ -85,6 +85,7 @@ func NewBuilder(fp *excelize.File) (*Builder, error) {
 
 func (b *Builder) NewSheet(name string) int {
 	b.sheetName = name
+	b.Row = 1
 	return b.fp.NewSheet(name)
 }
 
