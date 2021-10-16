@@ -7,8 +7,8 @@ import (
 
 	"github.com/xuri/excelize/v2"
 
-	"github.com/kshamiev/urok/excel/excelb"
-	"github.com/kshamiev/urok/excel/typs"
+	"github.com/kshamiev/urok/sample/excel/excelb"
+	"github.com/kshamiev/urok/sample/excel/typs"
 )
 
 type InvoiceTC struct {

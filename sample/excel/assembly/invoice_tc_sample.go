@@ -1,6 +1,6 @@
 package assembly
 
-import "github.com/kshamiev/urok/excel/typs"
+import "github.com/kshamiev/urok/sample/excel/typs"
 
 func NewInvoiceTCSample(number string) InvoiceTC {
 	return InvoiceTC{
