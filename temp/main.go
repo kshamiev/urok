@@ -79,6 +79,8 @@ type TestChild struct {
 	Name string
 }
 
+// ////
+
 // func (o TestChild) MarshalJSON() ([]byte, error) {
 // 	fmt.Println("MarshalJSON !!!")
 // 	return []byte("{}"), nil
@@ -88,8 +90,6 @@ type TestChild struct {
 // 	fmt.Println("UnmarshalJSON !!!")
 // 	return nil
 // }
-
-// ////
 
 // Чтение из БД
 func (o *Test) Scan(value interface{}) error {
