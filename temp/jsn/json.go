@@ -26,6 +26,10 @@ func (self *Json) Get() (name string, value string) {
 		switch e {
 		case 123: // {
 		case 125: // }
+		case 91: // [
+		case 93: // ]
+		case 92: // \
+			self.cursor++
 		case 34: // "
 			if flag == 34 {
 				goto stepName
@@ -34,14 +38,13 @@ func (self *Json) Get() (name string, value string) {
 				cur = self.cursor
 			}
 			flag = 34
-		case 92: // \
-			self.cursor++
-		case 91: // [
-		case 93: // ]
+		case 58: // :
+		case 44: // ,
 		}
 	}
 stepName:
 	name = string(self.data[cur : self.cursor-1])
+	self.cursor++ // минуем двоеточие
 
 	// value
 	flag = 0
@@ -51,6 +54,10 @@ stepName:
 		switch e {
 		case 123: // {
 		case 125: // }
+		case 91: // [
+		case 93: // ]
+		case 92: // \
+			self.cursor++
 		case 34: // "
 			if flag == 34 {
 				self.cursor++ // если значение в кавычках перепрыгиваем следующую запятую
@@ -68,10 +75,6 @@ stepName:
 			if flag != 34 {
 				goto stepValue
 			}
-		case 92: // \
-			self.cursor++
-		case 91: // [
-		case 93: // ]
 		}
 	}
 stepValue:
