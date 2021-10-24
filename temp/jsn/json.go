@@ -34,14 +34,6 @@ func (self *Json) Get() (name string, value string) {
 				cur = self.cursor
 			}
 			flag = 34
-		case 58: // :
-			if flag != 34 {
-				cur = self.cursor
-			}
-		case 44: // ,
-			if flag != 34 && flag != 0 {
-				goto stepName
-			}
 		case 92: // \
 			self.cursor++
 		case 91: // [
@@ -61,6 +53,7 @@ stepName:
 		case 125: // }
 		case 34: // "
 			if flag == 34 {
+				self.cursor++ // если значение в кавычках перепрыгиваем следующую запятую
 				goto stepValue
 			}
 			if flag == 0 {
