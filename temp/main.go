@@ -12,8 +12,10 @@ import (
 func main() {
 
 	o := &Test{
-		ID:   34,
-		Name: `"sdfsdfsd"`,
+		ID:    34,
+		Fio:   `Pupkin,:K`,
+		Price: 45.78,
+		Name:  `"sdfsdfsd"`,
 		Funtik: TestChild{
 			ID:   546,
 			Name: "hgjhjhjklfgh",
@@ -42,6 +44,8 @@ func main() {
 
 type Test struct {
 	ID     int
+	Fio    string
+	Price  float64
 	Name   string
 	Fantik []TestChild
 	Funtik TestChild
@@ -55,6 +59,14 @@ type Test struct {
 func (o *Test) UnmarshalJSON(data []byte) error {
 	sc := jsn.NewJson(data)
 	name, value := sc.Get()
+	fmt.Println(name, value)
+	name, value = sc.Get()
+	fmt.Println(name, value)
+	name, value = sc.Get()
+	fmt.Println(name, value)
+	name, value = sc.Get()
+	fmt.Println(name, value)
+	name, value = sc.Get()
 	fmt.Println(name, value)
 
 	return nil
