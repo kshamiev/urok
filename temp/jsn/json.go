@@ -39,7 +39,7 @@ func (self *Json) Get() (name string, value string) {
 				cur = self.cursor
 			}
 		case 44: // ,
-			if flag != 34 {
+			if flag != 34 && flag != 0 {
 				goto stepName
 			}
 		case 92: // \

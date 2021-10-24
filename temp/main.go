@@ -36,10 +36,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println(string(data))
 	if err := json.Unmarshal(data, o); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(string(data))
 }
 
 type Test struct {
