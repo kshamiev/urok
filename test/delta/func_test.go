@@ -1,5 +1,5 @@
 // sample full
-// go test -bench=. bench_test.go ... > namefile.txt
+// go test -bench=. bench_test.goq ... > namefile.txt
 // go test -bench=BenchmarkToJSON bench_test.go ... > namefile.txt
 //
 // go test -bench=. > old.txt
