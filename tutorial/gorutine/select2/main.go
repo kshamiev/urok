@@ -10,17 +10,19 @@ func main() {
 	c2 := make(chan string)
 
 	go func() {
-		for {
+		for n := 0; n < 10; n++ {
 			c1 <- "from 1"
 			time.Sleep(time.Second * 2)
 		}
+		close(c1)
 	}()
 
 	go func() {
-		for {
+		for n := 0; n < 10; n++ {
 			c2 <- "from 2"
 			time.Sleep(time.Second * 3)
 		}
+		close(c2)
 	}()
 
 	go func() {
@@ -28,16 +30,23 @@ func main() {
 			select {
 			// если не сделать получение с проверкой
 			// то после закрытия канала селект будет бесконечно сваливаться в секцию с закрытым каналом читаю из него пустое значение
-			case msg1 := <-c1:
+			case msg1, ok := <-c1:
+				if !ok {
+					goto Poit
+				}
 				fmt.Println(msg1)
 			// если не сделать получение с проверкой
 			// то после закрытия канала селект будет бесконечно сваливаться в секцию с закрытым каналом читаю из него пустое значение
-			case msg2 := <-c2:
+			case msg2, ok := <-c2:
+				if !ok {
+					goto Poit
+				}
 				fmt.Println(msg2)
 			case <-time.After(time.Second):
 				fmt.Println("timeout")
 			}
 		}
+	Poit:
 	}()
 
 	var input string
