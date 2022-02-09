@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-var haystack2 = `type CarrierMoneyRatio strut { // ИД`
+var haystack2 = `type CarrierMoneyRatio struct { // ИД`
 
 var pattern = regexp.MustCompile("type (.+?) struct {")
 

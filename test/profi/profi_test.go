@@ -1,5 +1,6 @@
 // go test -bench=.
 // GOGC=off go test -bench=BenchmarkRegex1 -cpuprofile cpu.out -memprofile mem.out
+// GOGC=off go test -bench=BenchmarkRegex2 -cpuprofile cpu.out -memprofile mem.out
 // go tool pprof profi.test cpu.out
 // go tool pprof -alloc_space profi.test mem.out
 // go tool pprof -inuse_space profi.test mem.out
