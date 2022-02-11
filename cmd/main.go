@@ -1,27 +1,20 @@
 package main
 
-import "strconv"
+import "fmt"
 
 func main() {
-}
-
-func RLE(str string) string {
-
-	var res string
-	var n int
-	var step rune
-
-	for _, s := range str {
-		if step != s {
-			if step != '' {
-
-			}
-			res += string(step) + strconv.Itoa(n)
-			step = s
-			n = 1
-		} else {
-			n++
-		}
-	}
-	return res
+	f := []byte{
+		0303,
+		0234,
+	} // "Ü"
+	f = []byte{
+		0313,
+		0232,
+	} // "˚"
+	f = []byte{ // 0xe2 0x80 0xa8
+		0342,
+		0200,
+		0250,
+	} // "% %"
+	fmt.Println("%" + string(f) + "%")
 }

@@ -1,6 +1,9 @@
-// go test -bench=.
+// go test -bench=. -benchmem
+//
+// go test -bench=. -cpuprofile cpu.out -memprofile mem.out
 // GOGC=off go test -bench=BenchmarkRegex1 -cpuprofile cpu.out -memprofile mem.out
 // GOGC=off go test -bench=BenchmarkRegex2 -cpuprofile cpu.out -memprofile mem.out
+//
 // go tool pprof profi.test cpu.out
 // go tool pprof -alloc_space profi.test mem.out
 // go tool pprof -inuse_space profi.test mem.out
@@ -26,9 +29,6 @@ func BenchmarkSubstring(b *testing.B) {
 }
 
 func BenchmarkRegex1(b *testing.B) {
-	// pprof.StartCPUProfile(...)
-	// pprof.StopCPUProfile()
-	// runtime.MemProfile(...)
 	for i := 0; i < b.N; i++ {
 		_, _ = regexp.MatchString("auctor", haystack)
 	}
@@ -37,10 +37,9 @@ func BenchmarkRegex1(b *testing.B) {
 var pattern = regexp.MustCompile("auctor")
 
 func BenchmarkRegex2(b *testing.B) {
-	// pprof.StartCPUProfile(...)
-	// pprof.StopCPUProfile()
-	// runtime.MemProfile(...)
 	for i := 0; i < b.N; i++ {
 		pattern.MatchString(haystack)
 	}
 }
+// BenchmarkStatsD-4                1000000          1516 ns/op         560 B/op         15 allocs/op
+// BenchmarkStatsD-4                5000000           381 ns/op         112 B/op          1 allocs/op
