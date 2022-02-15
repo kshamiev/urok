@@ -3,6 +3,9 @@
 // (pprof) top
 // (pprof) list main.allocAndLeave
 // (pprof) disasm main.allocAndLeave
+//
+// go build -gcflags=-m
+// показывает куда будут аллоцированы переменные программы
 package main
 
 import (

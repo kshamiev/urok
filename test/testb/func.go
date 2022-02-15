@@ -1,5 +1,10 @@
 package testb
 
+import (
+	"bytes"
+	"strings"
+)
+
 // ////
 
 // O(N^2)
@@ -25,4 +30,27 @@ func GetAlgorithmComplexity1(n int) map[int]map[int]int {
 		}
 	}
 	return data
+}
+
+func leftpad1(s string, length int, char rune) string {
+	for len(s) < length {
+		s = string(char) + s
+	}
+	return s
+}
+
+func leftpad2(s string, length int, char rune) string {
+	buf := bytes.Buffer{}
+	for i := 0; i < length-len(s); i++ {
+		buf.WriteRune(char)
+	}
+	buf.WriteString(s)
+	return buf.String()
+}
+
+func leftpad3(s string, length int, char rune) string {
+	if len(s) < length {
+		return strings.Repeat(string(char), length-len(s)) + s
+	}
+	return s
 }

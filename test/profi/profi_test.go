@@ -9,6 +9,8 @@
 // go tool pprof -inuse_space profi.test mem.out
 // (pprof) svg
 //
+// go build -gcflags=-m
+// показывает куда будут аллоцированы переменные программы
 // https://github.com/pkg/profile
 
 package profi

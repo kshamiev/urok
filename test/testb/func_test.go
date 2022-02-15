@@ -19,6 +19,7 @@ import (
 
 // O(N^2)
 func BenchmarkAlgorithmComplexity(b *testing.B) {
+	b.Skip()
 	data := GetAlgorithmComplexity1(1000)
 	b.ResetTimer()
 	b.ReportAllocs()
@@ -31,6 +32,7 @@ func BenchmarkAlgorithmComplexity(b *testing.B) {
 // ////
 
 func BenchmarkSample(b *testing.B) {
+	b.Skip()
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
 		if x := fmt.Sprintf("%d", 42); x != "42" {
@@ -60,6 +62,7 @@ func (s *Set) Delete(x interface{}) {
 }
 
 func BenchmarkSetDelete(b *testing.B) {
+	b.Skip()
 	var testSet []string
 	for i := 0; i < 1024; i++ {
 		testSet = append(testSet, strconv.Itoa(i))
