@@ -8,6 +8,7 @@ import (
 func main() {
 	testGoroutines3()
 	testData2()
+	testData4()
 }
 
 // что отобразится после вызова?
@@ -18,7 +19,7 @@ func testGoroutines3() {
 			fmt.Println(v)
 		}()
 	}
-	time.Sleep(3 * time.Second)
+	time.Sleep(2 * time.Second)
 }
 
 // что отобразится после вызова?
@@ -31,4 +32,21 @@ func testData2() {
 	for _, u := range result {
 		fmt.Printf("%d ", *u)
 	}
+	*result[0] = *result[0] * 2
+	fmt.Println()
+	for _, u := range result {
+		fmt.Printf("%d ", *u)
+	}
+	fmt.Println()
+}
+
+// что отобразится после вызова?
+func testData4() {
+	a := []int{1, 2, 3, 4, 5, 6, 7, 8}
+	for i := range a {
+		go func() {
+			fmt.Printf("%d ", a[i])
+		}()
+	}
+	time.Sleep(time.Second * 5)
 }
