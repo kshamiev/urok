@@ -1,49 +1,26 @@
-//  go test -v -bench=. bubble.go bubble_test.go utilites.go
 package sort
 
 import (
+	"strconv"
 	"testing"
 )
 
+// go test ./sample/sort/. -run=^# -bench=SortBubble -benchtime=10x -count 3
 func BenchmarkSortBubble(b *testing.B) {
-	b.Run("1 000", func(b *testing.B) {
-		b.ReportAllocs()
-		b.SetBytes(2)
-		b.ResetTimer()
-		b.StopTimer()
-		items := make([]int, 1000)
-		for i := range items {
-			items[i] = int(GenInt(1000))
-		}
-		b.StartTimer()
-		b.Log(items[:10])
-		b.Log(items[990:])
-		SortBubble(items)
-		b.Log(items[:10])
-		b.Log(items[990:])
-	})
-	b.Run("10 000", func(b *testing.B) {
-		b.ReportAllocs()
-		b.SetBytes(2)
-		b.ResetTimer()
-		b.StopTimer()
-		items := make([]int, 10000)
-		for i := range items {
-			items[i] = int(GenInt(10000))
-		}
-		b.StartTimer()
-		SortBubble(items)
-	})
-	b.Run("100 000", func(b *testing.B) {
-		b.ReportAllocs()
-		b.SetBytes(2)
-		b.ResetTimer()
-		b.StopTimer()
-		items := make([]int, 100000)
-		for i := range items {
-			items[i] = int(GenInt(100000))
-		}
-		b.StartTimer()
-		SortBubble(items)
-	})
+	for _, number := range []int{1000, 10000, 100000} {
+		b.Run(strconv.Itoa(number), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				b.ReportAllocs()
+				b.SetBytes(2)
+				b.ResetTimer()
+				b.StopTimer()
+				items := make([]int, number)
+				for i := range items {
+					items[i] = int(GenInt(int64(number)))
+				}
+				b.StartTimer()
+				SortBubble(items)
+			}
+		})
+	}
 }

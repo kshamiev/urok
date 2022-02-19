@@ -1,49 +1,50 @@
-//  go test -v -bench=. bitwise.go bitwise_test.go utilites.go
 package sort
 
 import (
+	"strconv"
 	"testing"
 )
 
+// go test ./sample/sort/. -run=^# -bench=SortBitwise -benchtime=10x -count 3
 func BenchmarkSortBitwise(b *testing.B) {
-	b.Run("1 000", func(b *testing.B) {
-		b.ReportAllocs()
-		b.SetBytes(2)
-		b.ResetTimer()
-		b.StopTimer()
-		items := make([]int, 1000)
-		for i := range items {
-			items[i] = int(GenInt(1000))
-		}
-		b.StartTimer()
-		b.Log(items[:10])
-		b.Log(items[990:])
-		items = SortBitwise(items, 10)
-		b.Log(items[:10])
-		b.Log(items[990:])
-	})
-	b.Run("10 000", func(b *testing.B) {
-		b.ReportAllocs()
-		b.SetBytes(2)
-		b.ResetTimer()
-		b.StopTimer()
-		items := make([]int, 10000)
-		for i := range items {
-			items[i] = int(GenInt(10000))
-		}
-		b.StartTimer()
-		items = SortBitwise(items, 10)
-	})
-	b.Run("100 000", func(b *testing.B) {
-		b.ReportAllocs()
-		b.SetBytes(2)
-		b.ResetTimer()
-		b.StopTimer()
-		items := make([]int, 100000)
-		for i := range items {
-			items[i] = int(GenInt(100000))
-		}
-		b.StartTimer()
-		items = SortBitwise(items, 10)
-	})
+	for _, number := range []int{1000, 10000, 100000} {
+		b.Run(strconv.Itoa(number), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				b.ReportAllocs()
+				b.SetBytes(2)
+				b.ResetTimer()
+				b.StopTimer()
+				items := make([]int, number)
+				for i := range items {
+					items[i] = int(GenInt(int64(number)))
+				}
+				b.StartTimer()
+				SortBitwise(items, 10)
+			}
+		})
+	}
 }
+
+/*
+BenchmarkSortBitwise/1000-8	    10    9971 ns/op    0.20 MB/s    11606 B/op    25 allocs/op
+
+10
+количество итераций тестирования функции
+
+9971 ns/op
+время затраченное в среднем на каждую итерацию в наносекундах.
+
+0.20 MB/s
+пропускная способность за одну итерацию в мегабайтах
+или количество обработанной памяти за одну итерацию
+(это то сколько данных было обработано)
+
+11606 B/op
+память выделенная на одну итерацию в байтах
+(это сколько памяти было выделено)
+
+25 allocs/op
+количество выделений памяти на куче не на стеке
+(это количесвто обращений к куче для выделения памяти)
+
+*/

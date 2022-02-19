@@ -1,5 +1,7 @@
 # Testing
 
+default: help
+
 test-all:
 	go test ./... -cover -v
 .PHONY: test-all
@@ -32,7 +34,7 @@ bench-func1:
 
 bench-func2:
 	go test ./... -run=^# -bench=SortBitwise -cover -v
-.PHONY: bench-func1
+.PHONY: bench-func2
 
 # FMT & IMPORT
 fmt:

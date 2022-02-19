@@ -1,34 +1,24 @@
-//  go test -v -bench=. merger.go merger_test.go utilites.go
 package sort
 
-import "testing"
+import (
+	"strconv"
+	"testing"
+)
 
+// go test ./sample/sort/. -run=^# -bench=SortMerge -benchtime=10x -count 3
 func BenchmarkSortMerge(b *testing.B) {
-	b.Run("1 000", func(b *testing.B) {
-		b.ReportAllocs()
-		items := make([]int, 1000)
-		for i := range items {
-			items[i] = int(GenInt(1000))
-		}
-		b.ResetTimer()
-		SortMerge(items)
-	})
-	b.Run("10 000", func(b *testing.B) {
-		b.ReportAllocs()
-		items := make([]int, 10000)
-		for i := range items {
-			items[i] = int(GenInt(10000))
-		}
-		b.ResetTimer()
-		SortMerge(items)
-	})
-	b.Run("100 000", func(b *testing.B) {
-		b.ReportAllocs()
-		items := make([]int, 100000)
-		for i := range items {
-			items[i] = int(GenInt(100000))
-		}
-		b.ResetTimer()
-		SortMerge(items)
-	})
+	for _, number := range []int{1000, 10000, 100000} {
+		b.Run(strconv.Itoa(number), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				b.ReportAllocs()
+				b.SetBytes(2)
+				items := make([]int, number)
+				for i := range items {
+					items[i] = int(GenInt(int64(number)))
+				}
+				b.ResetTimer()
+				SortMerge(items)
+			}
+		})
+	}
 }

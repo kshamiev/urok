@@ -6,26 +6,28 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"path/filepath"
+	"runtime"
 )
 
 func Home(w http.ResponseWriter, r *http.Request) {
-	imgFile, err := os.Open("product-name.png") // a QR code image
-
+	_, currentFile, _, _ := runtime.Caller(0)
+	imgFile, err := os.Open(filepath.Dir(currentFile) + "/product-name.png") // a QR code image
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(err.Error()))
+		return
 	}
-
 	defer imgFile.Close()
 
 	// create a new buffer base on file size
 	fInfo, _ := imgFile.Stat()
-	var size int64 = fInfo.Size()
+	size := fInfo.Size()
 	buf := make([]byte, size)
 
 	// read file content into buffer
 	fReader := bufio.NewReader(imgFile)
-	fReader.Read(buf)
+	_, _ = fReader.Read(buf)
 
 	// if you create a new image instead of loading from file, encode the image to buffer instead with png.Encode()
 
@@ -37,8 +39,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	// Embed into an html without PNG file
 	img2html := "<html><body><img src=\"data:image/png;base64," + imgBase64Str + "\" /></body></html>"
 
-	w.Write([]byte(fmt.Sprintf(img2html)))
-
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write([]byte(fmt.Sprintf(img2html)))
 }
 
 func main() {
