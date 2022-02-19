@@ -18,11 +18,10 @@ func main() {
 
 // IF
 func sampleIF(obj Facer) {
-
 	if _, ok := HashControl["qwerty1"]; ok {
-		fmt.Println("IF  Хеш index qwerty1 OK", "\n")
+		fmt.Println("IF  Хеш index qwerty1 OK")
 	} else {
-		fmt.Println("IF  Хеш index qwerty1 NOT", "\n")
+		fmt.Println("IF  Хеш index qwerty1 NOT")
 	}
 
 	if elm, ok := obj.(Instant); ok {
@@ -49,17 +48,17 @@ func sampleFOR() {
 		// 4 увеличение индекса
 		fmt.Print(sl[i], " ")
 	}
-	fmt.Println("\n")
+	fmt.Println()
 
 	for index := range sl {
 		fmt.Print(index, " ")
 	}
-	fmt.Println("\n")
+	fmt.Println()
 
 	for index, val := range sl {
 		fmt.Print(index, " = ", val, " ")
 	}
-	fmt.Println("\n")
+	fmt.Println()
 
 }
 

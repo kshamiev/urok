@@ -15,8 +15,8 @@ func SortBitwise(arr []int, cBase int) []int {
 			maxVal = value
 		}
 	}
-
 	i := 0
+
 	for math.Pow(float64(cBase), float64(i)) <= float64(maxVal) {
 		arr = bucketsToList(listToBuckets(arr, cBase, i))
 		i++

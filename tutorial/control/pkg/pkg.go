@@ -11,7 +11,7 @@ import (
 // перед входом в функцию main
 func init() {
 	fmt.Println(Num)
-	fmt.Println("_ import pkg\n")
+	fmt.Println("_ import pkg")
 }
 
 var Num = int64(254)

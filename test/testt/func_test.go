@@ -19,3 +19,20 @@ func Test1(t1 *testing.T) {
 		fmt.Println(data[i])
 	}
 }
+
+var pattern2 = regexp.MustCompile(`[[:graph:]]|\s|[а-яА-ЯёЁ№]+`)
+
+func Test2(t *testing.T) {
+	haystack := "aa  ˜  adfd Ü tuy ₽ thgfh6*,.~^&$%#Ёё!№ .ю, э ' ~ ` _ абырвалк � Ж ::;-+=*/˚"
+	flag := pattern2.MatchString(haystack)
+	t.Log(flag)
+	str := pattern2.ReplaceAllString(haystack, "")
+	fmt.Println("-" + str + "-")
+}
+
+// %˚%
+// % %
+// %�%
+// %˜%
+// %Ü%
+// %₽%

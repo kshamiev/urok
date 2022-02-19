@@ -12,7 +12,7 @@ func main() {
 	Stroka0 = "qwerty"
 	fmt.Println(Stroka0)
 	fmt.Println(Stroka1)
-	fmt.Println(Stroka2, "\n")
+	fmt.Println(Stroka2)
 
 	sampleString(Stroka1)
 	fmt.Println(Stroka1)

@@ -25,9 +25,7 @@ const SAMPLE float64 = 45.56
 const SAMPLE1 = float64(45.56)
 
 func main() {
-
-	fmt.Println(KB, MB, GB, TB, PB, EB, "\n")
-	fmt.Println(one, two, foo, "\n")
+	fmt.Println(KB, MB, GB, TB, PB, EB)
+	fmt.Println(one, two, foo)
 	fmt.Println(SAMPLE, SAMPLE1)
-
 }

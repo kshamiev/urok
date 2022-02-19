@@ -17,7 +17,7 @@ func main() {
 	sampleNumber(Celoe2, Drobnoe2)
 
 	fmt.Println(Celoe0, Celoe1, Celoe2)
-	fmt.Println(Drobnoe0, Drobnoe1, Drobnoe2, "\n")
+	fmt.Println(Drobnoe0, Drobnoe1, Drobnoe2)
 
 	sampleNumberLink(&Celoe2, &Drobnoe2)
 
