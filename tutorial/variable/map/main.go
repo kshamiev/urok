@@ -9,7 +9,7 @@ var Hash1 = make(map[string]string) // рекомендуется
 var Hash2 = map[string]string{
 	"key1": "value1",
 	"key2": "value2",
-}                                   // рекомендуется
+} // рекомендуется
 
 func main() {
 	//	Hash0["qwerty"] = "yuiop" // здесь будет ошибка, так как хеш просто обьявлен и имеет значение nil

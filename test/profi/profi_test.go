@@ -43,5 +43,6 @@ func BenchmarkRegex2(b *testing.B) {
 		pattern.MatchString(haystack)
 	}
 }
+
 // BenchmarkStatsD-4                1000000          1516 ns/op         560 B/op         15 allocs/op
 // BenchmarkStatsD-4                5000000           381 ns/op         112 B/op          1 allocs/op

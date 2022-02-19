@@ -6,7 +6,7 @@ import (
 
 // обьявление переменный уровня пакета
 // var Srez0 []int                              // рекомендуется
-var Srez1 = make([]int, 10, 15)              //
+var Srez1 = make([]int, 10, 15) //
 // var Srez2 = []int{1, 2, 3, 4, 5, 6, 7, 8, 9} // рекомендуется
 
 func main() {
