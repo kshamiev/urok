@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"runtime"
 	"time"
 )
 
@@ -19,11 +20,16 @@ func main() {
 	timeDedline, ok := ctx.Deadline()
 	fmt.Println(val, ch, err, timeDedline, ok)
 	fmt.Println()
+	fmt.Println(runtime.GoroutineProfile(nil))
 
 	testWithCancel(ctx)
 	testWithDeadline(ctx)
 	testWithTimeout(ctx)
 
+	for i := 0; i < 100; i++ {
+		time.Sleep(time.Second)
+		fmt.Println(runtime.GoroutineProfile(nil))
+	}
 }
 
 func testWithCancel(ctx context.Context) {
@@ -38,9 +44,9 @@ func testWithCancel(ctx context.Context) {
 }
 
 func testWithDeadline(ctx context.Context) {
-	ctx, cancel := context.WithDeadline(ctx, time.Now().Add(2*time.Second))
+	ctx, cancel := context.WithDeadline(ctx, time.Now().Add(3*time.Second))
 	go func() {
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 10)
 		fmt.Println("WithDeadline cancel")
 		cancel()
 	}()
@@ -49,9 +55,9 @@ func testWithDeadline(ctx context.Context) {
 }
 
 func testWithTimeout(ctx context.Context) {
-	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
 	go func() {
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 15)
 		fmt.Println("WithTimeout cancel")
 		cancel()
 	}()

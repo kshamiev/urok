@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math/rand"
+	"runtime"
 	"time"
 )
 
@@ -126,4 +127,6 @@ func main() {
 
 	// Выполнение работы
 	doWorkContext(ctxWithCancel)
+
+	fmt.Println(runtime.GoroutineProfile(nil))
 }
