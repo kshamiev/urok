@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// go test ./sample/sort/. -run=^# -bench=SortCounting -benchtime=10x -count 3
+// GOGC=off go test ./sample/sort/. -run=^# -bench=SortCounting -benchtime=10x -count 3
 func BenchmarkSortCounting(b *testing.B) {
 	for _, number := range []int{1000, 10000, 100000} {
 		b.Run(strconv.Itoa(number), func(b *testing.B) {

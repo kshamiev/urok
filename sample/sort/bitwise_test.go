@@ -5,7 +5,33 @@ import (
 	"testing"
 )
 
-// go test ./sample/sort/. -run=^# -bench=SortBitwise -benchtime=10x -count 3
+/*
+-run=^#
+-run none
+отключение запуска обычных или модульных тестов
+
+-bench=SortBitwise
+фильтр, какой тест будет запущен
+
+-benchtime=10x
+количество итераций внутри теста (b.N)
+-benchtime=10s
+время в секундах на тест
+
+-benchmem alias b.ReportAllocs()
+показывать аллокации на куче и время выполнения одной итерации внутри теста (b.N)
+
+-count 3
+количество запусков теста
+
+-cpu 8
+количество используемых процессоров
+
+GOGC=off
+Отключение GC
+*/
+
+// GOGC=off go test ./sample/sort/. -run=^# -bench=SortBitwise -benchtime=10x -count 3 -cpu 8
 func BenchmarkSortBitwise(b *testing.B) {
 	for _, number := range []int{1000, 10000, 100000} {
 		b.Run(strconv.Itoa(number), func(b *testing.B) {

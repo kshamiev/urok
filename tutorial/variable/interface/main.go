@@ -11,6 +11,11 @@ import (
 	"reflect"
 )
 
+func main() {
+
+	SampleFace()
+}
+
 func SampleFace() {
 	sampleFly(&Bird{"Чайка"})
 	fmt.Println()
@@ -27,9 +32,8 @@ func sampleFly(obj flying) {
 
 	// это абстрактный механизм проверки на реальный nil (но работает не быстро)
 	// быстрый (по производительности) способ проверки на nil это реализовывать методы у интерфейса и объектов которые делают эту проверку
-	if !reflect.ValueOf(obj).IsNil() {
-		fmt.Println("type check is nukll")
-		obj.Fly()
+	if reflect.ValueOf(obj).IsNil() {
+		fmt.Println("type check is null")
 	}
 
 	obj.Fly()
@@ -62,16 +66,4 @@ type Aircraft struct {
 
 func (o *Aircraft) Fly() {
 	fmt.Println("fly is *Aircraft: ", o.Name)
-}
-
-// ////
-
-// для понимания отображения в панели навигации
-type FlyingPub interface {
-	Test()
-}
-
-// для понимания отображения в панели навигации
-type flyingPubTest struct {
-	Name string
 }

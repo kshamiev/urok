@@ -27,12 +27,5 @@ func Test2(t *testing.T) {
 	flag := pattern2.MatchString(haystack)
 	t.Log(flag)
 	str := pattern2.ReplaceAllString(haystack, "")
-	fmt.Println("-" + str + "-")
+	t.Log("-" + str + "-")
 }
-
-// %˚%
-// % %
-// %�%
-// %˜%
-// %Ü%
-// %₽%
