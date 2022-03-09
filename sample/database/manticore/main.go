@@ -1,12 +1,17 @@
 // install from ubuntu
+//
 // wget https://repo.manticoresearch.com/manticore-repo.noarch.deb
 // sudo dpkg -i manticore-repo.noarch.deb
 // sudo apt update
 // sudo apt install manticore manticore-columnar-lib
 //
-// sudo indexer
+// sudo indexer --all --rotate
 //
 // systemctl status manticore
+// systemctl restart manticore
+//
+// sudo journalctl --unit manticore
+// sudo journalctl -xe
 //
 // Дмитрий Свиридов @dimuska139
 package main
@@ -25,15 +30,15 @@ func main() {
 		return
 	}
 
-	res, err := cl.Sphinxql(`replace into testrt values(1, 'my subject', 'my content')`)
+	res, err := cl.Sphinxql(`replace into usersidxrt values(1, 'my subject', 'my content')`)
 	fmt.Println(res, err)
-	res, err = cl.Sphinxql(`replace into testrt values(2,'another subject', 'more content')`)
+	res, err = cl.Sphinxql(`replace into usersidxrt values(2,'another subject', 'more content')`)
 	fmt.Println(res, err)
-	res, err = cl.Sphinxql(`replace into testrt values(5,'again subject', 'one more content')`)
+	res, err = cl.Sphinxql(`replace into usersidxrt values(5,'again subject', 'one more content')`)
 	fmt.Println(res, err)
-	res2, err2 := cl.Query("more|another", "testrt")
+	res2, err2 := cl.Query("more|another", "usersidxrt")
 	fmt.Println(res2, err2)
 
-	res2, err2 = cl.Query("zLVtPW2i", "test1")
+	res2, err2 = cl.Query("YAqcEZM8", "usersidx")
 	fmt.Println(res2, err2)
 }

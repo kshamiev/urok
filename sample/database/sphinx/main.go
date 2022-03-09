@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-"github.com/shopspring/decimal"
+	"github.com/shopspring/decimal"
 )
 
 func main() {
