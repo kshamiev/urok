@@ -39,6 +39,6 @@ func main() {
 	res2, err2 := cl.Query("more|another", "usersidxrt")
 	fmt.Println(res2, err2)
 
-	res2, err2 = cl.Query("YAqcEZM8", "usersidx")
+	res2, err2 = cl.Query("7i4kenQB", "usersidx")
 	fmt.Println(res2, err2)
 }
