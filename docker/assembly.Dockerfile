@@ -9,6 +9,6 @@ COPY go /usr/local
 
 ENV PATH=$PATH:/usr/local/go/bin
 
-# docker build --no-cache --rm -t kshamiev/assembly:v1 -f assembly.Dockerfile .
+# docker build --no-cache -t kshamiev/assembly:v1 -f assembly.Dockerfile .
 # docker push kshamiev/assembly:v1
 # docker run --rm -it kshamiev/assembly:v1

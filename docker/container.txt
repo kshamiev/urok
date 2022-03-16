@@ -1,0 +1,85 @@
+ОСНОВЫ РАБОТЫ С КОНТЕЙНЕРАМИ
+
+создание и запуск контейнера из образа
+	docker run busybox
+    docker run --rm -d --name sungora --net sun\
+        -p 8080:8080 \
+        -e TEST_VAR=password \
+        --mount type=bind,source=/home/domains/sungora.local/www,target=/home/app/www \
+        kshamiev/sungora
+    --rm                автоматическое удаление контейнера после остановки
+    -d                  запуск в режиме демона (отпустить консоль)
+    --name sungora      название контейнера
+    --net sun           сеть в которой будет работать контейнер (сеть должна существовать)
+    -p 8080:8080        проброс порта (port_host:port_container)
+    -e TEST_VAR=pass    переменная окружения внутри контейнера
+    kshamiev/sungora    используемый образ
+
+    монтирование папки хоста в папку контейнера
+    --mount type=bind,src=/home/domains/sungora.local/www,dst=/home/app/www \
+	--mount type=bind,src="$(pwd)",dst=/home/app
+	--mount type=tmpfs,dst=/home/app/www tmpfs-mode=1770
+	--mount type=volume,src=sungora_www,dst=/home/app/www \
+
+    docker run -it busybox sh|bash
+    создание, запуск контейнера и вход в него (используется для отладки).
+
+    ПРИМЕРЫ:
+    docker run --name test1 --net qwerty -dp 8080:8080 kshamiev/test1
+    docker run --name psql2 --net qwerty -dp 5433:5432 -e POSTGRES_PASSWORD=postgres postgres:10
+
+Список всех запущенных контейнеров (-a завершенные контейнеры)
+	docker ps
+	вывести только работающие контейнеры
+	docker ps -as
+    -a вывести все контейнеры
+    -s вывести информацию о размере контейнеров
+Запуск остановленного или созданного контейнера
+    docker start 305297d7a235
+Остановить работающий в фоне (в режиме демона) контейнер
+	docker stop 305297d7a235
+	остановка всех работающих контейнеров
+	docker stop $(docker ps -q)
+	жёсткая остановка всех работающих контейнеров
+	docker kill $(docker ps -q)
+Удаление контейнеров
+	docker rm 305297d7a235 ff0a5c3750b9
+	удаление всех не работающих контейнеров
+	docker rm $(docker ps -a -q -f status=exited)
+
+АНАЛИЗ КОНТЕЙНЕРОВ
+
+Вход в работающий в фоне контейнер
+	docker exec -ti my_container /bin/sh
+	docker exec -ti my_container bash
+	netstat -lp
+Просмотр используемых портов работающего контейнера
+	docker port my_container
+Просмотр логов работы контейнера
+	docker logs my_container
+Просмотр статистики использования ресурсов при работе контейнера
+	docker stats my_container
+Вывод подробной информации о контейнере.
+    docker inspect my_container
+
+СЕТИ ДОКЕРА
+
+Список всех сетей
+	docker network ls
+Подробная информация по указанной сети
+	docker network inspect bridge
+Создание новой сети
+	docker network create NameNewNet
+
+ХРАНИЛИЩА КОНТЕНЕРОВ
+
+    расположение томов
+    /var/lib/docker/volumes
+
+KUBERNETES
+	kubectl logs -f nodeName-5bc57c7b79-zjqlb --namespace project-develop --context abp-dev --tail 100 | head
+    kubectl exec -it containerName-bc9fdff6c-td52j --namespace project-develop --context dev bash
+    kubectl get pods --namespace project_name-dev --context dev
+    kubectl port-forward postgresql-0 5434:5432  --namespace project-develop --context dev
+    kubectl port-forward minio-0 9000:9000  --namespace project-develop --context dev
+    kubectl port-forward deployment/yarg 4567:4567  --namespace project-develop --context dev
