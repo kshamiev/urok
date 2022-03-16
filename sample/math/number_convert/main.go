@@ -57,6 +57,7 @@ func hex2int(hexStr string) int {
 func main() {
 
 	num1 := int64(123456789)
+	fmt.Println(fmt.Sprintf("%d", num1))
 	fmt.Println(fmt.Sprintf("%b", num1))
 	fmt.Println(fmt.Sprintf("%o", num1))
 	fmt.Println(fmt.Sprintf("%x", num1))

@@ -512,8 +512,8 @@ github.com/xdg-go/stringprep v1.0.2/go.mod h1:8F9zXuvzgwmyT5DUm4GUfZGDdT3W+LCvS6
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 github.com/xuri/efp v0.0.0-20210322160811-ab561f5b45e3 h1:EpI0bqf/eX9SdZDwlMmahKM+CDBgNbsXMhsN28XrM8o=
 github.com/xuri/efp v0.0.0-20210322160811-ab561f5b45e3/go.mod h1:ybY/Jr0T0GTCnYjKqmdwxyxn2BQf2RcQIIvex5QldPI=
-github.com/xuri/excelize/v2 v2.4.1 h1:veeeFLAJwsNEBPBlDepzPIYS1eLyBVcXNZUW79exZ1E=
-github.com/xuri/excelize/v2 v2.4.1/go.mod h1:rSu0C3papjzxQA3sdK8cU544TebhrPUoTOaGPIh0Q1A=
+github.com/xuri/excelize/v2 v2.5.0 h1:nDDVfX0qaDuGjAvb+5zTd0Bxxoqa1Ffv9B4kiE23PTM=
+github.com/xuri/excelize/v2 v2.5.0/go.mod h1:rSu0C3papjzxQA3sdK8cU544TebhrPUoTOaGPIh0Q1A=
 github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d h1:splanxYIlg+5LfHAM6xpdFEAYOk8iySO56hMFq6uLyA=
 github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d/go.mod h1:rHwXgn7JulP+udvsHwJoVG1YGAP6VLg4y9I5dyZdqmA=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

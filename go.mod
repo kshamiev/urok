@@ -11,7 +11,7 @@ require (
 	github.com/manticoresoftware/go-sdk v0.0.0-20200819180014-70a49dc3179d
 	github.com/shopspring/decimal v1.3.1
 	github.com/volatiletech/sqlboiler/v4 v4.8.3
-	github.com/xuri/excelize/v2 v2.4.1
+	github.com/xuri/excelize/v2 v2.5.0
 	go.mongodb.org/mongo-driver v1.8.4
 )
 

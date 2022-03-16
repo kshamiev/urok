@@ -12,18 +12,12 @@ import (
 )
 
 func main() {
-
-	SampleFace()
-}
-
-func SampleFace() {
+	var o *Bird
+	sampleFly(o)
+	fmt.Println()
 	sampleFly(&Bird{"Чайка"})
 	fmt.Println()
 	sampleFly(&Aircraft{"Mig-31"})
-}
-
-type flying interface {
-	Fly()
 }
 
 // пример передачи значение типа через интерфейс который он реализует
@@ -34,6 +28,7 @@ func sampleFly(obj flying) {
 	// быстрый (по производительности) способ проверки на nil это реализовывать методы у интерфейса и объектов которые делают эту проверку
 	if reflect.ValueOf(obj).IsNil() {
 		fmt.Println("type check is null")
+		return
 	}
 
 	obj.Fly()
@@ -52,6 +47,18 @@ func sampleFly(obj flying) {
 	}
 }
 
+// проверка что тип реализует указанный интерфейс
+var _ flying = &Bird{}
+var _ flying = &Aircraft{}
+var _ flying = (*Aircraft)(nil)
+
+// var _ flying = &AircraftFail{}
+// var _ flying = (*AircraftFail)(nil)
+
+type flying interface {
+	Fly()
+}
+
 type Bird struct {
 	Name string
 }
@@ -66,4 +73,8 @@ type Aircraft struct {
 
 func (o *Aircraft) Fly() {
 	fmt.Println("fly is *Aircraft: ", o.Name)
+}
+
+type AircraftFail struct {
+	Name string
 }
