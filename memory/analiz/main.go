@@ -15,7 +15,6 @@ type Y struct {
 type X struct{ v int }
 
 func foo(x interface{}) {
-	// fmt.Println(x.v)
 }
 
 // go build -gcflags=-m memory/analiz/main.go
