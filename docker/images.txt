@@ -6,6 +6,7 @@ docker login — вход в реестр Docker (https://hub.docker.com).
     --no-cache     отключение кеширования во время сборки
     -t идентификация образа, его имя
     -f файл с инструкциями для сборки
+
 Удаление образа
 	docker rmi Image1 Image2
 	docker rmi $(docker images -f dangling=true -q)
@@ -16,8 +17,10 @@ docker login — вход в реестр Docker (https://hub.docker.com).
 	    — удаление всех неиспользуемых контейнеров, томов, сетей и образов.
 	docker volume prune
         — удаление неиспользуемых томов.
+
 Получение, загрузка нужного образа
 	docker pull busybox
+
 Сохранение образа в репозитории (https://hub.docker.com)
     docker push my_repo/my_image:my_tag
 
@@ -31,5 +34,6 @@ docker login — вход в реестр Docker (https://hub.docker.com).
 Просмотр списка полученных и доступных образов в системе
 	docker images -a
 	docker image ls
+
 Поиск образа на хабе
 	docker search

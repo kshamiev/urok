@@ -1,8 +1,20 @@
 package main
 
+import (
+	"time"
+
+	"github.com/shopspring/decimal"
+)
+
+type Y struct {
+	v int
+	b time.Time
+	m decimal.Decimal
+	s string
+}
 type X struct{ v int }
 
-func foo(x *X) {
+func foo(x interface{}) {
 	// fmt.Println(x.v)
 }
 
@@ -10,4 +22,6 @@ func foo(x *X) {
 func main() {
 	x := &X{1}
 	foo(x)
+	y := &Y{}
+	foo(y)
 }
