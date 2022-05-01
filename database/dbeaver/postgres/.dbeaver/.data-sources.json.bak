@@ -6,6 +6,7 @@
 			"driver": "postgres-jdbc",
 			"name": "localhost",
 			"save-password": true,
+			"show-system-objects": true,
 			"read-only": false,
 			"configuration": {
 				"host": "localhost",
@@ -26,11 +27,52 @@
 					"postgresql.dd.plain.string": "false",
 					"postgresql.dd.tag.string": "false"
 				},
-				"auth-model": "native",
-				"handlers": {}
+				"auth-model": "native"
 			},
 			"custom-properties": {
 				"database.props.expensive": "true"
+			}
+		},
+		"postgres-jdbc-18038c8d41e-18ad5a557678b2f7": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "shamiev",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "5432",
+				"database": "postgres",
+				"url": "jdbc:postgresql://localhost:5432/postgres",
+				"type": "dev",
+				"provider-properties": {
+					"@dbeaver-show-non-default-db@": "true",
+					"@dbeaver-show-template-db@": "true",
+					"@dbeaver-show-unavailable-db@": "false",
+					"show-database-statistics": "false",
+					"@dbeaver-read-all-data-types-db@": "false",
+					"@dbeaver-use-prepared-statements-db@": "false",
+					"postgresql.dd.plain.string": "false",
+					"postgresql.dd.tag.string": "false"
+				},
+				"auth-model": "native",
+				"handlers": {
+					"ssh_tunnel": {
+						"type": "TUNNEL",
+						"enabled": true,
+						"save-password": true,
+						"properties": {
+							"jumpServer0.authType": "PASSWORD",
+							"jumpServer0.port": 22.0,
+							"port": 22.0,
+							"implementation": "jsch",
+							"bypassHostVerification": false,
+							"jumpServer0.enabled": false,
+							"host": "81.177.25.118",
+							"authType": "PASSWORD"
+						}
+					}
+				}
 			}
 		}
 	},

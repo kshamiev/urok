@@ -6,6 +6,7 @@
 			"driver": "postgres-jdbc",
 			"name": "localhost",
 			"save-password": true,
+			"show-system-objects": true,
 			"read-only": false,
 			"configuration": {
 				"host": "localhost",
@@ -26,8 +27,7 @@
 					"postgresql.dd.plain.string": "false",
 					"postgresql.dd.tag.string": "false"
 				},
-				"auth-model": "native",
-				"handlers": {}
+				"auth-model": "native"
 			},
 			"custom-properties": {
 				"database.props.expensive": "true"
@@ -63,10 +63,10 @@
 						"save-password": true,
 						"properties": {
 							"jumpServer0.authType": "PASSWORD",
+							"jumpServer0.port": 22.0,
+							"port": 22.0,
 							"implementation": "jsch",
 							"bypassHostVerification": false,
-							"jumpServer0.port": 22,
-							"port": 22,
 							"jumpServer0.enabled": false,
 							"host": "81.177.25.118",
 							"authType": "PASSWORD"

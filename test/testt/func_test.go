@@ -29,3 +29,11 @@ func Test2(t *testing.T) {
 	str := pattern2.ReplaceAllString(haystack, "")
 	t.Log("-" + str + "-")
 }
+
+var pattern3 = regexp.MustCompile(`json:"(.+?)"`)
+
+func TestReq(t *testing.T) {
+	haystack := `hfghgfhfg gfhfgh fhfg json:"status" dfdsf json:"status" nfghfghfg`
+	str := pattern3.ReplaceAllString(haystack, "")
+	t.Log("-" + str + "-")
+}

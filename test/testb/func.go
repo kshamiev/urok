@@ -48,6 +48,15 @@ func leftpad2(s string, length int, char rune) string {
 	return buf.String()
 }
 
+func leftpad21(s string, length int, char rune) string {
+	buf := strings.Builder{}
+	for i := 0; i < length-len(s); i++ {
+		buf.WriteRune(char)
+	}
+	buf.WriteString(s)
+	return buf.String()
+}
+
 func leftpad3(s string, length int, char rune) string {
 	if len(s) < length {
 		return strings.Repeat(string(char), length-len(s)) + s
