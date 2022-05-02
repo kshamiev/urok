@@ -2,16 +2,32 @@ package main
 
 import "fmt"
 
-func main() {
-	var a int
-	var b string
-	var c float64
-	var d bool
+type Face interface {
+	Good()
+}
 
-	fmt.Printf("var a %T = %+v\n", a, a)
-	fmt.Printf("var b %T = %q\n", b, b)
-	fmt.Printf("var c %T = %+v\n", c, c)
-	fmt.Printf("var d %T = %+v\n\n", d, d)
-	fmt.Printf("var d %T = %v\n\n", d, d)
-	fmt.Printf("var d %T = %#v\n\n", d, d)
+type Fikus struct {
+}
+
+func (o Fikus) Good() {
+
+}
+
+func main() {
+
+	f := Test()
+	if f == nil {
+		fmt.Println("NIL")
+	} else {
+		fmt.Println("NOT NIL")
+	}
+
+}
+
+func Test() Face {
+
+	return nil
+	// var g *Fikus
+	// return g
+	// return &Fikus{}
 }

@@ -13,8 +13,8 @@ func main() {
 	f = []byte{0314, 0206}
 	fmt.Println("%" + string(f) + "%")
 
-	// src := []byte("48656c6c6f20476f7068657221")
-	src := []byte("d398")
+	src := []byte("48656c6c6f20476f7068657221")
+	// src := []byte("d398")
 	dst := make([]byte, hex.DecodedLen(len(src)))
 	n, err := hex.Decode(dst, src)
 	if err != nil {
