@@ -14,7 +14,6 @@ from (
 -- Текущие соединения и запросы к БД
 select * from pg_stat_activity;
 select count(datid) from pg_stat_activity;
-select count(DISTINCT datid) from pg_stat_activity;
 show max_connections;
 
 

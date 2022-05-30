@@ -26,8 +26,8 @@ func main() {
 
 func Test() Face {
 
-	return nil
+	// return nil
 	// var g *Fikus
 	// return g
-	// return &Fikus{}
+	return Fikus{}
 }

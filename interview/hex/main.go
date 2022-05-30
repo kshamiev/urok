@@ -8,8 +8,12 @@ import (
 
 // Нужно реализовать сложение больших 16 разрядных чисел
 func main() {
-	sum, err := sum("aaaaaaf", "f")
-	fmt.Println(sum, err)
+	s, err := sum("44a2e2a50e24459bb771e2e4b801c55087894b9aa72e", "bc2d840be66ff0ee7a1a")
+	fmt.Println(s, err)
+	// 44a2e2a50e24459bb771e2e5742f495c6df93c892148 nil
+	s, err = sum("bc2d840be66ff0ee7a1a", "44a2e2a50e24459bb771e2e4b801c55087894b9aa72e")
+	fmt.Println(s, err)
+	// 44a2e2a50e24459bb771e2e5742f495c6df93c892148 nil
 }
 
 func sum(x, y string) (string, error) {

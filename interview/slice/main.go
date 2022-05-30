@@ -6,20 +6,26 @@ import (
 )
 
 func main() {
-	testGoroutines3()
+	testData1()
+	time.Sleep(5 * time.Second)
+	fmt.Println()
+
 	testData2()
-	testData4()
+	time.Sleep(5 * time.Second)
+	fmt.Println()
+
+	testData3()
+	time.Sleep(5 * time.Second)
 }
 
 // что отобразится после вызова?
-func testGoroutines3() {
+func testData1() {
 	data := []string{"one", "two", "three"}
 	for _, v := range data {
 		go func() {
 			fmt.Println(v)
 		}()
 	}
-	time.Sleep(2 * time.Second)
 }
 
 // что отобразится после вызова?
@@ -41,12 +47,11 @@ func testData2() {
 }
 
 // что отобразится после вызова?
-func testData4() {
+func testData3() {
 	a := []int{1, 2, 3, 4, 5, 6, 7, 8}
 	for i := range a {
 		go func() {
 			fmt.Printf("%d ", a[i])
 		}()
 	}
-	time.Sleep(time.Second * 5)
 }

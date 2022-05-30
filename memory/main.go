@@ -54,7 +54,25 @@
 // показывает куда будут аллоцированы переменные программы
 package main
 
+import (
+	"time"
+)
+
+// var ballast []byte
+
 func main() {
-	for {
-	}
+
+	// Create a large heap allocation of ~700 MiB
+	_ = make([]byte, 1<<16)
+
+	// for i := 0; i < len(ballast)/2; i++ {
+	// 	ballast[i] = byte('A')
+	// }
+
+	// блокировка (процессоры отдыхают)
+	<-time.After(time.Hour)
+
+	// печка (печём блины на процессоре)
+	// for {
+	// }
 }

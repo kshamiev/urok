@@ -25,6 +25,9 @@ CREATE TABLE public.web (
 	CONSTRAINT web_pk PRIMARY KEY (id)
 );
 
+INSERT INTO web (title, description, price) SELECT title, description, price FROM web;
+SELECT count(*) FROM web;
+
 -- простой вариант (динамический - на лету)
 
 -- COALESCE для обработки полей со значением NULL и включением в результаты поиска (иначе если одно поле будет null, то все остальные поля будут проигнорированы) 
