@@ -74,6 +74,19 @@
 					}
 				}
 			}
+		},
+		"dbeaver-sample-database-sqlite-1": {
+			"provider": "sqlite",
+			"driver": "sqlite_jdbc",
+			"name": "DBeaver Sample Database (SQLite)",
+			"save-password": true,
+			"show-system-objects": true,
+			"read-only": false,
+			"configuration": {
+				"database": "/home/konstantin/.local/share/DBeaverData/workspace6/.metadata/sample-database-sqlite-1/Chinook.db",
+				"url": "jdbc:sqlite:/home/konstantin/.local/share/DBeaverData/workspace6/.metadata/sample-database-sqlite-1/Chinook.db",
+				"type": "dev"
+			}
 		}
 	},
 	"connection-types": {

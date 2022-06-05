@@ -8,13 +8,11 @@ import (
 func main() {
 	semaphor := make(chan bool, 5)
 	for i := 0; i < 100; i++ {
+		semaphor <- true
 		go func(in int) {
-			semaphor <- true
 			defer func() { <-semaphor }()
 			fmt.Println(in)
-			time.Sleep(time.Second)
+			time.Sleep(time.Second * 5)
 		}(i)
 	}
-	var comIn string
-	_, _ = fmt.Scanln(&comIn)
 }
