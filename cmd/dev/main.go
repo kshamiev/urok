@@ -15,6 +15,8 @@ func (o Fikus) Good() {
 
 func main() {
 
+	fmt.Println(10000 / 500)
+
 	f := Test()
 	if f == nil {
 		fmt.Println("NIL")

@@ -1,97 +1,95 @@
-// Более сложный пример, с использованием пула обработчиков для типовых задач
 package main
 
 import (
-	"fmt"
 	"sync"
+	"time"
 )
 
-// Task - описание интерфейса работы
 type Task interface {
 	Execute()
 }
 
-// Pool
 type Pool struct {
-	size  int            // количество одновременно работающих воркеров (лимит)
-	tasks chan Task      // Канал задач - буферизированный, чтобы основная программа не блокировалась при постановке задач
-	kill  chan struct{}  // канал отмены, для завершения работы воркеров
-	wg    sync.WaitGroup // WaitGroup для контроля полного завершения работ всех задач и каналов
-	mu    sync.Mutex     // мутекс для безопасного изменения
+	tasks      chan Task      // Канал задач - буферизированный, чтобы порождающая программа не блокировалась при постановке задач
+	workerMin  int            // Минимальное количество одновременно работающих обработчиков
+	workerMax  int            // Максимальное количество одновременно работающих обработчиков
+	workerSelf int            // Текущее количество одновременно работающих обработчиков
+	kill       chan struct{}  // Канал отмены, для завершения работы обработчика
+	wg         sync.WaitGroup // WaitGroup для контроля полного завершения работ всех задач и каналов
 }
 
-// Скроем внутреннее устройство за конструктором, пользователь может влиять только на размер пула
-func NewPool(size int) *Pool {
-	pool := &Pool{
-		tasks: make(chan Task, 128),
-		kill:  make(chan struct{}),
+func NewPool(sizeChanel, workerMin, workerMax int) *Pool {
+	p := &Pool{
+		tasks:     make(chan Task, sizeChanel),
+		workerMin: workerMin,
+		workerMax: workerMax,
+		kill:      make(chan struct{}),
 	}
-	// Вызовем метод resize, чтобы установить соответствующий размер пула
-	pool.Resize(size)
-	return pool
-}
-
-func (p *Pool) Resize(n int) {
-	// Захватываем лок, чтобы избежать одновременного изменения состояния
-	p.mu.Lock()
-	defer p.mu.Unlock()
-	for p.size < n {
-		p.size++
+	for p.workerSelf < p.workerMin {
+		p.workerSelf++
 		p.wg.Add(1)
 		go p.worker()
 	}
-	for p.size > n {
-		p.kill <- struct{}{}
-	}
-}
-
-func (p *Pool) Wait() {
-	close(p.tasks)
-	p.wg.Wait()
+	p.wg.Add(1)
+	go p.control()
+	return p
 }
 
 func (p *Pool) TaskAdd(task Task) {
 	p.tasks <- task
 }
 
-// Жизненный цикл воркера
-func (p *Pool) worker() {
-	defer func() {
-		p.size--
-		p.wg.Done()
-	}()
+func (p *Pool) Wait() {
+	p.workerMin = 0
+	close(p.tasks)
+	p.wg.Wait()
+}
+
+func (p *Pool) control() {
 	for {
 		select {
-		// Если есть задача, то ее нужно обработать
-		// Блокируется пока канал не будет закрыт, либо не поступит новая задача
-		case task, ok := <-p.tasks:
-			if ok {
-				task.Execute()
-			} else {
-				return
+		case <-time.After(time.Millisecond):
+			check := len(p.tasks)
+			if check == 0 {
+				break
 			}
-			// Если пришел сигнал умирать, выходим
+			check = cap(p.tasks) / check
+			switch {
+			case check < 10: // канал заполнен задачами больше чем на 10%
+				if p.workerSelf < p.workerMax {
+					p.workerSelf++
+					p.wg.Add(1)
+					go p.worker()
+				}
+				if check == 1 { // канал заполнен задачами больше чем на половину // TODO метрика предупреждения
+				}
+			case check > 50: // канал заполнен меньше чем на 30%
+				if p.workerSelf > p.workerMin {
+					p.kill <- struct{}{}
+				}
+			}
+		}
+		if p.workerMin == 0 || p.workerMax == 0 {
+			break
+		}
+	}
+	p.wg.Done()
+}
+
+// Жизненный цикл обработчика
+func (p *Pool) worker() {
+	defer func() {
+		// TODO доработать обработку паники
+		p.workerSelf--
+		p.wg.Done()
+	}()
+
+	for task := range p.tasks {
+		task.Execute()
+		select {
+		default:
 		case <-p.kill:
 			return
 		}
 	}
-}
-
-type ExampleTask string
-
-func (e ExampleTask) Execute() {
-	fmt.Println("executing:", string(e))
-}
-
-func main() {
-	pool := NewPool(5)
-	pool.TaskAdd(ExampleTask("foo"))
-	pool.TaskAdd(ExampleTask("bar"))
-	pool.Resize(3)
-	pool.Resize(6)
-	for i := 0; i < 20; i++ {
-		pool.TaskAdd(ExampleTask(fmt.Sprintf("additional_%d", i+1)))
-	}
-	pool.Wait()
-	fmt.Println(pool.size)
 }
