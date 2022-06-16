@@ -24,10 +24,15 @@ func main() {
 // и использование утверждение типа
 func sampleFly(obj flying) {
 
+	if obj == nil {
+		fmt.Println("type check is nil")
+		return
+	}
+
 	// это абстрактный механизм проверки на реальный nil (но работает не быстро)
 	// быстрый (по производительности) способ проверки на nil это реализовывать методы у интерфейса и объектов которые делают эту проверку
 	if reflect.ValueOf(obj).IsNil() {
-		fmt.Println("type check is null")
+		fmt.Println("type check is reflect.nil")
 		return
 	}
 
@@ -73,8 +78,4 @@ type Aircraft struct {
 
 func (o *Aircraft) Fly() {
 	fmt.Println("fly is *Aircraft: ", o.Name)
-}
-
-type AircraftFail struct {
-	Name string
 }
