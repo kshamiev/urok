@@ -2,8 +2,8 @@ package main
 
 import "fmt"
 
-// go build main.go
-// objdump -d main | wc -l
+// go build -o scheduling/main scheduling/main.go
+// objdump -d scheduling/main | wc -l
 func main() {
 	fmt.Println("Hello word")
 }

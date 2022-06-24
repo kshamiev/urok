@@ -2,6 +2,10 @@
 
 default: help
 
+test-tag:
+	go test ./... -tags redis
+.PHONY: test-tag
+
 test-all:
 	go test ./... -cover -v
 .PHONY: test-all
@@ -50,6 +54,7 @@ h:
 	@echo "Usage: make [target]"
 	@echo "  target is:"
 	@echo "		h			- Вывод этой документации"
+	@echo "		test-tag		- Запуск тестов по тегу"
 	@echo "		test-all		- Запуск всех тестов"
 	@echo "		test-pkg		- Запуск тестов пакета"
 	@echo "		test-func1		- Запуск теста функции вариант 1"

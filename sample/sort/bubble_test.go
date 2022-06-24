@@ -7,7 +7,7 @@ import (
 
 // GOGC=off go test ./sample/sort/. -run=^# -bench=SortBubble -benchtime=10x -count 3
 func BenchmarkSortBubble(b *testing.B) {
-	for _, number := range []int{1000, 10000, 100000} {
+	for _, number := range []int{100, 1000, 10000} {
 		b.Run(strconv.Itoa(number), func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
 				b.ReportAllocs()

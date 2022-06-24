@@ -19,7 +19,7 @@ type Component struct {
 func GetEnv(t *testing.T) (*Component, context.Context) {
 	comp := &Component{}
 	strCon := fmt.Sprintf("dbname=%s host=%s port=%d user=%s password=%s sslmode=%s",
-		"sample",
+		"urok",
 		"localhost",
 		5432,
 		"postgres",

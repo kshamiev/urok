@@ -22,7 +22,7 @@ select count(datid) from pg_stat_activity;
 show max_connections;
 
 -- возможные типы данных 
-SELECT t.oid,t.*,c.relkind,format_type(nullif(t.typbasetype, 0), t.typtypmod) as base_type_name, d.description
+SELECT t.*, d.description
 FROM pg_catalog.pg_type t
 LEFT OUTER JOIN pg_catalog.pg_class c ON c.oid=t.typrelid
 LEFT OUTER JOIN pg_catalog.pg_description d ON t.oid=d.objoid

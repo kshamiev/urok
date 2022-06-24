@@ -1,3 +1,5 @@
+//go:build redis
+
 package redis
 
 import (
