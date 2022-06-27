@@ -4,9 +4,9 @@ SELECT
 	p.name,
 	s.units 
 FROM
-	products p
+	goods p
 LEFT JOIN sales s ON
-	p.id = s.product_id
+	p.id = s.good_id
 ;
 
 -- INNER JOIN
@@ -15,9 +15,9 @@ SELECT
 	p.name,
 	s.units 
 FROM
-	products p
+	goods p
 INNER JOIN sales s ON
-	p.id = s.product_id
+	p.id = s.good_id
 ;
 
 -- CROSS JOIN
@@ -26,7 +26,7 @@ SELECT
 	p.name,
 	s.units 
 FROM
-	products p
+	goods p
 CROSS JOIN sales s
 ;
 SELECT
@@ -34,14 +34,14 @@ SELECT
 	p.name,
 	s.units 
 FROM
-	products p, sales s
+	goods p, sales s
 ;
 SELECT
 	p.id,
 	p.name,
 	s.units 
 FROM
-	products p
+	goods p
 INNER JOIN sales s ON true
 ;
 

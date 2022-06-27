@@ -7,9 +7,9 @@ SELECT
 	p.name,
 	(sum(s.units) * (p.price - p.cost)) AS profit
 FROM
-	products p
+	goods p
 LEFT JOIN sales s ON
-	p.id = s.product_id
+	p.id = s.good_id
 WHERE
 	1=1
 	AND s.created_at > CURRENT_DATE - INTERVAL '4 weeks'
@@ -24,11 +24,11 @@ SELECT
 	p.id,
 	p.name
 FROM
-	products p
+	goods p
 LEFT JOIN sales s ON 
-	p.id = s.product_id AND s.created_at > CURRENT_DATE - INTERVAL '30 year'   
+	p.id = s.good_id AND s.created_at > CURRENT_DATE - INTERVAL '30 year'   
 WHERE
-   s.product_id IS NULL
+   s.good_id IS NULL
 ;
 
 
