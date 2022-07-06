@@ -26,10 +26,7 @@ SELECT * FROM pg_catalog.pg_stat_all_indexes AS tt WHERE tt.relname = 't';
 SELECT * FROM pg_catalog.pg_stat_all_tables AS dd WHERE dd.relname = 't';
 SELECT * FROM pg_catalog.pg_stat_activity psa ;
 
-
 SELECT version();
-
-
 
 SELECT '12.34'::float8::numeric::money;
 

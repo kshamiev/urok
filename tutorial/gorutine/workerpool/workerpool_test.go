@@ -31,6 +31,7 @@ func TestNewPool(t *testing.T) {
 // Benchmark_WorkerPool-8   	     120	   8580492 ns/op	  803321 B/op	   59791 allocs/op
 // 10000 100 1000
 // Benchmark_WorkerPool-8   	     127	   9083956 ns/op	  803158 B/op	   59791 allocs/op
+// Benchmark_WorkerPool-8   	       4	 293293199 ns/op	  852010 B/op	   60476 allocs/op
 func Benchmark_WorkerPool(b *testing.B) {
 	pool := NewPool(1000, 1, 5)
 	b.ReportAllocs()

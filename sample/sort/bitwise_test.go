@@ -54,6 +54,8 @@ func BenchmarkSortBitwise(b *testing.B) {
 /*
 BenchmarkSortBitwise/1000-8	    10    9971 ns/op    0.20 MB/s    11606 B/op    25 allocs/op
 
+BenchmarkSortBitwise/1000-8
+имя теста - количество используемых потоков (логических П)
 10
 количество итераций тестирования функции
 
