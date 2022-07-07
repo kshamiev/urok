@@ -24,24 +24,30 @@ func TestSubscribe(t *testing.T) {
 	go func(ch chan interface{}) {
 		for obj := range ch {
 			o := obj.(*typs.Cargo)
-			time.Sleep(time.Second)
+			time.Sleep(time.Second * 3)
 			fmt.Println(o.Name)
+			time.Sleep(time.Second * 3)
+			ch <- struct{}{}
 		}
 	}(ch1)
 	ch2 := pool.DataSubscribe(&typs.Cargo{})
 	go func(ch chan interface{}) {
 		for obj := range ch {
 			o := obj.(*typs.Cargo)
-			time.Sleep(time.Second)
+			time.Sleep(time.Second * 3)
 			fmt.Println(o.Name)
+			time.Sleep(time.Second * 3)
+			ch <- struct{}{}
 		}
 	}(ch2)
 	ch3 := pool.DataSubscribe(&typs.Cargo{})
 	go func(ch chan interface{}) {
 		for obj := range ch {
 			o := obj.(*typs.Cargo)
-			time.Sleep(time.Second)
+			time.Sleep(time.Second * 3)
 			fmt.Println(o.Name)
+			time.Sleep(time.Second * 3)
+			ch <- struct{}{}
 		}
 	}(ch3)
 

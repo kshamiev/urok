@@ -8,6 +8,8 @@ import (
 	"io"
 	"reflect"
 	"sync"
+
+	"github.com/kshamiev/urok/sample/excel/typs"
 )
 
 type Task interface {
@@ -94,8 +96,13 @@ func (p *Pool) DataSend(typ interface{}) {
 	i := t.String()
 	for ch := range p.storeSubscribe[i] {
 		ch <- typ
+		fmt.Println("SEND: " + typ.(*typs.Cargo).Name)
 	}
-	Dumper(typ)
+	for ch := range p.storeSubscribe[i] {
+		<-ch
+		fmt.Println("FINISH: ")
+	}
+
 }
 
 // Dumper all variables to STDOUT
