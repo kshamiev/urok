@@ -19,13 +19,12 @@ func TestSubscribe(t *testing.T) {
 		}
 	}()
 
-	// time.Sleep(time.Second * 3)
-
 	// подписчик
 	ch1 := pool.DataSubscribe(&typs.Cargo{})
 	go func(ch chan interface{}) {
 		for obj := range ch {
 			o := obj.(*typs.Cargo)
+			time.Sleep(time.Second)
 			fmt.Println(o.Name)
 		}
 	}(ch1)
@@ -33,6 +32,7 @@ func TestSubscribe(t *testing.T) {
 	go func(ch chan interface{}) {
 		for obj := range ch {
 			o := obj.(*typs.Cargo)
+			time.Sleep(time.Second)
 			fmt.Println(o.Name)
 		}
 	}(ch2)
@@ -40,11 +40,12 @@ func TestSubscribe(t *testing.T) {
 	go func(ch chan interface{}) {
 		for obj := range ch {
 			o := obj.(*typs.Cargo)
+			time.Sleep(time.Second)
 			fmt.Println(o.Name)
 		}
 	}(ch3)
 
-	time.Sleep(time.Millisecond)
+	time.Sleep(time.Hour)
 	pool.DataUnsubscribeData(&typs.Cargo{}, ch1)
 	pool.DataUnsubscribeData(&typs.Cargo{}, ch2)
 	pool.DataUnsubscribeData(&typs.Cargo{}, ch3)
