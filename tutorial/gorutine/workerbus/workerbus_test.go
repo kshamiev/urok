@@ -10,7 +10,7 @@ import (
 
 const count = 1000000
 
-// GOGC=off go test ./tutorial/gorutine/workerdatabus/. -run=^# -bench=Benchmark_Subscribe -benchtime=100000x -count 3 -cpu 8
+// GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_Subscribe -benchtime=1000x -count 5 -cpu 8
 func Benchmark_Subscribe(b *testing.B) {
 	pool := NewWorkerBus(1000, 3)
 	for i := 0; i < b.N; i++ {
@@ -23,11 +23,11 @@ func Benchmark_Subscribe(b *testing.B) {
 		}()
 
 		// подписчик
-		wg := &sync.WaitGroup{}
-		wg.Add(1)
-		ch := pool.SubscribeType(&typs.Cargo{})
-		go consumer(ch, count, wg)
-		wg.Wait()
+		// wg := &sync.WaitGroup{}
+		// wg.Add(1)
+		// ch := pool.SubscribeType(&typs.Cargo{})
+		// go consumer(ch, count, wg)
+		// wg.Wait()
 
 	}
 

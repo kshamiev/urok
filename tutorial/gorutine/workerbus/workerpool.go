@@ -40,6 +40,7 @@ func NewWorkerBus(sizeChanel, workerLimit int) *WorkerBus {
 func (p *WorkerBus) Wait() {
 	p.muWait.Lock()
 	p.workerLimit = 0
+	// time.Sleep(time.Second * 3)
 	p.muWait.Unlock()
 	close(p.chTask)
 	close(p.chData)
@@ -72,6 +73,7 @@ func (p *WorkerBus) SubscribeType(typ interface{}) chan interface{} {
 	}
 	p.storeSubscribe[i][ch] = struct{}{}
 	p.muConsumer.Unlock()
+	fmt.Println(len(p.storeSubscribe[i]))
 	return ch
 }
 
