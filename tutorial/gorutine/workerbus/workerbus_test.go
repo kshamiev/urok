@@ -1,4 +1,4 @@
-package workerdatabus
+package workerbus
 
 import (
 	"fmt"
@@ -52,18 +52,3 @@ func consumer(ch chan interface{}, limitData int) {
 		ch <- true
 	}
 }
-
-// ch3 := pool.DataSubscribe(&typs.Cargo{})
-// go func(ch chan interface{}) {
-// 	i := 0
-// 	for obj := range ch {
-// 		if i > 6000 {
-// 			ch <- false
-// 			break
-// 		}
-// 		i++
-// 		o := obj.(*typs.Cargo)
-// 		time.Sleep(time.Millisecond * time.Duration(o.Amount))
-// 		ch <- true
-// 	}
-// }(ch3)

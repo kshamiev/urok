@@ -1,4 +1,4 @@
-package workerdatabus
+package workerbus
 
 import (
 	"fmt"
@@ -8,14 +8,12 @@ import (
 type ExampleTask string
 
 func (e ExampleTask) Execute() {
-	fmt.Println(e)
+
 }
 
 func TestNewPool(t *testing.T) {
 	pool := NewPool(1000, 3)
-	pool.TaskSend(ExampleTask("foo"))
-	pool.TaskSend(ExampleTask("bar"))
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 1000000; i++ {
 		pool.TaskSend(ExampleTask(fmt.Sprintf("additional_%d", i+1)))
 	}
 	pool.Wait()
@@ -36,9 +34,7 @@ func Benchmark_WorkerPool(b *testing.B) {
 	b.ReportAllocs()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		for i := 0; i < 100; i++ {
-			pool.TaskSend(ExampleTask(fmt.Sprintf("additional_%d", i+1)))
-		}
+		pool.TaskSend(ExampleTask(fmt.Sprintf("additional_%d", i+1)))
 	}
 	pool.Wait()
 }
