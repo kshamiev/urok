@@ -1,14 +1,8 @@
 package workerbus
 
 import (
-	"bytes"
-	"crypto/rand"
 	"fmt"
-	"go/ast"
-	"go/token"
-	"io"
 	"log"
-	"math/big"
 	"reflect"
 	"sync"
 )
@@ -17,7 +11,7 @@ type Task interface {
 	Execute()
 }
 
-type Pool struct {
+type WorkerBus struct {
 	muConsumer     sync.Mutex       // для безопасного конкурентного доступа
 	muWait         sync.Mutex       // для безопасного конкурентного доступа
 	wg             sync.WaitGroup   // WaitGroup для контроля полного завершения работ всех задач и каналов
@@ -27,8 +21,8 @@ type Pool struct {
 	storeSubscribe map[string]map[chan interface{}]struct{}
 }
 
-func NewPool(sizeChanel, workerLimit int) *Pool {
-	p := &Pool{
+func NewWorkerBus(sizeChanel, workerLimit int) *WorkerBus {
+	p := &WorkerBus{
 		chTask:         make(chan Task, sizeChanel),
 		chData:         make(chan interface{}, sizeChanel),
 		workerLimit:    workerLimit,
@@ -43,18 +37,16 @@ func NewPool(sizeChanel, workerLimit int) *Pool {
 	return p
 }
 
-func (p *Pool) Wait() {
+func (p *WorkerBus) Wait() {
 	p.muWait.Lock()
 	p.workerLimit = 0
 	p.muWait.Unlock()
-	// p.TaskSend(nil)
-	// p.DataSend(nil)
 	close(p.chTask)
 	close(p.chData)
 	p.wg.Wait()
 }
 
-func (p *Pool) TaskSend(task Task) {
+func (p *WorkerBus) SendTask(task Task) {
 	p.muWait.Lock()
 	if p.workerLimit > 0 {
 		p.chTask <- task
@@ -62,7 +54,7 @@ func (p *Pool) TaskSend(task Task) {
 	p.muWait.Unlock()
 }
 
-func (p *Pool) DataSend(obj interface{}) {
+func (p *WorkerBus) SendData(obj interface{}) {
 	p.muWait.Lock()
 	if p.workerLimit > 0 {
 		p.chData <- obj
@@ -70,7 +62,20 @@ func (p *Pool) DataSend(obj interface{}) {
 	p.muWait.Unlock()
 }
 
-func (p *Pool) workerTask() {
+func (p *WorkerBus) SubscribeType(typ interface{}) chan interface{} {
+	t := reflect.TypeOf(typ)
+	i := t.String()
+	ch := make(chan interface{})
+	p.muConsumer.Lock()
+	if _, ok := p.storeSubscribe[i]; !ok {
+		p.storeSubscribe[i] = make(map[chan interface{}]struct{})
+	}
+	p.storeSubscribe[i][ch] = struct{}{}
+	p.muConsumer.Unlock()
+	return ch
+}
+
+func (p *WorkerBus) workerTask() {
 	defer func() {
 		// TODO доработать обработку паники
 		p.wg.Done()
@@ -84,7 +89,7 @@ func (p *Pool) workerTask() {
 	}
 }
 
-func (p *Pool) workerData() {
+func (p *WorkerBus) workerData() {
 	for obj := range p.chData {
 		// отправка данных подписчику
 		t := reflect.TypeOf(obj)
@@ -104,50 +109,4 @@ func (p *Pool) workerData() {
 		}
 	}
 	p.wg.Done()
-}
-
-func (p *Pool) DataSubscribe(typ interface{}) chan interface{} {
-	t := reflect.TypeOf(typ)
-	i := t.String()
-	ch := make(chan interface{})
-	p.muConsumer.Lock()
-	if _, ok := p.storeSubscribe[i]; !ok {
-		p.storeSubscribe[i] = make(map[chan interface{}]struct{})
-	}
-	p.storeSubscribe[i][ch] = struct{}{}
-	p.muConsumer.Unlock()
-	return ch
-}
-
-// //// для тестирования
-
-// Dumper all variables to STDOUT
-// From local debug
-func Dumper(idl ...interface{}) string {
-	ret := dump(idl...)
-	fmt.Print(ret.String())
-
-	return ret.String()
-}
-
-// dump all variables to bytes.Buffer
-func dump(idl ...interface{}) bytes.Buffer {
-	var buf bytes.Buffer
-
-	var wr = io.MultiWriter(&buf)
-
-	for _, field := range idl {
-		fset := token.NewFileSet()
-		_ = ast.Fprint(wr, fset, field, ast.NotNilFilter)
-	}
-
-	return buf
-}
-
-func GenInt(x int64) int64 {
-	safeNum, err := rand.Int(rand.Reader, big.NewInt(x))
-	if err != nil {
-		panic(err)
-	}
-	return safeNum.Int64()
 }
