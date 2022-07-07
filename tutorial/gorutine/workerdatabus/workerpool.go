@@ -2,11 +2,13 @@ package workerdatabus
 
 import (
 	"bytes"
+	"crypto/rand"
 	"fmt"
 	"go/ast"
 	"go/token"
 	"io"
 	"log"
+	"math/big"
 	"reflect"
 	"sync"
 )
@@ -16,7 +18,8 @@ type Task interface {
 }
 
 type Pool struct {
-	mu             sync.Mutex       // для безопасного конкурентного доступа
+	muConsumer     sync.Mutex       // для безопасного конкурентного доступа
+	muWait         sync.Mutex       // для безопасного конкурентного доступа
 	wg             sync.WaitGroup   // WaitGroup для контроля полного завершения работ всех задач и каналов
 	chTask         chan Task        // Канал задач - буф., чтобы родительская программа не блокировалась
 	workerLimit    int              // Количество одновременно работающих обработчиков
@@ -41,12 +44,31 @@ func NewPool(sizeChanel, workerLimit int) *Pool {
 }
 
 func (p *Pool) Wait() {
+	p.muWait.Lock()
+	p.workerLimit = 0
+	p.muWait.Unlock()
+	// p.TaskSend(nil)
+	// p.DataSend(nil)
 	close(p.chTask)
 	close(p.chData)
 	p.wg.Wait()
 }
 
-// //// TASK
+func (p *Pool) TaskSend(task Task) {
+	p.muWait.Lock()
+	if p.workerLimit > 0 {
+		p.chTask <- task
+	}
+	p.muWait.Unlock()
+}
+
+func (p *Pool) DataSend(obj interface{}) {
+	p.muWait.Lock()
+	if p.workerLimit > 0 {
+		p.chData <- obj
+	}
+	p.muWait.Unlock()
+}
 
 func (p *Pool) workerTask() {
 	defer func() {
@@ -62,29 +84,23 @@ func (p *Pool) workerTask() {
 	}
 }
 
-func (p *Pool) TaskSend(task Task) {
-	p.chTask <- task
-}
-
-// //// DATA
-
 func (p *Pool) workerData() {
 	for obj := range p.chData {
+		// отправка данных подписчику
 		t := reflect.TypeOf(obj)
 		i := t.String()
 		for ch := range p.storeSubscribe[i] {
 			ch <- obj
-			//			fmt.Println("SEND:")
 		}
+		// подтверждение обработки полученных данных и отписка
 		for ch := range p.storeSubscribe[i] {
 			if f, ok := (<-ch).(bool); ok && !f {
 				close(ch)
-				p.mu.Lock()
+				p.muConsumer.Lock()
 				delete(p.storeSubscribe[i], ch)
-				p.mu.Unlock()
+				p.muConsumer.Unlock()
 				fmt.Println("CLOSE:")
 			}
-			// fmt.Println("FINISH:")
 		}
 	}
 	p.wg.Done()
@@ -94,20 +110,16 @@ func (p *Pool) DataSubscribe(typ interface{}) chan interface{} {
 	t := reflect.TypeOf(typ)
 	i := t.String()
 	ch := make(chan interface{})
-	p.mu.Lock()
+	p.muConsumer.Lock()
 	if _, ok := p.storeSubscribe[i]; !ok {
 		p.storeSubscribe[i] = make(map[chan interface{}]struct{})
 	}
 	p.storeSubscribe[i][ch] = struct{}{}
-	p.mu.Unlock()
+	p.muConsumer.Unlock()
 	return ch
 }
 
-func (p *Pool) DataSend(obj interface{}) {
-	p.chData <- obj
-}
-
-// ////
+// //// для тестирования
 
 // Dumper all variables to STDOUT
 // From local debug
@@ -130,4 +142,12 @@ func dump(idl ...interface{}) bytes.Buffer {
 	}
 
 	return buf
+}
+
+func GenInt(x int64) int64 {
+	safeNum, err := rand.Int(rand.Reader, big.NewInt(x))
+	if err != nil {
+		panic(err)
+	}
+	return safeNum.Int64()
 }

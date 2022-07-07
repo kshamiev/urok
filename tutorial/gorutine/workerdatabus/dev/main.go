@@ -2,16 +2,28 @@ package main
 
 import (
 	"bytes"
+	"crypto/rand"
 	"fmt"
 	"go/ast"
 	"go/token"
 	"io"
+	"math/big"
 	"reflect"
 
 	"github.com/kshamiev/urok/sample/excel/typs"
 )
 
+func GenInt(x int64) int64 {
+	safeNum, err := rand.Int(rand.Reader, big.NewInt(x))
+	if err != nil {
+		panic(err)
+	}
+	return safeNum.Int64()
+}
+
 func main() {
+
+	fmt.Println(GenInt(10000))
 
 	// obj := Test1{Name: "popcorn"}
 	obj := &typs.Cargo{
