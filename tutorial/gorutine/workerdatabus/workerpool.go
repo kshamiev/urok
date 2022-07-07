@@ -73,22 +73,18 @@ func (p *Pool) workerData() {
 		t := reflect.TypeOf(obj)
 		i := t.String()
 		for ch := range p.storeSubscribe[i] {
-			if ch == nil {
-				p.mu.Lock()
-				delete(p.storeSubscribe[i], ch)
-				p.mu.Unlock()
-			}
 			ch <- obj
 			//			fmt.Println("SEND:")
 		}
 		for ch := range p.storeSubscribe[i] {
-			if ch == nil {
+			if f, ok := (<-ch).(bool); ok && !f {
+				close(ch)
 				p.mu.Lock()
 				delete(p.storeSubscribe[i], ch)
 				p.mu.Unlock()
+				fmt.Println("CLOSE:")
 			}
-			<-ch
-			//			fmt.Println("FINISH:")
+			// fmt.Println("FINISH:")
 		}
 	}
 	p.wg.Done()

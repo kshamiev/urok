@@ -21,7 +21,7 @@ func Subscribe(b *testing.B) {
 	pool := NewPool(1000, 3)
 
 	go func() {
-		for i := 0; i < 1000000000; i++ {
+		for i := 0; i < 1000000000000; i++ {
 			n := fmt.Sprintf("additional_%d", i+1)
 			pool.DataSend(&typs.Cargo{Name: n, Amount: 1})
 			// time.Sleep(time.Second)
@@ -31,37 +31,50 @@ func Subscribe(b *testing.B) {
 	// подписчик
 	ch1 := pool.DataSubscribe(&typs.Cargo{})
 	go func(ch chan interface{}) {
+		i := 0
 		for obj := range ch {
+			if i > 3000 {
+				ch <- false
+				break
+			}
+			i++
 			o := obj.(*typs.Cargo)
 			time.Sleep(time.Millisecond * time.Duration(o.Amount))
 			// fmt.Println(o.Name)
-			ch <- struct{}{}
+			ch <- true
 		}
 	}(ch1)
 	ch2 := pool.DataSubscribe(&typs.Cargo{})
 	go func(ch chan interface{}) {
+		i := 0
 		for obj := range ch {
+			if i > 3000 {
+				ch <- false
+				break
+			}
+			i++
 			o := obj.(*typs.Cargo)
 			time.Sleep(time.Millisecond * time.Duration(o.Amount))
 			// fmt.Println(o.Name)
-			ch <- struct{}{}
+			ch <- true
 		}
 	}(ch2)
 	ch3 := pool.DataSubscribe(&typs.Cargo{})
 	go func(ch chan interface{}) {
+		i := 0
 		for obj := range ch {
+			if i > 3000 {
+				ch <- false
+				break
+			}
+			i++
 			o := obj.(*typs.Cargo)
 			time.Sleep(time.Millisecond * time.Duration(o.Amount))
-			// fmt.Println(o.Name)
-			ch <- struct{}{}
+			ch <- true
 		}
 	}(ch3)
 
-	time.Sleep(time.Second * 2)
-	close(ch1)
-	close(ch2)
-	close(ch3)
-	time.Sleep(time.Second * 1)
+	time.Sleep(time.Second * 30)
 
 	pool.Wait()
 }
