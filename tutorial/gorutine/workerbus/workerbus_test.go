@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 	"testing"
+	"time"
 
 	"github.com/kshamiev/urok/sample/excel/typs"
 )
@@ -23,14 +24,15 @@ func Benchmark_Subscribe(b *testing.B) {
 		}()
 
 		// подписчик
-		// wg := &sync.WaitGroup{}
+		wg := &sync.WaitGroup{}
 		// wg.Add(1)
-		// ch := pool.SubscribeType(&typs.Cargo{})
-		// go consumer(ch, count, wg)
-		// wg.Wait()
+		pool.SubscribeType(&typs.Cargo{})
+		ch := pool.SubscribeType(&typs.Cargo{})
+		go consumer(ch, count, wg)
+		wg.Wait()
 
 	}
-
+	time.Sleep(time.Minute)
 	pool.Wait()
 }
 
@@ -47,7 +49,7 @@ func consumer(ch chan interface{}, limitData int, wg *sync.WaitGroup) {
 		ch <- true
 	}
 	fmt.Println(i)
-	wg.Done()
+	// wg.Done()
 }
 
 func Test_Subscribe(t *testing.T) {
