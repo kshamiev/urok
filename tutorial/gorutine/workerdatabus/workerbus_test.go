@@ -12,9 +12,9 @@ func TestSubscribe(t *testing.T) {
 	pool := NewPool(1000, 3)
 
 	go func() {
-		for i := 0; i < 1000; i++ {
+		for i := 0; i < 10000; i++ {
 			n := fmt.Sprintf("additional_%d", i+1)
-			pool.DataSend(&typs.Cargo{Name: n})
+			pool.DataSend(&typs.Cargo{Name: n, Amount: 1})
 			// time.Sleep(time.Second)
 		}
 	}()
@@ -24,9 +24,8 @@ func TestSubscribe(t *testing.T) {
 	go func(ch chan interface{}) {
 		for obj := range ch {
 			o := obj.(*typs.Cargo)
-			time.Sleep(time.Second * 3)
-			fmt.Println(o.Name)
-			time.Sleep(time.Second * 3)
+			time.Sleep(time.Second * time.Duration(o.Amount))
+			// fmt.Println(o.Name)
 			ch <- struct{}{}
 		}
 	}(ch1)
@@ -34,9 +33,8 @@ func TestSubscribe(t *testing.T) {
 	go func(ch chan interface{}) {
 		for obj := range ch {
 			o := obj.(*typs.Cargo)
-			time.Sleep(time.Second * 3)
-			fmt.Println(o.Name)
-			time.Sleep(time.Second * 3)
+			time.Sleep(time.Second * time.Duration(o.Amount))
+			// fmt.Println(o.Name)
 			ch <- struct{}{}
 		}
 	}(ch2)
@@ -44,16 +42,16 @@ func TestSubscribe(t *testing.T) {
 	go func(ch chan interface{}) {
 		for obj := range ch {
 			o := obj.(*typs.Cargo)
-			time.Sleep(time.Second * 3)
-			fmt.Println(o.Name)
-			time.Sleep(time.Second * 3)
+			time.Sleep(time.Second * time.Duration(o.Amount))
+			// fmt.Println(o.Name)
 			ch <- struct{}{}
 		}
 	}(ch3)
 
-	time.Sleep(time.Hour)
-	pool.DataUnsubscribeData(&typs.Cargo{}, ch1)
-	pool.DataUnsubscribeData(&typs.Cargo{}, ch2)
-	pool.DataUnsubscribeData(&typs.Cargo{}, ch3)
+	time.Sleep(time.Second * 2)
+	close(ch1)
+	close(ch2)
+	close(ch3)
+
 	pool.Wait()
 }

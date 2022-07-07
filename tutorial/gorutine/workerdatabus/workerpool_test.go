@@ -13,10 +13,10 @@ func (e ExampleTask) Execute() {
 
 func TestNewPool(t *testing.T) {
 	pool := NewPool(1000, 3)
-	pool.TaskAdd(ExampleTask("foo"))
-	pool.TaskAdd(ExampleTask("bar"))
+	pool.TaskSend(ExampleTask("foo"))
+	pool.TaskSend(ExampleTask("bar"))
 	for i := 0; i < 100; i++ {
-		pool.TaskAdd(ExampleTask(fmt.Sprintf("additional_%d", i+1)))
+		pool.TaskSend(ExampleTask(fmt.Sprintf("additional_%d", i+1)))
 	}
 	pool.Wait()
 }
@@ -37,7 +37,7 @@ func Benchmark_WorkerPool(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for i := 0; i < 100; i++ {
-			pool.TaskAdd(ExampleTask(fmt.Sprintf("additional_%d", i+1)))
+			pool.TaskSend(ExampleTask(fmt.Sprintf("additional_%d", i+1)))
 		}
 	}
 	pool.Wait()

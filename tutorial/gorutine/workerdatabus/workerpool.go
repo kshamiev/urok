@@ -6,10 +6,9 @@ import (
 	"go/ast"
 	"go/token"
 	"io"
+	"log"
 	"reflect"
 	"sync"
-
-	"github.com/kshamiev/urok/sample/excel/typs"
 )
 
 type Task interface {
@@ -17,6 +16,7 @@ type Task interface {
 }
 
 type Pool struct {
+	mu             sync.Mutex       // для безопасного конкурентного доступа
 	wg             sync.WaitGroup   // WaitGroup для контроля полного завершения работ всех задач и каналов
 	chTask         chan Task        // Канал задач - буф., чтобы родительская программа не блокировалась
 	workerLimit    int              // Количество одновременно работающих обработчиков
@@ -35,22 +35,26 @@ func NewPool(sizeChanel, workerLimit int) *Pool {
 		p.wg.Add(1)
 		go p.workerTask()
 	}
+	p.wg.Add(1)
+	go p.workerData()
 	return p
-}
-
-func (p *Pool) TaskAdd(task Task) {
-	p.chTask <- task
 }
 
 func (p *Pool) Wait() {
 	close(p.chTask)
+	close(p.chData)
 	p.wg.Wait()
 }
+
+// //// TASK
 
 func (p *Pool) workerTask() {
 	defer func() {
 		// TODO доработать обработку паники
 		p.wg.Done()
+		if rvr := recover(); rvr != nil {
+			log.Println(fmt.Errorf("%+v", rvr))
+		}
 	}()
 
 	for task := range p.chTask {
@@ -58,52 +62,56 @@ func (p *Pool) workerTask() {
 	}
 }
 
-// //// DATA BUS
+func (p *Pool) TaskSend(task Task) {
+	p.chTask <- task
+}
+
+// //// DATA
 
 func (p *Pool) workerData() {
-	defer func() {
-		// TODO доработать обработку паники
-		p.wg.Done()
-	}()
-
-	for task := range p.chTask {
-		task.Execute()
+	for obj := range p.chData {
+		t := reflect.TypeOf(obj)
+		i := t.String()
+		for ch := range p.storeSubscribe[i] {
+			if ch == nil {
+				p.mu.Lock()
+				delete(p.storeSubscribe[i], ch)
+				p.mu.Unlock()
+			}
+			ch <- obj
+			//			fmt.Println("SEND:")
+		}
+		for ch := range p.storeSubscribe[i] {
+			if ch == nil {
+				p.mu.Lock()
+				delete(p.storeSubscribe[i], ch)
+				p.mu.Unlock()
+			}
+			<-ch
+			//			fmt.Println("FINISH:")
+		}
 	}
+	p.wg.Done()
 }
 
 func (p *Pool) DataSubscribe(typ interface{}) chan interface{} {
 	t := reflect.TypeOf(typ)
 	i := t.String()
 	ch := make(chan interface{})
+	p.mu.Lock()
 	if _, ok := p.storeSubscribe[i]; !ok {
 		p.storeSubscribe[i] = make(map[chan interface{}]struct{})
 	}
 	p.storeSubscribe[i][ch] = struct{}{}
+	p.mu.Unlock()
 	return ch
 }
 
-func (p *Pool) DataUnsubscribeData(typ interface{}, ch chan interface{}) {
-	t := reflect.TypeOf(typ)
-	i := t.String()
-	if _, ok := p.storeSubscribe[i]; ok {
-		delete(p.storeSubscribe[i], ch)
-	}
-	close(ch)
+func (p *Pool) DataSend(obj interface{}) {
+	p.chData <- obj
 }
 
-func (p *Pool) DataSend(typ interface{}) {
-	t := reflect.TypeOf(typ)
-	i := t.String()
-	for ch := range p.storeSubscribe[i] {
-		ch <- typ
-		fmt.Println("SEND: " + typ.(*typs.Cargo).Name)
-	}
-	for ch := range p.storeSubscribe[i] {
-		<-ch
-		fmt.Println("FINISH: ")
-	}
-
-}
+// ////
 
 // Dumper all variables to STDOUT
 // From local debug
