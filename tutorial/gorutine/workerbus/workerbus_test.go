@@ -14,7 +14,7 @@ const (
 	maxLimitConsumerObject = 1000000
 )
 
-// GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_Subscribe -benchtime=100x -count 5 -cpu 8
+// GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_Subscribe -benchtime=100x -count 1 -cpu 8
 func Benchmark_Subscribe(b *testing.B) {
 	b.ReportAllocs()
 	pool := NewWorkerBus(100000, 3)
@@ -62,17 +62,17 @@ func Test_Subscribe(t *testing.T) {
 	pool.Wait()
 }
 
-func consumer(sub *Subscribe, limitData int, name string) {
+func consumer(ch chan interface{}, limitData int, name string) {
 	i := 0
-	for obj := range sub.Ch {
+	for obj := range ch {
 		_, ok := obj.(*typs.Cargo)
 		if !ok || i == limitData {
-			close(sub.Ch)
+			close(ch)
 			break
 		}
 		// It`s Work
 		// ...
-		sub.Ch <- true
+		ch <- true
 		i++
 	}
 }
