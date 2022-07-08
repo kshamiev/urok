@@ -37,4 +37,5 @@ func Benchmark_WorkerPool(b *testing.B) {
 		pool.SendTask(ExampleTask(fmt.Sprintf("additional_%d", i+1)))
 	}
 	pool.Wait()
+	pool.SendTask(ExampleTask("TEST"))
 }
