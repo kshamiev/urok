@@ -59,17 +59,7 @@ func (p *WorkerBus) Wait() {
 	close(p.chTask)
 	close(p.chData)
 
-	// p.muConsumer.Lock()
-	// for i := range p.storeSubscribe {
-	// 	for sub := range p.storeSubscribe[i] {
-	// 		close(sub.Ch)
-	// 	}
-	// }
-	// p.storeSubscribe = make(map[string]map[*Subscribe]struct{})
-	// p.muConsumer.Unlock()
-
 	p.wg.Wait()
-	Dumper(p.storeSubscribe)
 }
 
 func (p *WorkerBus) SendTask(task Task) {
@@ -106,7 +96,6 @@ func (p *WorkerBus) Subscribe(typ interface{}) *Subscribe {
 func (p *WorkerBus) workerData() {
 	for obj := range p.chData {
 		if obj == nil {
-
 			for i := range p.storeSubscribe {
 				for sub := range p.storeSubscribe[i] {
 					sub.Ch <- nil
@@ -116,10 +105,8 @@ func (p *WorkerBus) workerData() {
 				for sub := range p.storeSubscribe[i] {
 					<-sub.Ch
 					delete(p.storeSubscribe[i], sub)
-					// fmt.Println("CLOSE CHANEL AND REMOVE SYSTEM:")
 				}
 			}
-
 			continue
 		}
 
@@ -131,7 +118,6 @@ func (p *WorkerBus) workerData() {
 		for sub := range p.storeSubscribe[i] {
 			if _, ok := <-sub.Ch; !ok {
 				delete(p.storeSubscribe[i], sub)
-				// fmt.Println("CLOSE CHANEL AND REMOVE APP:")
 			}
 		}
 		p.muConsumer.Unlock()
