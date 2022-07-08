@@ -95,6 +95,7 @@ func (p *WorkerBus) Subscribe(typ interface{}) *Subscribe {
 
 func (p *WorkerBus) workerData() {
 	for obj := range p.chData {
+		p.muConsumer.Lock()
 		if obj == nil {
 			for i := range p.storeSubscribe {
 				for sub := range p.storeSubscribe[i] {
@@ -111,7 +112,6 @@ func (p *WorkerBus) workerData() {
 		}
 
 		i := reflect.TypeOf(obj).String()
-		p.muConsumer.Lock()
 		for sub := range p.storeSubscribe[i] {
 			sub.Ch <- obj
 		}

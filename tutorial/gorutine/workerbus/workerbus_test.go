@@ -75,5 +75,4 @@ func consumer(sub *Subscribe, limitData int, name string) {
 		sub.Ch <- true
 		i++
 	}
-	fmt.Println(name+" : consumer work count object: ", i)
 }
