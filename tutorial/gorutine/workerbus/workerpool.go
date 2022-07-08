@@ -54,16 +54,6 @@ func (p *WorkerBus) Wait() {
 	p.muWait.Lock()
 	p.workerLimit = 0
 	p.muWait.Unlock()
-
-	p.muConsumer.Lock()
-	for i := range p.storeSubscribe {
-		for sub := range p.storeSubscribe[i] {
-			close(sub.Ch)
-			delete(p.storeSubscribe[i], sub)
-		}
-	}
-	p.muConsumer.Unlock()
-
 	close(p.chTask)
 	close(p.chData)
 	p.wg.Wait()
@@ -101,6 +91,17 @@ func (p *WorkerBus) Subscribe(typ interface{}) *Subscribe {
 }
 
 func (p *WorkerBus) workerData() {
+	defer func() {
+		p.muConsumer.Lock()
+		for i := range p.storeSubscribe {
+			for sub := range p.storeSubscribe[i] {
+				close(sub.Ch)
+			}
+		}
+		p.storeSubscribe = make(map[string]map[*Subscribe]struct{})
+		p.muConsumer.Unlock()
+		p.wg.Done()
+	}()
 	for obj := range p.chData {
 		i := reflect.TypeOf(obj).String()
 		p.muConsumer.Lock()
@@ -125,7 +126,6 @@ func (p *WorkerBus) workerData() {
 		}
 		p.muConsumer.Unlock()
 	}
-	p.wg.Done()
 }
 
 func (p *WorkerBus) workerTask() {

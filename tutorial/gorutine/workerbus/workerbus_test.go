@@ -16,7 +16,7 @@ const (
 // GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_Subscribe -benchtime=100x -count 5 -cpu 8
 func Benchmark_Subscribe(b *testing.B) {
 	b.ReportAllocs()
-	pool := NewWorkerBus(maxLimitConsumerObject, 3)
+	pool := NewWorkerBus(100000, 3)
 
 	for i := 0; i < b.N; i++ {
 
@@ -41,7 +41,7 @@ func Benchmark_Subscribe(b *testing.B) {
 }
 
 func Test_Subscribe(t *testing.T) {
-	pool := NewWorkerBus(maxLimitConsumerObject, 3)
+	pool := NewWorkerBus(100000, 3)
 
 	// подписчики
 	for i := 0; i < 10; i++ {
