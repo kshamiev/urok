@@ -51,11 +51,23 @@ func NewWorkerBus(sizeChanel, workerLimit int) *WorkerBus {
 
 func (p *WorkerBus) Wait() {
 	fmt.Println("FINISH WORKER BUS:")
+
 	p.muWait.Lock()
 	p.workerLimit = 0
 	p.muWait.Unlock()
+
 	close(p.chTask)
 	close(p.chData)
+
+	p.muConsumer.Lock()
+	for i := range p.storeSubscribe {
+		for sub := range p.storeSubscribe[i] {
+			close(sub.Ch)
+		}
+	}
+	p.storeSubscribe = make(map[string]map[*Subscribe]struct{})
+	p.muConsumer.Unlock()
+
 	p.wg.Wait()
 }
 
@@ -91,32 +103,11 @@ func (p *WorkerBus) Subscribe(typ interface{}) *Subscribe {
 }
 
 func (p *WorkerBus) workerData() {
-	defer func() {
-		p.muConsumer.Lock()
-		for i := range p.storeSubscribe {
-			for sub := range p.storeSubscribe[i] {
-				close(sub.Ch)
-			}
-		}
-		p.storeSubscribe = make(map[string]map[*Subscribe]struct{})
-		p.muConsumer.Unlock()
-		p.wg.Done()
-	}()
 	for obj := range p.chData {
 		i := reflect.TypeOf(obj).String()
 		p.muConsumer.Lock()
 		for sub := range p.storeSubscribe[i] {
-			// if _, ok := <-sub.Ch; ok {
-			// if sub.Done || p.workerLimit == 0 {
-			// 	fmt.Println("FINISH")
-			// 	close(sub.Ch)
-			// 	delete(p.storeSubscribe[i], sub)
-			// 	continue
-			// }
 			sub.Ch <- obj
-			// } else {
-			// 	delete(p.storeSubscribe[i], sub)
-			// }
 		}
 		for sub := range p.storeSubscribe[i] {
 			if _, ok := <-sub.Ch; !ok {
@@ -126,6 +117,7 @@ func (p *WorkerBus) workerData() {
 		}
 		p.muConsumer.Unlock()
 	}
+	p.wg.Done()
 }
 
 func (p *WorkerBus) workerTask() {
