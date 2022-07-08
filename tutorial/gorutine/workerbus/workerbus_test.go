@@ -65,15 +65,17 @@ func Test_Subscribe(t *testing.T) {
 func consumer(sub *Subscribe, limitData int, name string) {
 	i := 0
 	for obj := range sub.Ch {
-		_ = obj.(*typs.Cargo)
-		i++
-		if i == limitData {
+		_, ok := obj.(*typs.Cargo)
+		if !ok || i == limitData {
 			close(sub.Ch)
 			fmt.Println()
 			fmt.Println("consumer finish (limit or condition)")
 			break
 		}
+		// It`s Work
+		// ...
 		sub.Ch <- true
+		i++
 	}
 	fmt.Println(name+" : consumer work count object: ", i)
 }
