@@ -2,55 +2,41 @@ package workerbus
 
 import (
 	"fmt"
-	"sync"
 	"testing"
+	"time"
 
 	"github.com/kshamiev/urok/sample/excel/typs"
 )
 
-const count = 1000000
+const count = 100000000
 
 // GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_Subscribe -benchtime=1000x -count 5 -cpu 8
 func Benchmark_Subscribe(b *testing.B) {
+	b.ReportAllocs()
 	pool := NewWorkerBus(1000, 3)
-	for i := 0; i < b.N; i++ {
 
-		// отправитель
-		go func() {
-			for i := 0; i < count; i++ {
-				pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
-			}
-		}()
+	// подписчик
+	sub := pool.Subscribe(&typs.Cargo{})
+	go consumer(sub, count-10)
 
-		// подписчик
-		wg := &sync.WaitGroup{}
-		wg.Add(1)
-		ch := pool.Subscribe(&typs.Cargo{})
-		go consumer(pool, ch, count, wg)
-		wg.Wait()
-
+	// отправитель
+	// go func() {
+	for i := 0; i < count; i++ {
+		pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
 	}
+	// }()
+
+	// time.Sleep(time.Second)
 
 	pool.Wait()
 }
 
-func consumer(pool *WorkerBus, ch chan interface{}, limitData int, wg *sync.WaitGroup) {
-	i := 0
-	for obj := range ch {
-		_ = obj.(*typs.Cargo)
-		// time.Sleep(time.Millisecond * time.Duration(o.Amount))
-		i++
-		if i == limitData {
-			pool.UnSubscribe(&typs.Cargo{}, ch)
-			break
-		}
-	}
-	fmt.Println(i)
-	wg.Done()
-}
-
 func Test_Subscribe(t *testing.T) {
 	pool := NewWorkerBus(1000, 3)
+
+	// подписчик
+	sub := pool.Subscribe(&typs.Cargo{})
+	go consumer(sub, count)
 
 	// отправитель
 	go func() {
@@ -58,13 +44,25 @@ func Test_Subscribe(t *testing.T) {
 			pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
 		}
 	}()
-
-	// подписчик
-	wg := &sync.WaitGroup{}
-	wg.Add(1)
-	ch := pool.Subscribe(&typs.Cargo{})
-	go consumer(pool, ch, count, wg)
-	wg.Wait()
+	time.Sleep(time.Second * 1)
 
 	pool.Wait()
+}
+
+func consumer(sub *Subscribe, limitData int) {
+	i := 0
+	for obj := range sub.Ch {
+		_ = obj.(*typs.Cargo)
+		// time.Sleep(time.Millisecond * time.Duration(o.Amount))
+		i++
+		if i == limitData {
+			close(sub.Ch)
+			// sub.Ch <- true
+			fmt.Println()
+			fmt.Println("finish")
+			break
+		}
+		sub.Ch <- true
+	}
+	fmt.Println(i)
 }

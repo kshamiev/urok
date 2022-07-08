@@ -11,6 +11,12 @@ type Task interface {
 	Execute()
 }
 
+type Subscribe struct {
+	Type string
+	Ch   chan interface{}
+	Done bool
+}
+
 type WorkerBus struct {
 	muConsumer     sync.Mutex       // для безопасного конкурентного доступа
 	muWait         sync.Mutex       // для безопасного конкурентного доступа
@@ -18,7 +24,7 @@ type WorkerBus struct {
 	chTask         chan Task        // Канал задач - буф., чтобы родительская программа не блокировалась
 	workerLimit    int              // Количество одновременно работающих обработчиков
 	chData         chan interface{} // Канал обмена данными - буф., чтобы родительская программа не блокировалась
-	storeSubscribe map[string]map[chan interface{}]struct{}
+	storeSubscribe map[string]map[*Subscribe]struct{}
 }
 
 func NewWorkerBus(sizeChanel, workerLimit int) *WorkerBus {
@@ -26,7 +32,7 @@ func NewWorkerBus(sizeChanel, workerLimit int) *WorkerBus {
 		chTask:         make(chan Task, sizeChanel),
 		chData:         make(chan interface{}, sizeChanel),
 		workerLimit:    workerLimit,
-		storeSubscribe: make(map[string]map[chan interface{}]struct{}),
+		storeSubscribe: make(map[string]map[*Subscribe]struct{}),
 	}
 	for i := 0; i < p.workerLimit; i++ {
 		p.wg.Add(1)
@@ -41,6 +47,16 @@ func (p *WorkerBus) Wait() {
 	p.muWait.Lock()
 	p.workerLimit = 0
 	p.muWait.Unlock()
+
+	p.muConsumer.Lock()
+	for i := range p.storeSubscribe {
+		for sub := range p.storeSubscribe[i] {
+			close(sub.Ch)
+			delete(p.storeSubscribe[i], sub)
+		}
+	}
+	p.muConsumer.Unlock()
+
 	close(p.chTask)
 	close(p.chData)
 	p.wg.Wait()
@@ -62,36 +78,43 @@ func (p *WorkerBus) SendData(obj interface{}) {
 	p.muWait.Unlock()
 }
 
-func (p *WorkerBus) Subscribe(typ interface{}) chan interface{} {
-	t := reflect.TypeOf(typ)
-	i := t.String()
-	ch := make(chan interface{})
-	p.muConsumer.Lock()
-	if _, ok := p.storeSubscribe[i]; !ok {
-		p.storeSubscribe[i] = make(map[chan interface{}]struct{})
+func (p *WorkerBus) Subscribe(typ interface{}) *Subscribe {
+	sub := &Subscribe{
+		Ch:   make(chan interface{}),
+		Type: reflect.TypeOf(typ).String(),
 	}
-	p.storeSubscribe[i][ch] = struct{}{}
-	p.muConsumer.Unlock()
-	return ch
-}
-
-func (p *WorkerBus) UnSubscribe(typ interface{}, ch chan interface{}) {
-	t := reflect.TypeOf(typ)
-	i := t.String()
 	p.muConsumer.Lock()
-	close(ch)
-	delete(p.storeSubscribe[i], ch)
-	fmt.Println("CLOSE:")
+	if _, ok := p.storeSubscribe[sub.Type]; !ok {
+		p.storeSubscribe[sub.Type] = make(map[*Subscribe]struct{})
+	}
+	p.storeSubscribe[sub.Type][sub] = struct{}{}
 	p.muConsumer.Unlock()
+
+	return sub
 }
 
 func (p *WorkerBus) workerData() {
 	for obj := range p.chData {
-		t := reflect.TypeOf(obj)
-		i := t.String()
+		i := reflect.TypeOf(obj).String()
 		p.muConsumer.Lock()
-		for ch := range p.storeSubscribe[i] {
-			ch <- obj
+		for sub := range p.storeSubscribe[i] {
+			// if _, ok := <-sub.Ch; ok {
+			// if sub.Done || p.workerLimit == 0 {
+			// 	fmt.Println("FINISH")
+			// 	close(sub.Ch)
+			// 	delete(p.storeSubscribe[i], sub)
+			// 	continue
+			// }
+			sub.Ch <- obj
+			// } else {
+			// 	delete(p.storeSubscribe[i], sub)
+			// }
+		}
+		for sub := range p.storeSubscribe[i] {
+			if _, ok := <-sub.Ch; !ok {
+				delete(p.storeSubscribe[i], sub)
+				fmt.Println("CLOSE:")
+			}
 		}
 		p.muConsumer.Unlock()
 	}
