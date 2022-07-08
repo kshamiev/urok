@@ -2,6 +2,7 @@ package workerbus
 
 import (
 	"fmt"
+	"strconv"
 	"testing"
 	"time"
 
@@ -18,12 +19,12 @@ func Benchmark_Subscribe(b *testing.B) {
 	b.ReportAllocs()
 	pool := NewWorkerBus(100000, 3)
 
-	for i := 0; i < b.N; i++ {
+	for j := 0; j < b.N; j++ {
 
 		// подписчики
 		for i := 0; i < 10; i++ {
 			sub := pool.Subscribe(&typs.Cargo{})
-			go consumer(sub, int(GenInt(maxLimitConsumerObject)))
+			go consumer(sub, int(GenInt(maxLimitConsumerObject)), strconv.Itoa(j)+"-"+strconv.Itoa(i))
 
 		}
 
@@ -46,7 +47,7 @@ func Test_Subscribe(t *testing.T) {
 	// подписчики
 	for i := 0; i < 10; i++ {
 		sub := pool.Subscribe(&typs.Cargo{})
-		go consumer(sub, int(GenInt(maxLimitConsumerObject)))
+		go consumer(sub, int(GenInt(maxLimitConsumerObject)), strconv.Itoa(i))
 
 	}
 
@@ -61,7 +62,7 @@ func Test_Subscribe(t *testing.T) {
 	pool.Wait()
 }
 
-func consumer(sub *Subscribe, limitData int) {
+func consumer(sub *Subscribe, limitData int, name string) {
 	i := 0
 	for obj := range sub.Ch {
 		_ = obj.(*typs.Cargo)
@@ -74,5 +75,5 @@ func consumer(sub *Subscribe, limitData int) {
 		}
 		sub.Ch <- true
 	}
-	fmt.Println("consumer work count object: ", i)
+	fmt.Println(name+" : consumer work count object: ", i)
 }
