@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"strconv"
 	"testing"
-	"time"
 
 	"github.com/kshamiev/urok/sample/excel/typs"
 )
 
 const (
-	countObject            = 1000000000
+	countObject            = 1000000
 	maxLimitConsumerObject = 1000000
 )
 
@@ -18,26 +17,19 @@ const (
 func Benchmark_Subscribe(b *testing.B) {
 	b.ReportAllocs()
 	pool := NewWorkerBus(100000, 3)
+	b.ResetTimer()
 
 	for j := 0; j < b.N; j++ {
-
 		// подписчики
-		for i := 0; i < 10; i++ {
-			sub := pool.Subscribe(&typs.Cargo{})
-			go consumer(sub, int(GenInt(maxLimitConsumerObject)), strconv.Itoa(j)+"-"+strconv.Itoa(i))
-
-		}
+		sub := pool.Subscribe(&typs.Cargo{})
+		go consumer(sub, int(GenInt(maxLimitConsumerObject)), strconv.Itoa(j))
 
 		// отправитель
-		go func() {
-			for i := 0; i < countObject; i++ {
-				pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
-			}
-		}()
-
+		for i := 0; i < countObject; i++ {
+			pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
+		}
 	}
 
-	time.Sleep(time.Second)
 	pool.Wait()
 }
 
@@ -45,20 +37,15 @@ func Test_Subscribe(t *testing.T) {
 	pool := NewWorkerBus(100000, 3)
 
 	// подписчики
-	for i := 0; i < 10; i++ {
-		sub := pool.Subscribe(&typs.Cargo{})
-		go consumer(sub, int(GenInt(maxLimitConsumerObject)), strconv.Itoa(i))
-
-	}
+	i := 0
+	ch := pool.Subscribe(&typs.Cargo{})
+	go consumer(ch, int(GenInt(maxLimitConsumerObject)), strconv.Itoa(i))
 
 	// отправитель
-	go func() {
-		for i := 0; i < countObject; i++ {
-			pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
-		}
-	}()
+	for i := 0; i < countObject; i++ {
+		pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
+	}
 
-	time.Sleep(time.Second)
 	pool.Wait()
 }
 
