@@ -8,7 +8,7 @@ import (
 	"github.com/kshamiev/urok/sample/excel/typs"
 )
 
-const count = 100000000
+const count = 1000000
 
 // GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_Subscribe -benchtime=1000x -count 5 -cpu 8
 func Benchmark_Subscribe(b *testing.B) {
@@ -32,11 +32,14 @@ func Benchmark_Subscribe(b *testing.B) {
 }
 
 func Test_Subscribe(t *testing.T) {
-	pool := NewWorkerBus(1000, 3)
+	pool := NewWorkerBus(1000000, 3)
 
-	// подписчик
-	sub := pool.Subscribe(&typs.Cargo{})
-	go consumer(sub, count)
+	// подписчики
+	for i := 0; i < 10; i++ {
+		sub := pool.Subscribe(&typs.Cargo{})
+		go consumer(sub, int(GenInt(10000000)))
+
+	}
 
 	// отправитель
 	go func() {
@@ -44,8 +47,8 @@ func Test_Subscribe(t *testing.T) {
 			pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
 		}
 	}()
-	time.Sleep(time.Second * 1)
 
+	time.Sleep(time.Second * 2)
 	pool.Wait()
 }
 
@@ -53,16 +56,14 @@ func consumer(sub *Subscribe, limitData int) {
 	i := 0
 	for obj := range sub.Ch {
 		_ = obj.(*typs.Cargo)
-		// time.Sleep(time.Millisecond * time.Duration(o.Amount))
 		i++
 		if i == limitData {
 			close(sub.Ch)
-			// sub.Ch <- true
 			fmt.Println()
-			fmt.Println("finish")
+			fmt.Println("consumer finish (limit or condition)")
 			break
 		}
 		sub.Ch <- true
 	}
-	fmt.Println(i)
+	fmt.Println("consumer work count object: ", i)
 }
