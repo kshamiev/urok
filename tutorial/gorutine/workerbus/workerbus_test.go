@@ -18,19 +18,23 @@ func Benchmark_Subscribe(b *testing.B) {
 	b.ReportAllocs()
 	pool := NewWorkerBus(maxLimitConsumerObject, 3)
 
-	// подписчики
-	for i := 0; i < 10; i++ {
-		sub := pool.Subscribe(&typs.Cargo{})
-		go consumer(sub, int(GenInt(maxLimitConsumerObject)))
+	for i := 0; i < b.N; i++ {
+
+		// подписчики
+		for i := 0; i < 10; i++ {
+			sub := pool.Subscribe(&typs.Cargo{})
+			go consumer(sub, int(GenInt(maxLimitConsumerObject)))
+
+		}
+
+		// отправитель
+		go func() {
+			for i := 0; i < countObject; i++ {
+				pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
+			}
+		}()
 
 	}
-
-	// отправитель
-	go func() {
-		for i := 0; i < countObject; i++ {
-			pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
-		}
-	}()
 
 	time.Sleep(time.Second)
 	pool.Wait()
