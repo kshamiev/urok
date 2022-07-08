@@ -50,25 +50,26 @@ func NewWorkerBus(sizeChanel, workerLimit int) *WorkerBus {
 }
 
 func (p *WorkerBus) Wait() {
-	fmt.Println("FINISH WORKER BUS:")
-
 	p.muWait.Lock()
 	p.workerLimit = 0
 	p.muWait.Unlock()
 
+	p.chData <- nil
+
 	close(p.chTask)
 	close(p.chData)
 
-	p.muConsumer.Lock()
-	for i := range p.storeSubscribe {
-		for sub := range p.storeSubscribe[i] {
-			close(sub.Ch)
-		}
-	}
-	p.storeSubscribe = make(map[string]map[*Subscribe]struct{})
-	p.muConsumer.Unlock()
+	// p.muConsumer.Lock()
+	// for i := range p.storeSubscribe {
+	// 	for sub := range p.storeSubscribe[i] {
+	// 		close(sub.Ch)
+	// 	}
+	// }
+	// p.storeSubscribe = make(map[string]map[*Subscribe]struct{})
+	// p.muConsumer.Unlock()
 
 	p.wg.Wait()
+	Dumper(p.storeSubscribe)
 }
 
 func (p *WorkerBus) SendTask(task Task) {
@@ -104,6 +105,24 @@ func (p *WorkerBus) Subscribe(typ interface{}) *Subscribe {
 
 func (p *WorkerBus) workerData() {
 	for obj := range p.chData {
+		if obj == nil {
+
+			for i := range p.storeSubscribe {
+				for sub := range p.storeSubscribe[i] {
+					sub.Ch <- nil
+				}
+			}
+			for i := range p.storeSubscribe {
+				for sub := range p.storeSubscribe[i] {
+					<-sub.Ch
+					delete(p.storeSubscribe[i], sub)
+					// fmt.Println("CLOSE CHANEL AND REMOVE SYSTEM:")
+				}
+			}
+
+			continue
+		}
+
 		i := reflect.TypeOf(obj).String()
 		p.muConsumer.Lock()
 		for sub := range p.storeSubscribe[i] {
@@ -112,7 +131,7 @@ func (p *WorkerBus) workerData() {
 		for sub := range p.storeSubscribe[i] {
 			if _, ok := <-sub.Ch; !ok {
 				delete(p.storeSubscribe[i], sub)
-				fmt.Println("CLOSE CHANEL AND REMOVE:")
+				// fmt.Println("CLOSE CHANEL AND REMOVE APP:")
 			}
 		}
 		p.muConsumer.Unlock()

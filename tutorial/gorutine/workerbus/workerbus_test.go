@@ -68,8 +68,6 @@ func consumer(sub *Subscribe, limitData int, name string) {
 		_, ok := obj.(*typs.Cargo)
 		if !ok || i == limitData {
 			close(sub.Ch)
-			fmt.Println()
-			fmt.Println("consumer finish (limit or condition)")
 			break
 		}
 		// It`s Work
