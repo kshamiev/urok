@@ -8,26 +8,6 @@ package function
 
 import "testing"
 
-func TestAdd(t *testing.T) {
-	type args struct {
-		args []int
-	}
-	tests := []struct {
-		name string
-		args args
-		want int
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := Add(tt.args.args...); got != tt.want {
-				t.Errorf("add() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func Test_Add(t *testing.T) {
 	type args struct {
 		args []int

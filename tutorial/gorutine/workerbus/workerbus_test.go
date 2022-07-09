@@ -27,9 +27,11 @@ func Benchmark_Subscribe(b *testing.B) {
 		}
 
 		// отправитель
-		for i := 0; i < countObject; i++ {
-			pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
-		}
+		go func() {
+			for i := 0; i < countObject; i++ {
+				pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
+			}
+		}()
 	}
 
 	pool.Wait()
