@@ -21,8 +21,10 @@ func Benchmark_Subscribe(b *testing.B) {
 
 	for j := 0; j < b.N; j++ {
 		// подписчики
-		sub := pool.Subscribe(&typs.Cargo{})
-		go consumer(sub, int(GenInt(maxLimitConsumerObject)), strconv.Itoa(j))
+		for i := 0; i < 1; i++ {
+			sub := pool.Subscribe(&typs.Cargo{})
+			go consumer(sub, maxLimitConsumerObject, strconv.Itoa(j)+"-"+strconv.Itoa(i))
+		}
 
 		// отправитель
 		for i := 0; i < countObject; i++ {
@@ -33,13 +35,34 @@ func Benchmark_Subscribe(b *testing.B) {
 	pool.Wait()
 }
 
+// GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_OneSubscribe -benchtime=1000000x -count 10 -cpu 8
+func Benchmark_OneSubscribe(b *testing.B) {
+	b.ReportAllocs()
+	pool := NewWorkerBus(100000, 3)
+
+	// подписчики
+	for i := 0; i < 1; i++ {
+		sub := pool.Subscribe(&typs.Cargo{})
+		go consumer(sub, maxLimitConsumerObject, strconv.Itoa(i))
+	}
+
+	b.ResetTimer()
+	// отправитель
+	for j := 0; j < b.N; j++ {
+		pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", j), Amount: 1})
+	}
+
+	pool.Wait()
+}
+
 func Test_Subscribe(t *testing.T) {
 	pool := NewWorkerBus(100000, 3)
 
 	// подписчики
-	i := 0
-	ch := pool.Subscribe(&typs.Cargo{})
-	go consumer(ch, int(GenInt(maxLimitConsumerObject)), strconv.Itoa(i))
+	for i := 0; i < 1; i++ {
+		ch := pool.Subscribe(&typs.Cargo{})
+		go consumer(ch, maxLimitConsumerObject, strconv.Itoa(i))
+	}
 
 	// отправитель
 	for i := 0; i < countObject; i++ {
