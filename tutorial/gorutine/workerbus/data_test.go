@@ -59,7 +59,7 @@ func consumerB(ch chan interface{}) {
 		ch <- true
 		i++
 	}
-	log.Println("count: ", i)
+	log.Println("full count: ", i)
 }
 
 func Test_Subscribe(t *testing.T) {
@@ -103,7 +103,7 @@ func consumerT(pool *WorkerBus, ch chan interface{}) {
 		ch <- true
 		i++
 	}
-	log.Println("count: ", i)
+	log.Println("full count: ", i)
 }
 
 // //// FOR TEST

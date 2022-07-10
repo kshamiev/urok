@@ -8,7 +8,7 @@ import (
 
 func main() {
 	// ctx, _ := context.WithTimeout(context.Background(), 2*time.Second)
-	ctx, _ := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background())
 
 	go test1(ctx)
 	go test1(ctx)
@@ -22,6 +22,8 @@ func main() {
 
 	var tt int
 	fmt.Scan(&tt)
+	cancel()
+	time.Sleep(time.Millisecond)
 	fmt.Println(tt)
 }
 
