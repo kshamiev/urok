@@ -80,6 +80,7 @@ func (p *WorkerBus) Subscribe(typ interface{}) chan interface{} {
 
 func (p *WorkerBus) workerData() {
 	var (
+		ok  bool
 		i   string
 		ch  chan interface{}
 		obj interface{}
@@ -91,7 +92,7 @@ func (p *WorkerBus) workerData() {
 			ch <- obj
 		}
 		for ch = range p.storeSubscribe[i] {
-			if _, ok := <-ch; !ok {
+			if _, ok = <-ch; !ok {
 				delete(p.storeSubscribe[i], ch)
 			}
 		}
