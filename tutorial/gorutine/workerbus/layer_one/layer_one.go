@@ -35,23 +35,48 @@ func ActionSend() {
 func ActionConsumer() {
 	// подписчик
 	ch := workerbus.Gist().Subscribe(&typs.General{})
-	go consumer(ch)
-	ch1 := workerbus.Gist().Subscribe(&typs.LayerTwo{})
-	go consumer(ch1)
+	go consumerGeneral(ch)
+	ch = workerbus.Gist().Subscribe(&typs.LayerTwo{})
+	go consumerLayerTwo(ch)
 }
 
-func consumer(ch chan interface{}) {
+func consumerGeneral(ch chan interface{}) {
 	i := 0
 	defer func() {
 		if rvr := recover(); rvr != nil {
 			// log.Println(fmt.Errorf("%+v", rvr))
 			close(ch)
 			ch = workerbus.Gist().Subscribe(&typs.General{})
-			go consumer(ch)
+			go consumerGeneral(ch)
 		}
 	}()
 	for obj := range ch {
 		o, ok := obj.(*typs.General)
+		if !ok {
+			close(ch)
+			break
+		}
+		// It`s Work
+		fmt.Println(o.Name)
+		// ...
+		ch <- true
+		i++
+	}
+	log.Println("full count: ", i)
+}
+
+func consumerLayerTwo(ch chan interface{}) {
+	i := 0
+	defer func() {
+		if rvr := recover(); rvr != nil {
+			// log.Println(fmt.Errorf("%+v", rvr))
+			close(ch)
+			ch = workerbus.Gist().Subscribe(&typs.LayerTwo{})
+			go consumerLayerTwo(ch)
+		}
+	}()
+	for obj := range ch {
+		o, ok := obj.(*typs.LayerTwo)
 		if !ok {
 			close(ch)
 			break
