@@ -13,7 +13,7 @@ func (e ExampleTask) Execute() {
 
 func TestNewPool(t *testing.T) {
 	pool := NewWorkerBus(1000, 3)
-	for i := 0; i < 1000000; i++ {
+	for i := 0; i < 100000; i++ {
 		pool.SendTask(ExampleTask(fmt.Sprintf("additional_%d", i+1)))
 	}
 	pool.Wait()

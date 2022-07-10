@@ -1,0 +1,79 @@
+package workerbus
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/kshamiev/urok/sample/excel/typs"
+)
+
+const (
+	countObject            = 1000000
+	maxLimitConsumerObject = 1000000
+)
+
+// GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_OneSubscribe -benchtime=1000000x -count 10 -cpu 8
+func Benchmark_OneSubscribe(b *testing.B) {
+	b.ReportAllocs()
+	// Init(100000, 3)
+	pool := NewWorkerBus(100000, 3)
+
+	// подписчики
+	for i := 0; i < 1; i++ {
+		ch := pool.Subscribe(&typs.Cargo{})
+		go consumer(ch)
+	}
+
+	b.ResetTimer()
+	// отправитель
+	for j := 0; j < b.N; j++ {
+		pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", j), Amount: 1})
+	}
+
+	pool.Wait()
+}
+
+func Test_Subscribe(t *testing.T) {
+	Init(100000, 3)
+
+	// подписчики
+	for i := 0; i < 1; i++ {
+		ch := Gist().Subscribe(&typs.Cargo{})
+		go consumer(ch)
+	}
+
+	// отправитель
+	for i := 0; i < countObject; i++ {
+		Gist().SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
+	}
+
+	Gist().Wait()
+}
+
+func consumer(ch chan interface{}) {
+	i := 0
+	// defer func() {
+	// 	if rvr := recover(); rvr != nil {
+	// 		// log.Println(fmt.Errorf("%+v", rvr))
+	// 		close(ch)
+	// 		ch = Gist().Subscribe(&typs.Cargo{})
+	// 		go consumer(ch)
+	// 	}
+	// }()
+	//
+	for obj := range ch {
+		_, ok := obj.(*typs.Cargo)
+		if !ok {
+			close(ch)
+			break
+		}
+		// It`s Work
+		// if i == 1000 {
+		// 	panic("PANICA")
+		// }
+		// ...
+		ch <- true
+		i++
+	}
+	// fmt.Println("count: ", i)
+}

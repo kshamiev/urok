@@ -27,10 +27,10 @@ type WorkerBus struct {
 	storeSubscribe map[string]map[chan interface{}]struct{}
 }
 
-func NewWorkerBus(sizeChanel, workerLimit int) *WorkerBus {
+func NewWorkerBus(sizeBufferChanel, workerLimit int) *WorkerBus {
 	p := &WorkerBus{
-		chTask:         make(chan Task, sizeChanel),
-		chData:         make(chan interface{}, sizeChanel),
+		chTask:         make(chan Task, sizeBufferChanel),
+		chData:         make(chan interface{}, sizeBufferChanel),
 		workerLimit:    workerLimit,
 		storeSubscribe: make(map[string]map[chan interface{}]struct{}),
 	}
@@ -116,10 +116,11 @@ func (p *WorkerBus) workerData() {
 
 func (p *WorkerBus) workerTask() {
 	defer func() {
-		// TODO доработать обработку паники
 		p.wg.Done()
 		if rvr := recover(); rvr != nil {
 			log.Println(fmt.Errorf("%+v", rvr))
+			p.wg.Add(1)
+			go p.workerTask()
 		}
 	}()
 
