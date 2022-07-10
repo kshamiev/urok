@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/kshamiev/urok/sample/excel/typs"
 	"github.com/kshamiev/urok/tutorial/gorutine/workerbus"
+	"github.com/kshamiev/urok/tutorial/gorutine/workerbus/typs"
 )
 
 func Action() {

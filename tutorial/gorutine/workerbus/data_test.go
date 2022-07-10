@@ -11,7 +11,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/kshamiev/urok/sample/excel/typs"
+	"github.com/kshamiev/urok/tutorial/gorutine/workerbus/typs"
 )
 
 const (
@@ -59,7 +59,7 @@ func consumerB(ch chan interface{}) {
 		ch <- true
 		i++
 	}
-	log.Println("full count: ", i)
+	// log.Println("full count: ", i)
 }
 
 func Test_Subscribe(t *testing.T) {

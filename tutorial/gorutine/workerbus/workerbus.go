@@ -79,13 +79,18 @@ func (p *WorkerBus) Subscribe(typ interface{}) chan interface{} {
 }
 
 func (p *WorkerBus) workerData() {
-	for obj := range p.chData {
-		i := reflect.TypeOf(obj).String()
+	var (
+		i   string
+		ch  chan interface{}
+		obj interface{}
+	)
+	for obj = range p.chData {
+		i = reflect.TypeOf(obj).String()
 		p.muConsumer.Lock()
-		for ch := range p.storeSubscribe[i] {
+		for ch = range p.storeSubscribe[i] {
 			ch <- obj
 		}
-		for ch := range p.storeSubscribe[i] {
+		for ch = range p.storeSubscribe[i] {
 			if _, ok := <-ch; !ok {
 				delete(p.storeSubscribe[i], ch)
 			}
@@ -93,13 +98,13 @@ func (p *WorkerBus) workerData() {
 		p.muConsumer.Unlock()
 	}
 	p.muConsumer.Lock()
-	for i := range p.storeSubscribe {
-		for ch := range p.storeSubscribe[i] {
+	for i = range p.storeSubscribe {
+		for ch = range p.storeSubscribe[i] {
 			ch <- nil
 		}
 	}
-	for i := range p.storeSubscribe {
-		for ch := range p.storeSubscribe[i] {
+	for i = range p.storeSubscribe {
+		for ch = range p.storeSubscribe[i] {
 			<-ch
 			delete(p.storeSubscribe[i], ch)
 		}
