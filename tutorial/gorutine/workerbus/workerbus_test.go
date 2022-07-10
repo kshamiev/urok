@@ -13,30 +13,6 @@ const (
 	maxLimitConsumerObject = 1000000
 )
 
-// GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_Subscribe -benchtime=100x -count 1 -cpu 8
-func Benchmark_Subscribe(b *testing.B) {
-	b.ReportAllocs()
-	pool := NewWorkerBus(100000, 3)
-	b.ResetTimer()
-
-	for j := 0; j < b.N; j++ {
-		// подписчики
-		for i := 0; i < 1; i++ {
-			sub := pool.Subscribe(&typs.Cargo{})
-			go consumer(sub, maxLimitConsumerObject, strconv.Itoa(j)+"-"+strconv.Itoa(i))
-		}
-
-		// отправитель
-		go func() {
-			for i := 0; i < countObject; i++ {
-				pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
-			}
-		}()
-	}
-
-	pool.Wait()
-}
-
 // GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_OneSubscribe -benchtime=1000000x -count 10 -cpu 8
 func Benchmark_OneSubscribe(b *testing.B) {
 	b.ReportAllocs()
