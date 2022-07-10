@@ -15,7 +15,7 @@ func ActionSend() {
 	go func() {
 		for i := 0; i < 1000000; i++ {
 			workerbus.Gist().SendData(&typs.General{
-				Name:   "additional_layer_two_General" + strconv.Itoa(i),
+				Name:   "send_layer_two_type_General" + strconv.Itoa(i),
 				Amount: 1,
 			})
 			time.Sleep(time.Second)
@@ -24,7 +24,7 @@ func ActionSend() {
 	go func() {
 		for i := 0; i < 1000000; i++ {
 			workerbus.Gist().SendData(&typs.LayerTwo{
-				Name:   "additional_layer_two_LayerTwo" + strconv.Itoa(i),
+				Name:   "send_layer_two_type_LayerTwo" + strconv.Itoa(i),
 				Amount: 1,
 			})
 			time.Sleep(time.Second)
