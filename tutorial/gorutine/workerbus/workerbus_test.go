@@ -16,21 +16,22 @@ const (
 // GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_OneSubscribe -benchtime=1000000x -count 10 -cpu 8
 func Benchmark_OneSubscribe(b *testing.B) {
 	b.ReportAllocs()
-	pool := NewWorkerBus(100000, 3)
+	// pool := NewWorkerBus(100000, 3)
+	Init(100000, 3)
 
 	// подписчики
 	for i := 0; i < 1; i++ {
-		sub := pool.Subscribe(&typs.Cargo{})
+		sub := Gist().Subscribe(&typs.Cargo{})
 		go consumer(sub, maxLimitConsumerObject, strconv.Itoa(i))
 	}
 
 	b.ResetTimer()
 	// отправитель
 	for j := 0; j < b.N; j++ {
-		pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", j), Amount: 1})
+		Gist().SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", j), Amount: 1})
 	}
 
-	pool.Wait()
+	Gist().Wait()
 }
 
 func Test_Subscribe(t *testing.T) {
