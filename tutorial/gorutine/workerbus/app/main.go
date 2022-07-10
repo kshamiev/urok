@@ -11,8 +11,11 @@ import (
 func main() {
 	workerbus.Init(100000, 3)
 
-	layer_one.Action()
-	layer_two.Action()
+	layer_one.ActionSend()
+	layer_two.ActionSend()
+
+	layer_one.ActionConsumer()
+	layer_two.ActionConsumer()
 
 	var tt int
 	fmt.Scanln(&tt)

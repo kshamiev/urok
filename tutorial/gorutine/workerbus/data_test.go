@@ -25,14 +25,14 @@ func Benchmark_OneSubscribe(b *testing.B) {
 
 	// подписчики
 	for i := 0; i < 1; i++ {
-		ch := Gist().Subscribe(&typs.Cargo{})
+		ch := Gist().Subscribe(&typs.General{})
 		go consumerB(ch)
 	}
 
 	b.ResetTimer()
 	// отправитель
 	for j := 0; j < b.N; j++ {
-		Gist().SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", j), Amount: 1})
+		Gist().SendData(&typs.General{Name: fmt.Sprintf("additional_%d", j), Amount: 1})
 	}
 
 	Gist().Wait()
@@ -44,12 +44,12 @@ func consumerB(ch chan interface{}) {
 		if rvr := recover(); rvr != nil {
 			// log.Println(fmt.Errorf("%+v", rvr))
 			close(ch)
-			ch = Gist().Subscribe(&typs.Cargo{})
+			ch = Gist().Subscribe(&typs.General{})
 			go consumerB(ch)
 		}
 	}()
 	for obj := range ch {
-		_, ok := obj.(*typs.Cargo)
+		_, ok := obj.(*typs.General)
 		if !ok {
 			close(ch)
 			break
@@ -67,13 +67,13 @@ func Test_Subscribe(t *testing.T) {
 
 	// подписчики
 	for i := 0; i < 1; i++ {
-		ch := pool.Subscribe(&typs.Cargo{})
+		ch := pool.Subscribe(&typs.General{})
 		go consumerT(pool, ch)
 	}
 
 	// отправитель
 	for i := 0; i < countObject; i++ {
-		pool.SendData(&typs.Cargo{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
+		pool.SendData(&typs.General{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
 	}
 
 	pool.Wait()
@@ -85,12 +85,12 @@ func consumerT(pool *WorkerBus, ch chan interface{}) {
 		if rvr := recover(); rvr != nil {
 			// log.Println(fmt.Errorf("%+v", rvr))
 			close(ch)
-			ch = pool.Subscribe(&typs.Cargo{})
+			ch = pool.Subscribe(&typs.General{})
 			go consumerT(pool, ch)
 		}
 	}()
 	for obj := range ch {
-		_, ok := obj.(*typs.Cargo)
+		_, ok := obj.(*typs.General)
 		if !ok {
 			close(ch)
 			break
