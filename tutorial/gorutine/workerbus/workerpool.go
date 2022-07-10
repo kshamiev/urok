@@ -1,14 +1,8 @@
 package workerbus
 
 import (
-	"bytes"
-	"crypto/rand"
 	"fmt"
-	"go/ast"
-	"go/token"
-	"io"
 	"log"
-	"math/big"
 	"reflect"
 	"sync"
 )
@@ -127,37 +121,4 @@ func (p *WorkerBus) workerTask() {
 	for task := range p.chTask {
 		task.Execute()
 	}
-}
-
-// //// FOR TEST
-
-func GenInt(x int64) int64 {
-	safeNum, err := rand.Int(rand.Reader, big.NewInt(x))
-	if err != nil {
-		panic(err)
-	}
-	return safeNum.Int64()
-}
-
-// Dumper all variables to STDOUT
-// From local debug
-func Dumper(idl ...interface{}) string {
-	ret := dump(idl...)
-	fmt.Print(ret.String())
-
-	return ret.String()
-}
-
-// dump all variables to bytes.Buffer
-func dump(idl ...interface{}) bytes.Buffer {
-	var buf bytes.Buffer
-
-	var wr = io.MultiWriter(&buf)
-
-	for _, field := range idl {
-		fset := token.NewFileSet()
-		_ = ast.Fprint(wr, fset, field, ast.NotNilFilter)
-	}
-
-	return buf
 }

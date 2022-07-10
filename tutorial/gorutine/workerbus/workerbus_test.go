@@ -1,28 +1,32 @@
 package workerbus
 
 import (
+	"bytes"
+	"crypto/rand"
 	"fmt"
-	"strconv"
+	"go/ast"
+	"go/token"
+	"io"
+	"log"
+	"math/big"
 	"testing"
 
 	"github.com/kshamiev/urok/sample/excel/typs"
 )
 
 const (
-	countObject            = 1000000
-	maxLimitConsumerObject = 1000000
+	countObject = 1000000
 )
 
 // GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_OneSubscribe -benchtime=1000000x -count 10 -cpu 8
 func Benchmark_OneSubscribe(b *testing.B) {
 	b.ReportAllocs()
-	// pool := NewWorkerBus(100000, 3)
 	Init(100000, 3)
 
 	// подписчики
 	for i := 0; i < 1; i++ {
-		sub := Gist().Subscribe(&typs.Cargo{})
-		go consumer(sub, maxLimitConsumerObject, strconv.Itoa(i))
+		ch := Gist().Subscribe(&typs.Cargo{})
+		go consumerB(ch)
 	}
 
 	b.ResetTimer()
@@ -34,13 +38,37 @@ func Benchmark_OneSubscribe(b *testing.B) {
 	Gist().Wait()
 }
 
+func consumerB(ch chan interface{}) {
+	i := 0
+	defer func() {
+		if rvr := recover(); rvr != nil {
+			// log.Println(fmt.Errorf("%+v", rvr))
+			close(ch)
+			ch = Gist().Subscribe(&typs.Cargo{})
+			go consumerB(ch)
+		}
+	}()
+	for obj := range ch {
+		_, ok := obj.(*typs.Cargo)
+		if !ok {
+			close(ch)
+			break
+		}
+		// It`s Work
+		// ...
+		ch <- true
+		i++
+	}
+	log.Println("count: ", i)
+}
+
 func Test_Subscribe(t *testing.T) {
 	pool := NewWorkerBus(100000, 3)
 
 	// подписчики
 	for i := 0; i < 1; i++ {
 		ch := pool.Subscribe(&typs.Cargo{})
-		go consumer(ch, maxLimitConsumerObject, strconv.Itoa(i))
+		go consumerT(pool, ch)
 	}
 
 	// отправитель
@@ -51,17 +79,62 @@ func Test_Subscribe(t *testing.T) {
 	pool.Wait()
 }
 
-func consumer(ch chan interface{}, limitData int, name string) {
+func consumerT(pool *WorkerBus, ch chan interface{}) {
 	i := 0
+	defer func() {
+		if rvr := recover(); rvr != nil {
+			// log.Println(fmt.Errorf("%+v", rvr))
+			close(ch)
+			ch = pool.Subscribe(&typs.Cargo{})
+			go consumerT(pool, ch)
+		}
+	}()
 	for obj := range ch {
 		_, ok := obj.(*typs.Cargo)
-		if !ok || i == limitData {
+		if !ok {
 			close(ch)
 			break
 		}
 		// It`s Work
+		if i == 1000 {
+			panic("PANICA")
+		}
 		// ...
 		ch <- true
 		i++
 	}
+	log.Println("count: ", i)
+}
+
+// //// FOR TEST
+
+func GenInt(x int64) int64 {
+	safeNum, err := rand.Int(rand.Reader, big.NewInt(x))
+	if err != nil {
+		panic(err)
+	}
+	return safeNum.Int64()
+}
+
+// Dumper all variables to STDOUT
+// From local debug
+func Dumper(idl ...interface{}) string {
+	ret := dump(idl...)
+	fmt.Print(ret.String())
+
+	return ret.String()
+}
+
+// dump all variables to bytes.Buffer
+func dump(idl ...interface{}) bytes.Buffer {
+	var buf bytes.Buffer
+
+	var wr = io.MultiWriter(&buf)
+
+	for _, field := range idl {
+		fset := token.NewFileSet()
+		_ = ast.Fprint(wr, fset, field, ast.NotNilFilter)
+	}
+
+	return buf
 }
