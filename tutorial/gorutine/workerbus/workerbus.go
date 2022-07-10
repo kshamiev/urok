@@ -123,8 +123,9 @@ func (p *WorkerBus) workerTask() {
 			go p.workerTask()
 		}
 	}()
+	var task Task
 
-	for task := range p.chTask {
+	for task = range p.chTask {
 		task.Execute()
 	}
 }
