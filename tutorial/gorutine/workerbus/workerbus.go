@@ -1,10 +1,14 @@
 package workerbus
 
 import (
+	"bytes"
 	"fmt"
 	"log"
+	"os"
 	"reflect"
+	"strconv"
 	"sync"
+	"time"
 )
 
 type Task interface {
@@ -21,7 +25,7 @@ type WorkerBus struct {
 	storeSubscribe map[string]map[chan interface{}]struct{}
 }
 
-func NewWorkerBus(sizeBufferChanel, workerLimit int) *WorkerBus {
+func NewWorkerBus(sizeBufferChanel, workerLimit int, debug bool) *WorkerBus {
 	p := &WorkerBus{
 		chTask:         make(chan Task, sizeBufferChanel),
 		chData:         make(chan interface{}, sizeBufferChanel),
@@ -34,6 +38,9 @@ func NewWorkerBus(sizeBufferChanel, workerLimit int) *WorkerBus {
 	}
 	p.wg.Add(1)
 	go p.workerData()
+	if debug {
+		go p.debugReport()
+	}
 	return p
 }
 
@@ -127,5 +134,27 @@ func (p *WorkerBus) workerTask() {
 
 	for task = range p.chTask {
 		task.Execute()
+	}
+}
+
+func (p *WorkerBus) debugReport() {
+	f, err := os.OpenFile("debug.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0o600)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer func() {
+		_ = f.Close()
+	}()
+	for {
+		s := "count chanel Data: " + strconv.Itoa(len(p.chData)) + "\n"
+		for i := range p.storeSubscribe {
+			s += i + ": " + strconv.Itoa(len(p.storeSubscribe[i])) + "\n"
+		}
+		s += "\n"
+		buf := &bytes.Buffer{}
+		buf.WriteString(s)
+		_, _ = buf.WriteTo(f)
+		time.Sleep(time.Minute)
 	}
 }

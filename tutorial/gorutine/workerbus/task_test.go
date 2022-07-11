@@ -11,8 +11,8 @@ func (e ExampleTask) Execute() {
 
 }
 
-func TestNewPool(t *testing.T) {
-	pool := NewWorkerBus(1000, 3)
+func TestNewTask(t *testing.T) {
+	pool := NewWorkerBus(1000, 3, false)
 	for i := 0; i < 100000; i++ {
 		pool.SendTask(ExampleTask(fmt.Sprintf("additional_%d", i+1)))
 	}
@@ -29,8 +29,8 @@ func TestNewPool(t *testing.T) {
 // 10000 100 1000
 // Benchmark_WorkerPool-8   	     127	   9083956 ns/op	  803158 B/op	   59791 allocs/op
 // Benchmark_WorkerPool-8   	       4	 293293199 ns/op	  852010 B/op	   60476 allocs/op
-func Benchmark_WorkerPool(b *testing.B) {
-	pool := NewWorkerBus(1000, 3)
+func Benchmark_WorkerTask(b *testing.B) {
+	pool := NewWorkerBus(1000, 3, false)
 	b.ReportAllocs()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {

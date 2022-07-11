@@ -63,7 +63,6 @@ func consumerGeneral(ch chan interface{}, limit int) {
 	for obj := range ch {
 		_, ok = obj.(*typs.General)
 		if !ok || limit == i {
-			close(ch)
 			break
 		}
 		// It`s Work
@@ -73,6 +72,7 @@ func consumerGeneral(ch chan interface{}, limit int) {
 		i++
 	}
 	// log.Println("full count: ", i)
+	close(ch)
 }
 
 func consumerLayerTwo(ch chan interface{}, limit int) {
@@ -89,7 +89,6 @@ func consumerLayerTwo(ch chan interface{}, limit int) {
 	for obj := range ch {
 		_, ok = obj.(*typs.LayerTwo)
 		if !ok || limit == i {
-			close(ch)
 			break
 		}
 		// It`s Work
@@ -99,6 +98,7 @@ func consumerLayerTwo(ch chan interface{}, limit int) {
 		i++
 	}
 	// log.Println("full count: ", i)
+	close(ch)
 }
 
 func genInt(x int64) int {

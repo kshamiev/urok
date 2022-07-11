@@ -21,7 +21,7 @@ const (
 // GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_Subscribe -benchtime=1000000x -count 10 -cpu 8
 func Benchmark_Subscribe(b *testing.B) {
 	b.ReportAllocs()
-	Init(100000, 3)
+	Init(100000, 3, false)
 
 	// подписчики
 	for i := 0; i < 1; i++ {
@@ -42,7 +42,7 @@ func consumerB(ch chan interface{}) {
 	i := 0
 	defer func() {
 		if rvr := recover(); rvr != nil {
-			// log.Println(fmt.Errorf("%+v", rvr))
+			log.Println(fmt.Errorf("%+v", rvr))
 			close(ch)
 			ch = Gist().Subscribe(&typs.General{})
 			go consumerB(ch)
@@ -51,7 +51,6 @@ func consumerB(ch chan interface{}) {
 	for obj := range ch {
 		_, ok := obj.(*typs.General)
 		if !ok {
-			close(ch)
 			break
 		}
 		// It`s Work
@@ -59,11 +58,12 @@ func consumerB(ch chan interface{}) {
 		ch <- true
 		i++
 	}
-	// log.Println("full count: ", i)
+	log.Println("full count: ", i)
+	close(ch)
 }
 
 func Test_Subscribe(t *testing.T) {
-	pool := NewWorkerBus(100000, 3)
+	pool := NewWorkerBus(100000, 3, false)
 
 	// подписчики
 	for i := 0; i < 1; i++ {
@@ -83,7 +83,7 @@ func consumerT(pool *WorkerBus, ch chan interface{}) {
 	i := 0
 	defer func() {
 		if rvr := recover(); rvr != nil {
-			// log.Println(fmt.Errorf("%+v", rvr))
+			log.Println(fmt.Errorf("%+v", rvr))
 			close(ch)
 			ch = pool.Subscribe(&typs.General{})
 			go consumerT(pool, ch)
@@ -92,11 +92,10 @@ func consumerT(pool *WorkerBus, ch chan interface{}) {
 	for obj := range ch {
 		_, ok := obj.(*typs.General)
 		if !ok {
-			close(ch)
 			break
 		}
 		// It`s Work
-		if i == 1000 {
+		if i == 100000 {
 			panic("PANICA")
 		}
 		// ...
@@ -104,6 +103,7 @@ func consumerT(pool *WorkerBus, ch chan interface{}) {
 		i++
 	}
 	log.Println("full count: ", i)
+	close(ch)
 }
 
 // //// FOR TEST

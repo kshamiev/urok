@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	workerbus.Init(100000, 3)
+	workerbus.Init(100000, 3, true)
 
 	layer_one.ActionSend()
 	layer_two.ActionSend()
