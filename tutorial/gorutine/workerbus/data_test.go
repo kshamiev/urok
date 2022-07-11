@@ -18,8 +18,8 @@ const (
 	countObject = 1000000
 )
 
-// GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_OneSubscribe -benchtime=1000000x -count 10 -cpu 8
-func Benchmark_OneSubscribe(b *testing.B) {
+// GOGC=off go test ./tutorial/gorutine/workerbus/. -run=^# -bench=Benchmark_Subscribe -benchtime=1000000x -count 10 -cpu 8
+func Benchmark_Subscribe(b *testing.B) {
 	b.ReportAllocs()
 	Init(100000, 3)
 

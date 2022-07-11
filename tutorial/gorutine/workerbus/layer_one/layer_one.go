@@ -1,8 +1,8 @@
 package layer_one
 
 import (
-	"fmt"
-	"log"
+	"crypto/rand"
+	"math/big"
 	"strconv"
 	"time"
 
@@ -13,79 +13,98 @@ import (
 func ActionSend() {
 	// отправитель
 	go func() {
-		for i := 0; i < 1000000; i++ {
+		var i int
+		for {
+			i++
 			workerbus.Gist().SendData(&typs.General{
 				Name:   "send_layer_one_type_General" + strconv.Itoa(i),
 				Amount: 1,
 			})
-			time.Sleep(time.Second)
+			time.Sleep(time.Millisecond)
 		}
 	}()
 	go func() {
-		for i := 0; i < 1000000; i++ {
+		var i int
+		for {
+			i++
 			workerbus.Gist().SendData(&typs.LayerOne{
 				Name:   "send_layer_one_type_LayerOne" + strconv.Itoa(i),
 				Amount: 1,
 			})
-			time.Sleep(time.Second)
+			time.Sleep(time.Microsecond)
 		}
 	}()
 }
 
 func ActionConsumer() {
 	// подписчик
-	ch := workerbus.Gist().Subscribe(&typs.General{})
-	go consumerGeneral(ch)
-	ch = workerbus.Gist().Subscribe(&typs.LayerTwo{})
-	go consumerLayerTwo(ch)
+	go func() {
+		for {
+			ch := workerbus.Gist().Subscribe(&typs.General{})
+			go consumerGeneral(ch, genInt(100000))
+			ch = workerbus.Gist().Subscribe(&typs.LayerTwo{})
+			go consumerLayerTwo(ch, genInt(100000))
+			time.Sleep(time.Second * 3)
+		}
+	}()
 }
 
-func consumerGeneral(ch chan interface{}) {
-	i := 0
+func consumerGeneral(ch chan interface{}, limit int) {
+	var i int
+	var ok bool
 	defer func() {
 		if rvr := recover(); rvr != nil {
 			// log.Println(fmt.Errorf("%+v", rvr))
 			close(ch)
 			ch = workerbus.Gist().Subscribe(&typs.General{})
-			go consumerGeneral(ch)
+			go consumerGeneral(ch, limit)
 		}
 	}()
 	for obj := range ch {
-		o, ok := obj.(*typs.General)
-		if !ok {
+		_, ok = obj.(*typs.General)
+		if !ok || limit == i {
 			close(ch)
 			break
 		}
 		// It`s Work
-		fmt.Println(o.Name)
+		time.Sleep(time.Microsecond)
 		// ...
 		ch <- true
 		i++
 	}
-	log.Println("full count: ", i)
+	// log.Println("full count: ", i)
 }
 
-func consumerLayerTwo(ch chan interface{}) {
-	i := 0
+func consumerLayerTwo(ch chan interface{}, limit int) {
+	var i int
+	var ok bool
 	defer func() {
 		if rvr := recover(); rvr != nil {
 			// log.Println(fmt.Errorf("%+v", rvr))
 			close(ch)
 			ch = workerbus.Gist().Subscribe(&typs.LayerTwo{})
-			go consumerLayerTwo(ch)
+			go consumerLayerTwo(ch, limit)
 		}
 	}()
 	for obj := range ch {
-		o, ok := obj.(*typs.LayerTwo)
-		if !ok {
+		_, ok = obj.(*typs.LayerTwo)
+		if !ok || limit == i {
 			close(ch)
 			break
 		}
 		// It`s Work
-		fmt.Println(o.Name)
+		time.Sleep(time.Microsecond)
 		// ...
 		ch <- true
 		i++
 	}
-	log.Println("full count: ", i)
+	// log.Println("full count: ", i)
+}
+
+func genInt(x int64) int {
+	safeNum, err := rand.Int(rand.Reader, big.NewInt(x))
+	if err != nil {
+		panic(err)
+	}
+	return int(safeNum.Int64())
 }
