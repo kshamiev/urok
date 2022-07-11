@@ -20,7 +20,7 @@ func ActionSend() {
 				Name:   "send_layer_two_type_General" + strconv.Itoa(i),
 				Amount: 1,
 			})
-			time.Sleep(time.Microsecond)
+			time.Sleep(time.Millisecond)
 		}
 	}()
 	go func() {

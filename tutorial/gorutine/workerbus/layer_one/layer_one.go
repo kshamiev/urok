@@ -31,7 +31,7 @@ func ActionSend() {
 				Name:   "send_layer_one_type_LayerOne" + strconv.Itoa(i),
 				Amount: 1,
 			})
-			time.Sleep(time.Microsecond)
+			time.Sleep(time.Millisecond)
 		}
 	}()
 }

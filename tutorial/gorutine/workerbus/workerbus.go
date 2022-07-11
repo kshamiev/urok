@@ -147,6 +147,7 @@ func (p *WorkerBus) debugReport() {
 		_ = f.Close()
 	}()
 	for {
+		time.Sleep(time.Minute)
 		s := "count chanel Data: " + strconv.Itoa(len(p.chData)) + "\n"
 		for i := range p.storeSubscribe {
 			s += i + ": " + strconv.Itoa(len(p.storeSubscribe[i])) + "\n"
@@ -155,6 +156,5 @@ func (p *WorkerBus) debugReport() {
 		buf := &bytes.Buffer{}
 		buf.WriteString(s)
 		_, _ = buf.WriteTo(f)
-		time.Sleep(time.Minute)
 	}
 }
