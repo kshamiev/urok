@@ -10,8 +10,6 @@ import (
 	"log"
 	"math/big"
 	"testing"
-
-	"github.com/kshamiev/urok/tutorial/gorutine/workerbus/typs"
 )
 
 const (
@@ -25,14 +23,14 @@ func Benchmark_Subscribe(b *testing.B) {
 
 	// подписчики
 	for i := 0; i < 1; i++ {
-		ch := Gist().Subscribe(&typs.General{})
+		ch := Gist().Subscribe(&ExampleTask{})
 		go consumerB(ch)
 	}
 
 	b.ResetTimer()
 	// отправитель
 	for j := 0; j < b.N; j++ {
-		Gist().SendData(&typs.General{Name: fmt.Sprintf("additional_%d", j), Amount: 1})
+		Gist().SendData(&ExampleTask{Name: fmt.Sprintf("additional_%d", j)})
 	}
 
 	Gist().Wait()
@@ -44,12 +42,12 @@ func consumerB(ch chan interface{}) {
 		if rvr := recover(); rvr != nil {
 			log.Println(fmt.Errorf("%+v", rvr))
 			close(ch)
-			ch = Gist().Subscribe(&typs.General{})
+			ch = Gist().Subscribe(&ExampleTask{})
 			go consumerB(ch)
 		}
 	}()
 	for obj := range ch {
-		_, ok := obj.(*typs.General)
+		_, ok := obj.(*ExampleTask)
 		if !ok {
 			break
 		}
@@ -67,13 +65,13 @@ func Test_Subscribe(t *testing.T) {
 
 	// подписчики
 	for i := 0; i < 1; i++ {
-		ch := pool.Subscribe(&typs.General{})
+		ch := pool.Subscribe(&ExampleTask{})
 		go consumerT(pool, ch)
 	}
 
 	// отправитель
 	for i := 0; i < countObject; i++ {
-		pool.SendData(&typs.General{Name: fmt.Sprintf("additional_%d", i+1), Amount: 1})
+		pool.SendData(&ExampleTask{Name: fmt.Sprintf("additional_%d", i+1)})
 	}
 
 	pool.Wait()
@@ -85,12 +83,12 @@ func consumerT(pool *WorkerBus, ch chan interface{}) {
 		if rvr := recover(); rvr != nil {
 			log.Println(fmt.Errorf("%+v", rvr))
 			close(ch)
-			ch = pool.Subscribe(&typs.General{})
+			ch = pool.Subscribe(&ExampleTask{})
 			go consumerT(pool, ch)
 		}
 	}()
 	for obj := range ch {
-		_, ok := obj.(*typs.General)
+		_, ok := obj.(*ExampleTask)
 		if !ok {
 			break
 		}

@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/kshamiev/urok/tutorial/gorutine/workerbus"
-	"github.com/kshamiev/urok/tutorial/gorutine/workerbus/layer_one"
-	"github.com/kshamiev/urok/tutorial/gorutine/workerbus/layer_two"
+	"github.com/kshamiev/urok/tutorial/gorutine/workerbus/sample/layer_one"
+	"github.com/kshamiev/urok/tutorial/gorutine/workerbus/sample/layer_two"
 )
 
 func main() {
