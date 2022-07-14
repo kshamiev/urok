@@ -19,8 +19,8 @@ func main() {
 	err := ctx.Err()
 	timeDedline, ok := ctx.Deadline()
 	fmt.Println(val, ch, err, timeDedline, ok)
-	fmt.Println()
 	fmt.Println(runtime.GoroutineProfile(nil))
+	fmt.Println()
 
 	testWithCancel(ctx)
 	testWithDeadline(ctx)
@@ -35,7 +35,7 @@ func main() {
 func testWithCancel(ctx context.Context) {
 	ctx, cancel := context.WithCancel(ctx)
 	go func() {
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 3)
 		fmt.Println("WithCancel cancel")
 		cancel()
 	}()
@@ -46,7 +46,7 @@ func testWithCancel(ctx context.Context) {
 func testWithDeadline(ctx context.Context) {
 	ctx, cancel := context.WithDeadline(ctx, time.Now().Add(3*time.Second))
 	go func() {
-		time.Sleep(time.Second * 10)
+		time.Sleep(time.Second * 20)
 		fmt.Println("WithDeadline cancel")
 		cancel()
 	}()
@@ -57,7 +57,7 @@ func testWithDeadline(ctx context.Context) {
 func testWithTimeout(ctx context.Context) {
 	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
 	go func() {
-		time.Sleep(time.Second * 15)
+		time.Sleep(time.Second * 20)
 		fmt.Println("WithTimeout cancel")
 		cancel()
 	}()
