@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	"gitlab.tn.ru/golang/app/dtbus"
-	"gitlab.tn.ru/golang/app/dtbus/sample/layer_one"
-	"gitlab.tn.ru/golang/app/dtbus/sample/layer_two"
+	"github.com/kshamiev/urok/tutorial/gorutine/dtbus"
+	"github.com/kshamiev/urok/tutorial/gorutine/dtbus/sample/layer_one"
+	"github.com/kshamiev/urok/tutorial/gorutine/dtbus/sample/layer_two"
 )
 
 func main() {

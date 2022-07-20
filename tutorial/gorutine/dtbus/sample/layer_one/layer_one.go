@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"time"
 
-	"gitlab.tn.ru/golang/app/dtbus"
-	"gitlab.tn.ru/golang/app/dtbus/sample/typs"
+	"github.com/kshamiev/urok/tutorial/gorutine/dtbus"
+	"github.com/kshamiev/urok/tutorial/gorutine/dtbus/sample/typs"
 )
 
 func ActionSend() {
