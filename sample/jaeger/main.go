@@ -9,10 +9,11 @@ import (
 	"os/signal"
 	"strconv"
 
-	_ "go.opentelemetry.io/otel/exporters/jaeger"
-	_ "go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
-	_ "go.opentelemetry.io/otel/sdk/trace"
-	_ "go.opentelemetry.io/otel/semconv/v1.10.0"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
+	"go.opentelemetry.io/otel/sdk/resource"
+	sdkTrace "go.opentelemetry.io/otel/sdk/trace"
+	"go.opentelemetry.io/otel/semconv/v1.10.0"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
@@ -22,8 +23,57 @@ import (
 // name is the Tracer name used to identify this instrumentation library.
 const name = "jaeger"
 
+// newExporter returns a console exporter.
+func newExporter(w io.Writer) (sdkTrace.SpanExporter, error) {
+	return stdouttrace.New(
+		stdouttrace.WithWriter(w),
+		// Use human-readable output.
+		stdouttrace.WithPrettyPrint(),
+		// Do not print timestamps for the demo.
+		stdouttrace.WithoutTimestamps(),
+	)
+}
+
+// newResource returns a resource describing this application.
+func newResource() *resource.Resource {
+	r, _ := resource.Merge(
+		resource.Default(),
+		resource.NewWithAttributes(
+			semconv.SchemaURL,
+			semconv.ServiceNameKey.String("fib"),
+			semconv.ServiceVersionKey.String("v0.1.0"),
+			attribute.String("environment", "demo"),
+		),
+	)
+	return r
+}
+
 func main() {
 	l := log.New(os.Stdout, "", 0)
+
+	// Write telemetry data to a file.
+	f, err := os.Create("traces.txt")
+	if err != nil {
+		l.Fatal(err)
+	}
+	defer f.Close()
+
+	exp, err := newExporter(f)
+	if err != nil {
+		l.Fatal(err)
+	}
+
+	tp := sdkTrace.NewTracerProvider(
+		sdkTrace.WithBatcher(exp),
+		sdkTrace.WithResource(newResource()),
+	)
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			l.Fatal(err)
+		}
+	}()
+	otel.SetTracerProvider(tp)
+	//
 
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, os.Interrupt)
@@ -59,7 +109,7 @@ func NewApp(r io.Reader, l *log.Logger) *App {
 // Run starts polling users for Fibonacci number requests and writes results.
 func (a *App) Run(ctx context.Context) error {
 	for {
-		// TODO Each execution of the run loop, we should get a new "root" span and context.
+		// Each execution of the run loop, we should get a new "root" span and context.
 		var span trace.Span
 		ctx, span = otel.Tracer(name).Start(ctx, "Run")
 		defer span.End()
@@ -82,6 +132,11 @@ func (a *App) Poll(ctx context.Context) (uint, error) {
 
 	var n uint
 	_, err := fmt.Fscanf(a.r, "%d\n", &n)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, err.Error())
+		return 0, err
+	}
 
 	// Store n as a string to not overflow an int64.
 	nStr := strconv.FormatUint(uint64(n), 10)
@@ -99,7 +154,12 @@ func (a *App) Write(ctx context.Context, n uint) {
 	f, err := func(ctx context.Context) (uint64, error) {
 		_, span := otel.Tracer(name).Start(ctx, "Fibonacci")
 		defer span.End()
-		return Fibonacci(n)
+		f, err := Fibonacci(n)
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, err.Error())
+		}
+		return f, err
 	}(ctx)
 
 	if err != nil {
@@ -115,6 +175,10 @@ func (a *App) Write(ctx context.Context, n uint) {
 func Fibonacci(n uint) (uint64, error) {
 	if n <= 1 {
 		return uint64(n), nil
+	}
+
+	if n > 93 {
+		return 0, fmt.Errorf("unsupported fibonacci number %d: too large", n)
 	}
 
 	var n2, n1 uint64 = 0, 1
