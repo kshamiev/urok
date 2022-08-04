@@ -24,7 +24,8 @@ import (
 
 func main() {
 	cl := manticore.NewClient()
-	cl.SetServer("127.0.0.1", 9312)
+	// cl.SetServer("192.168.0.101", 9312)
+	cl.SetServer("192.168.0.101", 9308)
 	if _, err := cl.Open(); err != nil {
 		fmt.Println(err)
 		return
@@ -39,6 +40,8 @@ func main() {
 	res2, err2 := cl.Query("more|another", "usersidxrt")
 	fmt.Println(res2, err2)
 
-	res2, err2 = cl.Query("7i4kenQB", "usersidx")
+	fmt.Println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQq")
+
+	res2, err2 = cl.Query("testLogin", "usersidx")
 	fmt.Println(res2, err2)
 }
