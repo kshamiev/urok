@@ -42,6 +42,6 @@ func main() {
 
 	fmt.Println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQq")
 
-	res2, err2 = cl.Query("testLogin", "usersidx")
+	res2, err2 = cl.Query("RIDGEMONT", "usersidx")
 	fmt.Println(res2, err2)
 }
