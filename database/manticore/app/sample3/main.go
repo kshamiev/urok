@@ -24,8 +24,7 @@ func main() {
 	res2, err2 := cl.RunQuery(q)
 	fmt.Println(res2, err2)
 
-	attrValues := []int64{10}
-	q.AddFilter("gid", attrValues, false)
+	q.AddFilterExpression("gid > 10 AND gid < 20", false)
 	res2, err2 = cl.RunQuery(q)
 	fmt.Println(res2, err2)
 }

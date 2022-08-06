@@ -24,7 +24,6 @@ import (
 
 func main() {
 	cl := manticore.NewClient()
-	// cl.SetServer("192.168.0.101", 9308)
 	cl.SetServer("127.0.0.1", 9308)
 	if _, err := cl.Open(); err != nil {
 		fmt.Println(err)
