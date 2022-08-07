@@ -1,19 +1,3 @@
-// install from ubuntu
-//
-// wget https://repo.manticoresearch.com/manticore-repo.noarch.deb
-// sudo dpkg -i manticore-repo.noarch.deb
-// sudo apt update
-// sudo apt install manticore manticore-columnar-lib
-//
-// sudo indexer --all --rotate
-//
-// systemctl status manticore
-// systemctl restart manticore
-//
-// sudo journalctl --unit manticore
-// sudo journalctl -xe
-//
-// Дмитрий Свиридов @dimuska139
 package main
 
 import (

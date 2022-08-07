@@ -1,28 +1,39 @@
 ## Manticore
 
-## install Docker
+## Install System & Start
 
-```dockerfile
-docker run --rm --name manticore \
-    -e MCL=1 \
-    -e QUERY_LOG_TO_STDOUT=true \
-    -v $(pwd)/etc/manticore.conf:/etc/manticoresearch/manticore.conf \
-	-v $(pwd)/tmp:/var/lib/manticore \
-	-p 192.168.0.101:9308:9308 \
-	-p 192.168.0.101:9312:9312 \
-	-d manticoresearch/manticore
+```text
+sudo apt remove manticore*
 
-docker run --rm --name manticore \
-    -v $(pwd)/etc/manticore.conf:/etc/manticoresearch/manticore.conf \
-	-v $(pwd)/tmp:/var/lib/manticore \
-	-p 9308:9308 \
-	-p 9312:9312 \
-	-d manticoresearch/manticore
+wget https://repo.manticoresearch.com/manticore-repo.noarch.deb
+sudo dpkg -i manticore-repo.noarch.deb
+sudo apt update
+sudo apt install manticore manticore-columnar-lib
 
-docker exec -it manticore bash
+info from indexer
+sudo -u manticore indexer
+apt-file find libmysqlclient.so.20
 
-gosu manticore indexer --all --rotate
+sudo apt-get install libmysqlclient20 libodbc1 libpq5 libexpat1
+
+systemctl status manticore
+systemctl stop manticore
+systemctl restart manticore
+systemctl start manticore
+ 
 searchd --status
+sudo indexer --all --rotate
+gosu manticore indexer --all --rotate
+
+debug
+sudo journalctl --unit manticore
+sudo journalctl -xe
 ```
 
-## install System
+Можно работать только в одном режиме из двух.
+В режиме индексов реального времени.
+Либо в режиме простого индекса
+При работе в режиме простого индекса.
+
+1) Только декларативный подход.
+2) Репликации на уровне manticore недоступны.
