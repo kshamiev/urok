@@ -24,5 +24,3 @@ docker exec -it manticore bash
 gosu manticore indexer --all --rotate
 searchd --status
 ```
-
-## install System

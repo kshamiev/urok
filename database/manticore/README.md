@@ -16,6 +16,10 @@ apt-file find libmysqlclient.so.20
 
 sudo apt-get install libmysqlclient20 libodbc1 libpq5 libexpat1
 
+systemctl is-enabled manticore
+systemctl enable manticore
+systemctl disable manticore
+
 systemctl status manticore
 systemctl stop manticore
 systemctl restart manticore
