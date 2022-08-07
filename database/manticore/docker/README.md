@@ -22,5 +22,4 @@ docker run --rm --name manticore \
 docker exec -it manticore bash
 
 gosu manticore indexer --all --rotate
-searchd --status
 ```
