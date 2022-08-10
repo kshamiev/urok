@@ -36,7 +36,7 @@
 		"postgres-jdbc-18038c8d41e-18ad5a557678b2f7": {
 			"provider": "postgresql",
 			"driver": "postgres-jdbc",
-			"name": "shamiev",
+			"name": "sungora",
 			"save-password": true,
 			"read-only": false,
 			"configuration": {
@@ -63,10 +63,10 @@
 						"save-password": true,
 						"properties": {
 							"jumpServer0.authType": "PASSWORD",
-							"jumpServer0.port": 22.0,
-							"port": 22.0,
 							"implementation": "jsch",
 							"bypassHostVerification": false,
+							"jumpServer0.port": 22,
+							"port": 22,
 							"jumpServer0.enabled": false,
 							"host": "81.177.25.118",
 							"authType": "PASSWORD"
@@ -86,6 +86,37 @@
 				"database": "/home/konstantin/.local/share/DBeaverData/workspace6/.metadata/sample-database-sqlite-1/Chinook.db",
 				"url": "jdbc:sqlite:/home/konstantin/.local/share/DBeaverData/workspace6/.metadata/sample-database-sqlite-1/Chinook.db",
 				"type": "dev"
+			}
+		},
+		"mysql8-18286ee85f2-23156986e502898d": {
+			"provider": "mysql",
+			"driver": "mysql8",
+			"name": "shamiev",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "3306",
+				"url": "jdbc:mysql://localhost:3306/",
+				"type": "dev",
+				"auth-model": "native",
+				"handlers": {
+					"ssh_tunnel": {
+						"type": "TUNNEL",
+						"enabled": true,
+						"save-password": true,
+						"properties": {
+							"jumpServer0.authType": "PASSWORD",
+							"implementation": "jsch",
+							"bypassHostVerification": false,
+							"jumpServer0.port": 22,
+							"port": 22,
+							"jumpServer0.enabled": false,
+							"host": "81.177.25.46",
+							"authType": "PASSWORD"
+						}
+					}
+				}
 			}
 		}
 	},
