@@ -9,6 +9,12 @@ systemctl restart manticore
 searchd --status
 sudo -u manticore indexer --all --rotate
 
+mysql -P9306 -h0
+SHOW TABLES;
+DESCRIBE users_main_idx;
+SHOW META;
+RELOAD INDEXES;
+
 searchd --config /etc/manticoresearch/manticore.conf --stop
 searchd --config dev.conf --status
 sudo -u manticore searchd --config dev.conf
