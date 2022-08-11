@@ -14,3 +14,7 @@ UPDATE films SET created_at = now() - INTERVAL '5 MONTH', updated_at = now() - I
 
 SELECT updated_at, to_timestamp(extract(epoch from updated_at::timestamptz)) FROM users_breaker ub;
 
+UPDATE films SET created_at = , updated_at = WHERE id BETWEEN 1 AND 10;
+SELECT count(*) FROM films f WHERE created_at BETWEEN '2019-05-10 12:49:34.779' AND '2021-01-10 12:49:34.779';  
+
+SELECT * FROM films f WHERE id BETWEEN 9000000 AND 9000001;
