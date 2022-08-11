@@ -14,7 +14,7 @@ func main() {
 		return
 	}
 
-	res2, err2 := cl.Query("незнайка", "users_main")
+	res2, err2 := cl.Query("незнайка", "users")
 	fmt.Println(res2, err2)
 
 	// res3, err3 := cl.Query("PRIDE")
