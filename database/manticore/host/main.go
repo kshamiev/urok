@@ -14,19 +14,7 @@ func main() {
 		return
 	}
 
-	index := "rt"
-
-	q := `replace into ` + index + ` (id, title) values(1, 'my subject fake')`
-	res, err := cl.Sphinxql(q)
-	fmt.Println(res, err)
-	q = `replace into ` + index + ` (title) values('тузик')`
-	res, err = cl.Sphinxql(q)
-	fmt.Println(res, err)
-	q = `replace into ` + index + ` (title) values('грелка')`
-	res, err = cl.Sphinxql(q)
-	fmt.Println(res, err)
-
-	res2, err2 := cl.Query("грелка")
+	res2, err2 := cl.Query("незнайка", "users_main_idx")
 	fmt.Println(res2, err2)
 
 	// res3, err3 := cl.Query("PRIDE")
