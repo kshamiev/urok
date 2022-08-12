@@ -14,7 +14,12 @@ func main() {
 		return
 	}
 
-	res2, err2 := cl.Query("незнайка", "users")
+	// res1, err1 := cl.Query("незнайка", "users")
+	// fmt.Println(res1, err1)
+
+	q := manticore.NewSearch("дом", "users", "")
+	q.Limit = 20
+	res2, err2 := cl.RunQuery(q)
 	fmt.Println(res2, err2)
 
 	// res3, err3 := cl.Query("PRIDE")
