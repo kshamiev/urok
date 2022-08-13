@@ -14,7 +14,8 @@ func main() {
 		return
 	}
 
-	q := manticore.NewSearch("дом", "users", "")
+	q := manticore.NewSearch("Дом на берегу озера", "users", "")
+	// q := manticore.NewSearch("Дом", "users", "")
 	// q.Offset = 0
 	q.Limit = 3
 	res2, err2 := cl.RunQuery(q)
