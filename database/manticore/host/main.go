@@ -14,19 +14,38 @@ func main() {
 		return
 	}
 
-	q := manticore.NewSearch("Дом на берегу озера", "users", "")
-	// q := manticore.NewSearch("Дом", "users", "")
-	// q.Offset = 0
-	q.Limit = 3
+	// data, err := cl.Json("/search", req)
+	// fmt.Println(data, err)
+
+	res, err := cl.Sphinxql("RELOAD INDEXES")
+	// fmt.Println(res, err)
+
+	// q := manticore.NewSearch("Дом на берегу озера", "users", "")
+	// q := manticore.NewSearch("дом на холме", "users", "")
+	q := manticore.NewSearch("дом", "users", "")
+	q.Offset = 0
+	q.Limit = 30
 	res2, err2 := cl.RunQuery(q)
 	fmt.Println(res2, err2)
-	fmt.Println(len(res2.Matches), res2.Total)
+	// fmt.Println(len(res2.Matches), res2.Total)
 
 	// Total: 3
 	// Total found: 2162
 	// 'дом' (Docs:2162, Hits:3891)
 
 }
+
+var req = `
+{
+  "index": "users",
+  "query": {
+    "match": {
+      "title, description": "дом"
+    }
+  },
+  "limit": 10
+}
+`
 
 /*
 
