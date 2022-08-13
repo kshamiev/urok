@@ -14,18 +14,17 @@ func main() {
 		return
 	}
 
-	// res1, err1 := cl.Query("незнайка", "users")
-	// fmt.Println(res1, err1)
-
 	q := manticore.NewSearch("дом", "users", "")
-	q.Limit = 20
+	// q.Offset = 0
+	q.Limit = 3
 	res2, err2 := cl.RunQuery(q)
 	fmt.Println(res2, err2)
+	fmt.Println(len(res2.Matches), res2.Total)
 
-	// res3, err3 := cl.Query("PRIDE")
-	// fmt.Println(res3, err3)
-	// res3, err3 = cl.Query("Пенка")
-	// fmt.Println(res3, err3)
+	// Total: 3
+	// Total found: 2162
+	// 'дом' (Docs:2162, Hits:3891)
+
 }
 
 /*
