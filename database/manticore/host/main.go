@@ -17,14 +17,14 @@ func main() {
 	// data, err := cl.Json("/search", req)
 	// fmt.Println(data, err)
 
-	res, err := cl.Sphinxql("RELOAD INDEXES")
+	// res, err := cl.Sphinxql("RELOAD INDEXES")
 	// fmt.Println(res, err)
 
 	// q := manticore.NewSearch("Дом на берегу озера", "users", "")
 	// q := manticore.NewSearch("дом на холме", "users", "")
-	q := manticore.NewSearch("дом", "users", "")
+	q := manticore.NewSearch("Мухомор", "users", "")
 	q.Offset = 0
-	q.Limit = 30
+	q.Limit = 5
 	res2, err2 := cl.RunQuery(q)
 	fmt.Println(res2, err2)
 	// fmt.Println(len(res2.Matches), res2.Total)
@@ -48,6 +48,20 @@ var req = `
 `
 
 /*
+start
+1000000 0
+update
+999998 2
+restart
+
+
+killlist = SELECT id FROM documents WHERE updated_at >=  (SELECT created_at FROM deltabreaker WHERE index_name='delta')
+
+
+sql_query_killlist = \
+        SELECT id FROM documents WHERE updated_ts>=@last_reindex UNION \
+        SELECT id FROM documents_deleted WHERE deleted_ts>=@last_reindex
+}
 
 Прохор Пастушенко, [05.08.2022 09:48]
 @s_a_nikolaev

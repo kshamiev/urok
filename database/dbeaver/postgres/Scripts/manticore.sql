@@ -9,7 +9,7 @@ SELECT title, description, category_id, release_year, price, created_at, updated
 
 INSERT INTO filmss 
 	(title, description, category_id, release_year, price, created_at, updated_at, deleted_at)
-SELECT title, description, category_id, release_year, price, created_at, updated_at, deleted_at FROM films ORDER BY updated_at DESC LIMIT 1000003;
+SELECT title, description, category_id, release_year, price, created_at, updated_at, deleted_at FROM films ORDER BY updated_at DESC LIMIT 1000000;
 
 SELECT count(*) FROM films;
 SELECT count(*) FROM filmss;
@@ -24,5 +24,6 @@ SELECT count(*) FROM films f WHERE created_at BETWEEN '2019-05-10 12:49:34.779' 
 
 SELECT * FROM films WHERE 1 = 1 ORDER BY updated_at DESC LIMIT 10;
 SELECT * FROM filmss WHERE 1 = 1 ORDER BY updated_at DESC LIMIT 10;
+DELETE FROM filmss WHERE id > 10;
 
 
