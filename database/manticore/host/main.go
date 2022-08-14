@@ -8,34 +8,26 @@ import (
 
 func main() {
 	cl := manticore.NewClient()
-	cl.SetServer("localhost", 9312)
+	cl.SetServer("localhost", 9308)
 	if _, err := cl.Open(); err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	// data, err := cl.Json("/search", req)
-	// fmt.Println(data, err)
+	data, err := cl.Json("search", req2)
+	fmt.Println(data, err)
 
 	// res, err := cl.Sphinxql("RELOAD INDEXES")
 	// fmt.Println(res, err)
 
-	// q := manticore.NewSearch("Дом на берегу озера", "users", "")
-	// q := manticore.NewSearch("дом на холме", "users", "")
-	q := manticore.NewSearch("Мухомор", "users", "")
-	q.Offset = 0
-	q.Limit = 5
-	res2, err2 := cl.RunQuery(q)
-	fmt.Println(res2, err2)
-	// fmt.Println(len(res2.Matches), res2.Total)
-
-	// Total: 3
-	// Total found: 2162
-	// 'дом' (Docs:2162, Hits:3891)
-
+	// q := manticore.NewSearch("Мухомор", "users", "")
+	// q.Offset = 0
+	// q.Limit = 5
+	// res2, err2 := cl.RunQuery(q)
+	// fmt.Println(res2, err2)
 }
 
-var req = `
+var req1 = `
 {
   "index": "users",
   "query": {
@@ -47,12 +39,25 @@ var req = `
 }
 `
 
+var req2 = `
+{
+  "index": "users",
+  "query": {
+    "match": {
+      "title,description": "Дом"
+    }
+  },
+  "sort": [ { "updated_at":"desc" } ],
+  "limit": 3
+}
+`
+
 /*
-start
-1000000 0
-update
-999998 2
-restart
+main 50 s
+delta 2 s
+
+main 2 m
+delta 2 s
 
 
 killlist = SELECT id FROM documents WHERE updated_at >=  (SELECT created_at FROM deltabreaker WHERE index_name='delta')
