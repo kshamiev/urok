@@ -14,17 +14,19 @@ func main() {
 		return
 	}
 
-	data, err := cl.Json("search", req2)
-	fmt.Println(data, err)
-
 	// res, err := cl.Sphinxql("RELOAD INDEXES")
 	// fmt.Println(res, err)
 
-	// q := manticore.NewSearch("Мухомор", "users", "")
-	// q.Offset = 0
-	// q.Limit = 5
-	// res2, err2 := cl.RunQuery(q)
-	// fmt.Println(res2, err2)
+	data, err := cl.Json("search", req2)
+	fmt.Println(data, err)
+
+	// q := manticore.NewSearch("Дом", "users", "")
+	q := manticore.NewSearch("мухомор", "users", "")
+	q.Offset = 0
+	q.Limit = 3
+	q.SetSortMode(manticore.SortExtended, "updated_at desc")
+	res2, err2 := cl.RunQuery(q)
+	fmt.Println(res2, err2)
 }
 
 var req1 = `

@@ -8,7 +8,8 @@ systemctl restart manticore
 
 searchd --status
 sudo -u manticore indexer --all --rotate
-sudo -u manticore indexer users_main --rotate && systemctl restart manticore
+systemctl restart manticore
+sudo -u manticore indexer users_main --rotate
 sudo -u manticore indexer users_delta --rotate
 
 mysql -P9306 -h0
