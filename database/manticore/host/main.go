@@ -55,15 +55,12 @@ var req2 = `
 `
 
 /*
-main 50 s
-delta 2 s
+10 000 000
 
-main 2 m
-delta 2 s
-
+2022-08-15 13:16:22.528
+2022-08-15 13:26:50.872
 
 killlist = SELECT id FROM documents WHERE updated_at >=  (SELECT created_at FROM deltabreaker WHERE index_name='delta')
-
 
 sql_query_killlist = \
         SELECT id FROM documents WHERE updated_ts>=@last_reindex UNION \

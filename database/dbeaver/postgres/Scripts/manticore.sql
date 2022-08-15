@@ -3,13 +3,13 @@ INSERT INTO films
 SELECT title, description, category_id, release_year, price
 FROM films WHERE id IN (349, 696);
 
-INSERT INTO films 
+INSERT INTO documents 
 	(title, description, category_id, release_year, price, created_at, updated_at, deleted_at)
 SELECT title, description, category_id, release_year, price, created_at, updated_at, deleted_at FROM films;
 
 INSERT INTO documents  
 	(title, description, category_id, release_year, price, created_at, updated_at, deleted_at)
-SELECT title, description, category_id, release_year, price, created_at, updated_at, deleted_at FROM documents1 ORDER BY updated_at DESC LIMIT 1000000;
+SELECT title, description, category_id, release_year, price, created_at, updated_at, deleted_at FROM documents1 ORDER BY updated_at DESC LIMIT 10000000;
 
 SELECT count(*) FROM documents;
 SELECT count(*) FROM documents1;
@@ -24,3 +24,4 @@ DELETE FROM documents WHERE id > 10;
 UPDATE documents SET id = id - 1;
 UPDATE documents SET updated_at = now(), deleted_at = NULL WHERE id > 4;
 
+SELECT * FROM documents1 ORDER BY updated_at DESC LIMIT 10;

@@ -9,8 +9,8 @@ systemctl restart manticore
 searchd --status
 sudo -u manticore indexer --all --rotate
 systemctl restart manticore
-sudo -u manticore indexer users_main --rotate
-sudo -u manticore indexer users_delta --rotate
+sudo -u manticore indexer documents_main --rotate
+sudo -u manticore indexer documents_delta --rotate
 
 mysql -P9306 -h0
 SHOW TABLES;
