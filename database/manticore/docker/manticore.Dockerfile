@@ -6,6 +6,7 @@ RUN apt-get update \
     && apt-get install make \
     && apt-get -y install mc \
     && apt-get -y install mysql-client \
+    && apt-get -y install postgresql-client-14 \
     && apt-get -y install wget
 
 RUN mkdir -p /var/run/manticore \
@@ -35,7 +36,3 @@ ENV PATH=$PATH:/usr/local/go/bin
 EXPOSE 9306
 EXPOSE 9308
 EXPOSE 9312
-
-# docker build --no-cache -t kshamiev/manticore:v1 -f manticore.Dockerfile .
-# docker push kshamiev/assembly:v1
-# docker run --rm -it kshamiev/assembly:v1

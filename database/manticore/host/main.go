@@ -8,7 +8,10 @@ import (
 
 func main() {
 	cl := manticore.NewClient()
-	cl.SetServer("localhost", 9308)
+	// cl.SetServer("192.168.0.103", 9312)
+	cl.SetServer("127.0.0.1", 9312)
+	// cl.SetServer("localhost", 9312)
+	// cl.SetServer("localhost", 9308)
 	if _, err := cl.Open(); err != nil {
 		fmt.Println(err)
 		return
