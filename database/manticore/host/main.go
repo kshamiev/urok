@@ -17,11 +17,11 @@ func main() {
 	// res, err := cl.Sphinxql("RELOAD INDEXES")
 	// fmt.Println(res, err)
 
-	data, err := cl.Json("search", req2)
-	fmt.Println(data, err)
+	// data, err := cl.Json("search", req2)
+	// fmt.Println(data, err)
 
-	// q := manticore.NewSearch("Дом", "users", "")
-	q := manticore.NewSearch("мухомор", "users", "")
+	q := manticore.NewSearch("Дом", "documents", "")
+	// q := manticore.NewSearch("мухомор", "users", "")
 	q.Offset = 0
 	q.Limit = 3
 	q.SetSortMode(manticore.SortExtended, "updated_at desc")
@@ -56,9 +56,32 @@ var req2 = `
 
 /*
 10 000 000
+main
 
+2022-08-16 10:47:50.444
+2022-08-16 11:06:50.444
+186 000
+
+
+range 1 000 000
+2022-08-15 14:24:06.320
+2022-08-15 14:34:59.649
+10:53
+
+range 100 000
 2022-08-15 13:16:22.528
 2022-08-15 13:26:50.872
+10:28
+
+range 10 000
+2022-08-15 13:55:09.463
+2022-08-15 14:06:27.283
+11:18
+
+delta
+
+2022-08-15 13:53:14.961
+2022-08-15 13:53:33.508
 
 killlist = SELECT id FROM documents WHERE updated_at >=  (SELECT created_at FROM deltabreaker WHERE index_name='delta')
 
@@ -66,6 +89,15 @@ sql_query_killlist = \
         SELECT id FROM documents WHERE updated_ts>=@last_reindex UNION \
         SELECT id FROM documents_deleted WHERE deleted_ts>=@last_reindex
 }
+
+
+Total: 3
+Total found: 21614
+
+
+'дом' (Docs:21614, Hits:38903)
+
+
 
 Прохор Пастушенко, [05.08.2022 09:48]
 @s_a_nikolaev
