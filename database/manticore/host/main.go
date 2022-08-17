@@ -14,8 +14,8 @@ func main() {
 		return
 	}
 
-	// res, err := cl.Sphinxql("RELOAD INDEXES")
-	// fmt.Println(res, err)
+	res, err := cl.Sphinxql("RELOAD INDEXES")
+	fmt.Println(res, err)
 
 	// data, err := cl.Json("search", req2)
 	// fmt.Println(data, err)
