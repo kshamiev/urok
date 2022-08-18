@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/manticoresoftware/go-sdk/manticore"
+	"github.com/kshamiev/urok/database/manticore/manticore"
 )
 
 func main() {
