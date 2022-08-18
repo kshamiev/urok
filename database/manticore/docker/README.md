@@ -16,8 +16,17 @@ docker run --rm --name manticore \
 	-d kshamiev/manticore:v1 searchd --nodetach
 
 docker exec -it manticore bash
+docker logs manticore
 
+searchd --status
+searchd --stop
 sudo -u manticore indexer documents_main --rotate
 sudo -u manticore indexer documents_delta --rotate
 gosu manticore indexer --all --rotate
+
+mysql -P9306 -h0
+SHOW TABLES;
+DESCRIBE users_main_idx;
+SHOW META;
+RELOAD INDEXES;
 ```

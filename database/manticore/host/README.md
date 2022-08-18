@@ -7,7 +7,7 @@ systemctl status manticore
 systemctl restart manticore
 
 searchd --status
-searchd --config /etc/manticoresearch/manticore.conf --stop
+searchd --stop
 sudo -u manticore indexer documents_main --rotate
 sudo -u manticore indexer documents_delta --rotate
 sudo -u manticore indexer --all --rotate
@@ -17,7 +17,6 @@ SHOW TABLES;
 DESCRIBE users_main_idx;
 SHOW META;
 RELOAD INDEXES;
-
 ```
 
 Можно работать только в одном режиме из двух.

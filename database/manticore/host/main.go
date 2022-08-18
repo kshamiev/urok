@@ -9,7 +9,7 @@ import (
 func main() {
 	cl := manticore.NewClient()
 	// cl.SetServer("192.168.0.103", 9312)
-	cl.SetServer("127.0.0.1", 9312)
+	cl.SetServer("localhost", 9312)
 	// cl.SetServer("localhost", 9312)
 	// cl.SetServer("localhost", 9308)
 	if _, err := cl.Open(); err != nil {
@@ -17,24 +17,24 @@ func main() {
 		return
 	}
 
-	res, err := cl.Sphinxql("RELOAD INDEXES")
-	fmt.Println(res, err)
+	// res, err := cl.Sphinxql("RELOAD INDEXES")
+	// fmt.Println(res, err)
 
-	// data, err := cl.Json("search", req2)
-	// fmt.Println(data, err)
+	data, err := cl.Json("search", req2)
+	fmt.Println(data, err)
 
-	q := manticore.NewSearch("Дом", "documents", "")
-	// q := manticore.NewSearch("мухомор", "users", "")
-	q.Offset = 0
-	q.Limit = 3
-	q.SetSortMode(manticore.SortExtended, "updated_at desc")
-	res2, err2 := cl.RunQuery(q)
-	fmt.Println(res2, err2)
+	// q := manticore.NewSearch("Дом", "documents", "")
+	// // q := manticore.NewSearch("мухомор", "users", "")
+	// q.Offset = 0
+	// q.Limit = 3
+	// q.SetSortMode(manticore.SortExtended, "updated_at desc")
+	// res2, err2 := cl.RunQuery(q)
+	// fmt.Println(res2, err2)
 }
 
 var req1 = `
 {
-  "index": "users",
+  "index": "documents",
   "query": {
     "match": {
       "title, description": "дом"
@@ -46,7 +46,7 @@ var req1 = `
 
 var req2 = `
 {
-  "index": "users",
+  "index": "documents",
   "query": {
     "match": {
       "title,description": "Дом"
