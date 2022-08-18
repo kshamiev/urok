@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"strconv"
+	"time"
 
 	"github.com/manticoresoftware/go-sdk/manticore"
 )
@@ -17,19 +19,37 @@ func main() {
 		return
 	}
 
+	tm := strconv.Itoa(int(time.Now().Unix()))
+	qq := `replace into documents_rt (
+	id, title, category_id, release_year, price, created_at, updated_at, deleted_at, description
+	) values (
+	999999999,
+	'Мухомор обыкновенный',
+	8,
+	2025,
+	34.67,
+	'` + tm + `',
+	'` + tm + `',
+	'NULL',
+	'В лесу растёт мухомор обыкновенный. Шляпка этого гриба красного цвета с белыми вкраплениями. Растёт и встречается он равномерно по всему лесу. Ножка этого гриба обыкновенная, светлого цвета. Это гриб очень ядовит. Но для лосей он является лекарством. Любите наш лес.'
+	)`
+	res, err := cl.Sphinxql(qq)
+	fmt.Println(res, err)
+
 	// res, err := cl.Sphinxql("RELOAD INDEXES")
 	// fmt.Println(res, err)
 
-	data, err := cl.Json("search", req2)
-	fmt.Println(data, err)
+	// data, err := cl.Json("search", req2)
+	// fmt.Println(data, err)
 
 	// q := manticore.NewSearch("Дом", "documents", "")
-	// // q := manticore.NewSearch("мухомор", "users", "")
-	// q.Offset = 0
-	// q.Limit = 3
-	// q.SetSortMode(manticore.SortExtended, "updated_at desc")
-	// res2, err2 := cl.RunQuery(q)
-	// fmt.Println(res2, err2)
+	// q := manticore.NewSearch("мухомор", "documents", "")
+	q := manticore.NewSearch("мухомор", "*", "")
+	q.Offset = 0
+	q.Limit = 3
+	q.SetSortMode(manticore.SortExtended, "updated_at desc")
+	res2, err2 := cl.RunQuery(q)
+	fmt.Println(res2, err2)
 }
 
 var req1 = `

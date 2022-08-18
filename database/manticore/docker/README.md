@@ -7,6 +7,7 @@ docker build --no-cache -t kshamiev/manticore:v1 -f manticore.Dockerfile .
 docker push kshamiev/assembly:v1
 
 docker run --rm -it kshamiev/manticore:v1
+
 docker run --rm --name manticore \
 	-v $(pwd)/tmp:/var/lib/manticore \
 	-v $(pwd)/manticore.conf:/etc/manticoresearch/manticore.conf \
@@ -22,6 +23,7 @@ searchd --status
 searchd --stop
 sudo -u manticore indexer documents_main --rotate
 sudo -u manticore indexer documents_delta --rotate
+sudo -u manticore indexer documents_rt --rotate
 gosu manticore indexer --all --rotate
 
 mysql -P9306 -h0
