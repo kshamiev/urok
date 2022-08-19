@@ -23,5 +23,8 @@ DELETE FROM documents WHERE id > 10;
 
 UPDATE documents SET id = id - 1;
 UPDATE documents SET updated_at = now(), deleted_at = NULL WHERE id > 4;
+UPDATE documents SET DATA = '{"id":12, "name":"funtik", "price":34.67}';
+UPDATE documents SET is_flag = true;
+
 
 SELECT * FROM documents1 ORDER BY updated_at DESC LIMIT 10;

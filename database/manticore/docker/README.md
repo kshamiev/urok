@@ -32,3 +32,19 @@ DESCRIBE users_main_idx;
 SHOW META;
 RELOAD INDEXES;
 ```
+
+ 1 sql_attr_bigint = id
+ 2 sql_attr_string = title
+ 3 sql_attr_uint = release_year
+ 4 sql_attr_float = price
+ 5 sql_attr_timestamp = created_at
+ 6 sql_attr_bool = is_flag
+ 7 sql_attr_json = data
+
+1 rt_attr_bigint = id
+2 rt_attr_string = title
+3 rt_attr_uint = release_year
+4 rt_attr_float = price
+5 rt_attr_timestamp = created_at
+6 rt_attr_bool = is_flag
+7 rt_attr_json = data
