@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/kshamiev/urok/database/manticore/manticore"
+	"github.com/kshamiev/urok/database/manticore/typs"
 )
 
 func main() {
@@ -21,7 +23,14 @@ func main() {
 	// fmt.Println(res, err)
 
 	data, err := cl.Json("search", req2)
-	fmt.Println(data.Answer, err)
+
+	obj := &manticore.Result{}
+	err = json.Unmarshal([]byte(data.Answer), obj)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	typs.Dumper(obj)
 
 	// q := manticore.NewSearch("Дом", "documents", "")
 	// q := manticore.NewSearch("мухомор", "documents", "")
