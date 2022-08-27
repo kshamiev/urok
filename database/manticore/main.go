@@ -1,11 +1,9 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/kshamiev/urok/database/manticore/manticore"
-	"github.com/kshamiev/urok/database/manticore/typs"
 )
 
 func main() {
@@ -24,22 +22,23 @@ func main() {
 
 	data, err := cl.Json("search", req2)
 
-	obj := &manticore.Result{}
-	err = json.Unmarshal([]byte(data.Answer), obj)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	typs.Dumper(obj)
+	fmt.Println(data.Answer, err)
+	// obj := &manticore.Result{}
+	// err = json.Unmarshal([]byte(data.Answer), obj)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+	// typs.Dumper(obj)
 
-	// q := manticore.NewSearch("Дом", "documents", "")
+	q := manticore.NewSearch("Дом", "documents", "")
 	// q := manticore.NewSearch("мухомор", "documents", "")
 	// q := manticore.NewSearch("мухомор", "*", "")
 	// q.Offset = 0
-	// q.Limit = 3
-	// q.SetSortMode(manticore.SortExtended, "updated_at desc")
-	// res2, err2 := cl.RunQuery(q)
-	// fmt.Println(res2, err2)
+	q.Limit = 3
+	q.SetSortMode(manticore.SortExtended, "updated_at desc")
+	res2, err2 := cl.RunQuery(q)
+	fmt.Println(res2, err2)
 }
 
 var req1 = `
