@@ -33,11 +33,13 @@ require (
 	github.com/friendsofgo/errors v0.9.2 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
+	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/gofrs/uuid v4.0.0+incompatible // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/snappy v0.0.3 // indirect
+	github.com/jmoiron/sqlx v1.3.5 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/lib/pq v1.10.2 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect

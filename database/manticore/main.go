@@ -19,6 +19,7 @@ func main() {
 
 	// res, err := cl.Sphinxql("RELOAD INDEXES")
 	// fmt.Println(res, err)
+	// SELECT * FROM documents WHERE MATCH('Дом') ORDER BY updated_at desc LIMIT 0,3 OPTION ranker=proximity, cutoff=0, retry_count=0, retry_delay=0;
 
 	data, err := cl.Json("search", req2)
 
