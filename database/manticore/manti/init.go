@@ -7,11 +7,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type Storage struct {
-	db *sqlx.DB
-}
-
-var instance *Storage
+var instance *sqlx.DB
 
 func Init() error {
 	var err error
@@ -26,8 +22,6 @@ func Init() error {
 	}
 	db.SetMaxIdleConns(100)
 	db.SetMaxOpenConns(100)
-	instance = &Storage{
-		db: db,
-	}
+	instance = db
 	return nil
 }

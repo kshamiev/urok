@@ -4,6 +4,7 @@ import (
 	"fmt"
 	_ "fmt"
 	"regexp"
+	"time"
 )
 
 var patternToml1 = regexp.MustCompile(`"_source": {
@@ -25,6 +26,9 @@ func main() {
 
 	math := patternToml.FindAllStringSubmatch(tpl, -1)
 	fmt.Println(math)
+
+	tt := time.Unix(1661068031, 0)
+	fmt.Println(tt.String())
 
 }
 
