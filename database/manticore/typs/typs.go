@@ -34,25 +34,19 @@ type Document struct {
 }
 
 type Documents struct {
-	Total int         `json:"total"`
-	Data  []*Document `json:"data"`
+	Total int        `json:"total"`
+	Data  []Document `json:"data"`
 }
 
 func NewDocuments(limit int) *Documents {
 	return &Documents{
 		Total: 0,
-		Data:  make([]*Document, 0, limit),
+		Data:  make([]Document, 0, limit),
 	}
 }
 
 func (doc *Documents) Parse(row map[string]interface{}) {
-	// Dumper(row, manti.ConvertBigint(row["id"]))
-	// for i := range row {
-	// 	fmt.Printf("%s = %T", i, row[i])
-	// }
-	// fmt.Println()
-
-	doc.Data = append(doc.Data, &Document{
+	doc.Data = append(doc.Data, Document{
 		ID:          manti.ConvertBigint(row["id"]),
 		Title:       manti.ConvertString(row["title"]),
 		CategoryID:  manti.ConvertBigint(row["category_id"]),

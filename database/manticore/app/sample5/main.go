@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"log"
 
 	"github.com/kshamiev/urok/database/manticore/manti"
@@ -9,10 +9,10 @@ import (
 )
 
 func main() {
-
 	if err := manti.Init(); err != nil {
 		log.Fatalln(err)
 	}
+	ctx := context.Background()
 
 	qu := `
 	SELECT * 
@@ -22,14 +22,10 @@ func main() {
 	LIMIT 0,3 
 	OPTION ranker=proximity, cutoff=0, retry_count=0, retry_delay=0;
 	`
-
 	data := typs.NewDocuments(100)
-
-	if err := manti.SearchCustom(data, qu); err != nil {
+	if err := manti.SearchCustom(ctx, data, qu); err != nil {
 		log.Fatalln(err)
 	}
 
 	typs.Dumper(data)
-	fmt.Println(data.Data[0].Price.String())
-	fmt.Println(data.Data[0].UpdatedAt.String())
 }

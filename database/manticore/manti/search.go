@@ -1,7 +1,7 @@
 package manti
 
 import (
-	"log"
+	"context"
 	"strconv"
 	"time"
 
@@ -29,16 +29,18 @@ func (s *Search) Limit(limit, offset int) {
 	s.offset = offset
 }
 
-func SearchCustom(result Parser, qu string, args ...interface{}) error {
-	rows, err := instance.DB.Query(qu, args...)
+func SearchCustom(ctx context.Context, result Parser, qu string, args ...interface{}) error {
+	rows, err := instance.DB.QueryContext(ctx, qu, args...)
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	cols, err := rows.Columns()
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 	values := make([]interface{}, len(cols))
 	for i := range values {
@@ -48,7 +50,7 @@ func SearchCustom(result Parser, qu string, args ...interface{}) error {
 	dest := make(map[string]interface{})
 	for rows.Next() {
 		if err := rows.Scan(values...); err != nil {
-			log.Fatalln(err)
+			return err
 		}
 		for i, column := range cols {
 			dest[column] = *(values[i].(*interface{}))
