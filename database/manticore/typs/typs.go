@@ -59,3 +59,7 @@ func (doc *Documents) Parse(row map[string]interface{}) {
 		Description: manti.ConvertString(row["description"]),
 	})
 }
+
+func (doc *Documents) SetCount(cnt int) {
+	doc.Total = cnt
+}

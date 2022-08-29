@@ -48,14 +48,18 @@ func (s *Search) Options(options string) {
 
 func (s *Search) Fetch(ctx context.Context, result Parser) error {
 	query := "SELECT " + strings.Join(s.columns, ", ") + " FROM " + strings.Join(s.fromIndexes, ", ")
+	queryCnt := "SELECT count(*) FROM " + strings.Join(s.fromIndexes, ", ")
 	// where
 	switch {
 	case s.search != "" && s.where != "":
 		query += " WHERE MATCH('" + s.search + "') AND " + s.where
+		queryCnt += " WHERE MATCH('" + s.search + "') AND " + s.where
 	case s.search == "" && s.where != "":
 		query += " WHERE " + s.where
+		queryCnt += " WHERE " + s.where
 	case s.search != "" && s.where == "":
 		query += " WHERE MATCH('" + s.search + "') "
+		queryCnt += " WHERE MATCH('" + s.search + "') "
 	}
 	// order by
 	if s.order != "" {
@@ -68,9 +72,17 @@ func (s *Search) Fetch(ctx context.Context, result Parser) error {
 	// options
 	if s.options != "" {
 		query += " OPTION " + s.options
+		queryCnt += " OPTION " + s.options
 	} else {
 		query += " OPTION ranker=proximity, cutoff=0, retry_count=0, retry_delay=0;"
+		queryCnt += " OPTION ranker=proximity, cutoff=0, retry_count=0, retry_delay=0;"
 	}
 	fmt.Printf(query)
-	return SearchCustom(ctx, result, query)
+	fmt.Printf(queryCnt)
+	cnt, err := SearchCount(ctx, queryCnt)
+	if err != nil {
+		return err
+	}
+	result.SetCount(cnt)
+	return SearchData(ctx, result, query)
 }

@@ -34,9 +34,10 @@ func Init() error {
 
 type Parser interface {
 	Parse(map[string]interface{})
+	SetCount(int)
 }
 
-func SearchCustom(ctx context.Context, result Parser, qu string, args ...interface{}) error {
+func SearchData(ctx context.Context, result Parser, qu string, args ...interface{}) error {
 	rows, err := instance.DB.QueryContext(ctx, qu, args...)
 	if err != nil {
 		return err
@@ -68,6 +69,15 @@ func SearchCustom(ctx context.Context, result Parser, qu string, args ...interfa
 		result.Parse(dest)
 	}
 	return nil
+}
+
+func SearchCount(ctx context.Context, qu string, args ...interface{}) (int, error) {
+	row := instance.DB.QueryRowContext(ctx, qu, args...)
+	var cnt int
+	if err := row.Scan(&cnt); err != nil {
+		return cnt, err
+	}
+	return cnt, nil
 }
 
 // ////

@@ -23,9 +23,20 @@ func main() {
 	OPTION ranker=proximity, cutoff=0, retry_count=0, retry_delay=0;
 	`
 	data := typs.NewDocuments(100)
-	if err := manti.SearchCustom(ctx, data, qu); err != nil {
+	if err := manti.SearchData(ctx, data, qu); err != nil {
 		log.Fatalln(err)
 	}
 
-	typs.Dumper(data)
+	qu = `
+	SELECT count(*) 
+	FROM documents 
+	WHERE MATCH('Дом')
+	OPTION ranker=proximity, cutoff=0, retry_count=0, retry_delay=0;
+	`
+	cnt, err := manti.SearchCount(ctx, qu)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	typs.Dumper(data, cnt)
 }
