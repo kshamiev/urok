@@ -12,11 +12,11 @@ func main() {
 		assembly.NewInvoiceTCSample("6578"),
 		assembly.NewInvoiceTCSample("83464"),
 	}
-	fp, err := assembly.InvoiceTCTrucking("sample/excel/combined.xlsx", data)
+	fp, err := assembly.InvoiceTCTrucking("sample/excel/app/sample1/combined.xlsx", data)
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err := fp.SaveAs("sample/excel/test.xlsx"); err != nil {
+	if err := fp.SaveAs("sample/excel/app/sample1/test.xlsx"); err != nil {
 		log.Fatal(err)
 	}
 }
