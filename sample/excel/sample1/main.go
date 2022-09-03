@@ -5,14 +5,13 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/kshamiev/urok/sample/excel/docexcel"
-	"github.com/kshamiev/urok/sample/excel/typs"
+	"github.com/kshamiev/urok/sample/excel/sample1/docexcel"
+	"github.com/kshamiev/urok/sample/excel/sample1/typs"
 )
 
 func main() {
 	_, filePath, _, _ := runtime.Caller(0)
 	filePath = filepath.Dir(filePath)
-
 	data := []typs.InvoiceTC{
 		typs.NewInvoiceTC("2345"),
 		typs.NewInvoiceTC("6578"),

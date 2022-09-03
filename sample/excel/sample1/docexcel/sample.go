@@ -8,7 +8,7 @@ import (
 	"github.com/xuri/excelize/v2"
 
 	"github.com/kshamiev/urok/sample/excel/excel"
-	"github.com/kshamiev/urok/sample/excel/typs"
+	"github.com/kshamiev/urok/sample/excel/sample1/typs"
 )
 
 type Sample struct {
