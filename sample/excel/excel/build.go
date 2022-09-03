@@ -28,9 +28,17 @@ func (b *Build) Style(position StyleXY) *Build {
 	return b
 }
 
-func (b *Build) Cell(colBeg string, rowBeg int, colEnd string, rowEnd int) *Build {
+func (b *Build) CellRow(colBeg string, rowBeg int, colEnd string, rowEnd int) *Build {
 	b.rowBeg = rowBeg
 	b.rowEnd = rowEnd
+	b.colBeg = colBeg
+	b.colEnd = colEnd
+	return b
+}
+
+func (b *Build) Cell(colBeg string, colEnd string) *Build {
+	b.rowBeg = b.Row
+	b.rowEnd = b.Row
 	b.colBeg = colBeg
 	b.colEnd = colEnd
 	return b

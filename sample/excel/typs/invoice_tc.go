@@ -3,66 +3,99 @@ package typs
 func NewInvoiceTC(number string) InvoiceTC {
 	return InvoiceTC{
 		Number: number,
+		Initiator: Contact{
+			FullName: "Капитан очевидность",
+			Phone:    "-5 (000) 111-11-11",
+			Email:    "big@fire.ru",
+		},
+		From: Participant{
+			Contact: Contact{
+				FullName: "Шариков Полиграф Полиграфович",
+				Phone:    "-1 (000) 999-99-99",
+				Email:    "koshmar@boloto.ru",
+			},
+			Company: "Три пескаря",
+			Date:    "2010-10-10",
+			Destination: Destination{
+				Province: "Болото",
+				City:     "Лягушатник",
+				House:    "5",
+			},
+		},
+		To: Participant{
+			Contact: Contact{
+				FullName: "Шаша Бесподобный",
+				Phone:    "-2 (000) 888-88-88",
+				Email:    "razlojenie@ujas.ru",
+			},
+			Company: "Колхоз 30 лет без урожая",
+			Date:    "2010-10-20",
+			Destination: Destination{
+				Province: "Топь",
+				City:     "Трясина",
+				House:    "23",
+			},
+		},
 		Cargos: []Cargo{
 			{
-				ID:     "200",
+				ID:     "201",
 				Name:   "Ловушка для мух",
-				Weight: 20,
-				Length: 2,
-				Width:  2,
-				Height: 2,
-				Amount: 10,
+				Weight: 10,
+				Length: 1.4,
+				Width:  1.5,
+				Height: 1.4,
+				Amount: 4,
+				Summ:   950,
+			},
+			{
+				ID:     "202",
+				Name:   "Мышеловка для крыс",
+				Weight: 12,
+				Length: 1.5,
+				Width:  1.3,
+				Height: 1.1,
+				Amount: 4,
+				Summ:   345,
+			},
+			{
+				ID:     "203",
+				Name:   "Сачок для бабочек",
+				Weight: 14,
+				Length: 1.9,
+				Width:  1.8,
+				Height: 1.7,
+				Amount: 8,
 				Summ:   1000,
 			},
 			{
-				ID:     "200",
-				Name:   "Ловушка для мух",
-				Weight: 20,
+				ID:     "204",
+				Name:   "Сморчок на палочке",
+				Weight: 16,
 				Length: 2,
-				Width:  2,
-				Height: 2,
+				Width:  1.5,
+				Height: 1.3,
 				Amount: 10,
-				Summ:   1000,
+				Summ:   756,
 			},
 			{
-				ID:     "200",
-				Name:   "Ловушка для мух",
-				Weight: 20,
-				Length: 2,
-				Width:  2,
-				Height: 2,
-				Amount: 10,
-				Summ:   1000,
+				ID:     "205",
+				Name:   "Суслик засушливый",
+				Weight: 18,
+				Length: 1,
+				Width:  1.6,
+				Height: 1.4,
+				Amount: 12,
+				Summ:   802,
 			},
 			{
-				ID:     "200",
-				Name:   "Ловушка для мух",
+				ID:     "206",
+				Name:   "Мухомор обыкновенный",
 				Weight: 20,
-				Length: 2,
-				Width:  2,
-				Height: 2,
-				Amount: 10,
-				Summ:   1000,
-			},
-			{
-				ID:     "200",
-				Name:   "Ловушка для мух",
-				Weight: 20,
-				Length: 2,
-				Width:  2,
-				Height: 2,
-				Amount: 10,
-				Summ:   1000,
-			},
-			{
-				ID:     "200",
-				Name:   "Ловушка для мух",
-				Weight: 20,
-				Length: 2,
-				Width:  2,
-				Height: 2,
-				Amount: 10,
-				Summ:   1000,
+				Length: 1.1,
+				Width:  1.2,
+				Height: 1.3,
+				Amount: 6,
+				Summ:   456,
 			},
 		},
 		PackageList: []PackageYarg{
@@ -70,15 +103,15 @@ func NewInvoiceTC(number string) InvoiceTC {
 			{Name: "Упаковка", Count: "567"},
 			{Name: "Прыщи пузырчатые", Count: "1289"},
 		},
-		Comment: "SetSheetName предоставляет функцию для установки имени листа по заданным именам старого и нового листа. В заголовке листа допускается не более 31 символа, и эта функция изменяет только имя листа и не обновляет имя листа в формуле или ссылке, связанной с ячейкой. Таким образом, может быть ошибка формулы проблемы или отсутствует ссылка. SetSheetName предоставляет функцию для установки имени листа по заданным именам старого и нового листа. В заголовке листа допускается не более 31 символа, и эта функция изменяет только имя листа и не обновляет имя листа в формуле или ссылке, связанной с ячейкой. Таким образом, может быть ошибка формулы проблемы или отсутствует ссылка. ",
+		Comment: "Предоставляет функцию для установки имени листа по заданным именам старого и нового листа. В заголовке листа допускается не более 31 символа, и эта функция изменяет только имя листа и не обновляет имя листа в формуле или ссылке, связанной с ячейкой. Таким образом, может быть ошибка формулы проблемы или отсутствует ссылка. Предоставляет функцию для установки имени листа по заданным именам старого и нового листа. В заголовке листа допускается не более 31 символа, и эта функция изменяет только имя листа и не обновляет имя листа в формуле или ссылке, связанной с ячейкой. Таким образом, может быть ошибка формулы проблемы или отсутствует ссылка.",
 	}
 }
 
 type InvoiceTC struct {
 	Number      string        `json:"number"`
 	Initiator   Contact       `json:"initiator"`
-	From        []Participant `json:"from"`
-	To          []Participant `json:"to"`
+	From        Participant   `json:"from"`
+	To          Participant   `json:"to"`
 	Cargos      []Cargo       `json:"cargos"`
 	PackageList []PackageYarg `json:"package_list"`
 	Comment     string        `json:"comment"`
