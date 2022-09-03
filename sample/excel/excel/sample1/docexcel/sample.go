@@ -8,12 +8,12 @@ import (
 	"github.com/xuri/excelize/v2"
 
 	"github.com/kshamiev/urok/sample/excel/excel"
-	"github.com/kshamiev/urok/sample/excel/sample1/typs"
+	"github.com/kshamiev/urok/sample/excel/excel/sample1/typs"
 )
 
 type Sample struct {
 	tplPath string
-	s       sampleSheet
+	s       styleSheet
 }
 
 func NewSample(tplPath string) Sample {
@@ -30,9 +30,6 @@ func (doc Sample) Compile(data []typs.InvoiceTC) (*excelize.File, error) {
 	defer func() {
 		bu.DeleteStartSheet()
 	}()
-
-	// b := bu.NewSheet("test")
-	// b.Style(doc.styleH3).CellRow("B", 2, "E", 2).Value("Заголовок")
 
 	for _, inv := range data {
 		b := bu.NewSheet(inv.Number)
@@ -220,27 +217,27 @@ func (doc Sample) commentA(b *excel.Build, inv typs.InvoiceTC) (err error) {
 
 // ////
 
-type sampleSheet struct {
+type styleSheet struct {
 }
 
-func (doc sampleSheet) Head1(b *excel.Build) *excel.Build {
+func (doc styleSheet) Head1(b *excel.Build) *excel.Build {
 	return b.Style("C2")
 }
-func (doc sampleSheet) Head2(b *excel.Build) *excel.Build {
+func (doc styleSheet) Head2(b *excel.Build) *excel.Build {
 	return b.Style("C4")
 }
-func (doc sampleSheet) Head3(b *excel.Build) *excel.Build {
+func (doc styleSheet) Head3(b *excel.Build) *excel.Build {
 	return b.Style("C6")
 }
-func (doc sampleSheet) Head4(b *excel.Build) *excel.Build {
+func (doc styleSheet) Head4(b *excel.Build) *excel.Build {
 	return b.Style("C8")
 }
-func (doc sampleSheet) Body1(b *excel.Build) *excel.Build {
+func (doc styleSheet) Body1(b *excel.Build) *excel.Build {
 	return b.Style("C15")
 }
-func (doc sampleSheet) Footer1(b *excel.Build) *excel.Build {
+func (doc styleSheet) Footer1(b *excel.Build) *excel.Build {
 	return b.Style("C29")
 }
-func (doc sampleSheet) Formula1(b *excel.Build) *excel.Build {
+func (doc styleSheet) Formula1(b *excel.Build) *excel.Build {
 	return b.Style("C22")
 }

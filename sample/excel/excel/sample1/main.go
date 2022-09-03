@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/kshamiev/urok/sample/excel/sample1/docexcel"
-	"github.com/kshamiev/urok/sample/excel/sample1/typs"
+	"github.com/kshamiev/urok/sample/excel/excel/sample1/docexcel"
+	"github.com/kshamiev/urok/sample/excel/excel/sample1/typs"
 )
 
 func main() {
