@@ -6,6 +6,7 @@ import (
 
 	"github.com/kshamiev/urok/database/manticore/manti"
 	"github.com/kshamiev/urok/database/manticore/typs"
+	"github.com/kshamiev/urok/debug"
 )
 
 func main() {
@@ -38,5 +39,5 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	typs.Dumper(data, cnt)
+	debug.Dumper(data, cnt)
 }
