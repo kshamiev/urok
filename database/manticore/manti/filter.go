@@ -10,7 +10,7 @@ type Filter struct {
 
 type Attribute struct {
 	Name  string
-	Order string
+	Sign  string
 	Value string
 }
 

@@ -19,7 +19,7 @@ UPDATE documents SET created_at = now() - INTERVAL '5 MONTH', updated_at = now()
 
 SELECT start_at, to_timestamp(extract(epoch from start_at::timestamptz)) FROM manticore_breaker;
 
-DELETE FROM documents WHERE id > 10;
+DELETE FROM documents WHERE id > 4000000;
 
 UPDATE documents SET id = id - 1;
 UPDATE documents SET updated_at = now(), deleted_at = NULL WHERE id > 4;

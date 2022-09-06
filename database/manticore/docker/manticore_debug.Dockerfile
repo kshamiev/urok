@@ -3,6 +3,8 @@ FROM ubuntu:22.04
 LABEL maintainer="Konstantin Shamiev aka ilosa <konstantin@shamiev.ru>"
 
 RUN apt-get update \
+    && apt-get install make \
+    && apt-get -y install mc \
     && apt-get -y install mysql-client \
     && apt-get -y install postgresql-client-14 \
     && apt-get -y install wget
@@ -24,7 +26,12 @@ RUN wget https://repo.manticoresearch.com/repository/morphology/ru.pak.tgz \
     && tar -xvf ru.pak.tgz \
     && mv ru.pak /usr/share/manticore
 
-RUN rm ./*.deb && rm ./*.tgz
+RUN wget https://go.dev/dl/go1.17.13.linux-amd64.tar.gz \
+    && rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.13.linux-amd64.tar.gz
+
+RUN rm ./*.deb && rm ./*.tgz && rm ./*.gz
+
+ENV PATH=$PATH:/usr/local/go/bin
 
 EXPOSE 9306
 EXPOSE 9308

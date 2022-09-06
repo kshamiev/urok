@@ -3,104 +3,25 @@ package main
 import (
 	"fmt"
 	_ "fmt"
-	"regexp"
-	"time"
 )
 
-var patternToml1 = regexp.MustCompile(`"_source": {
-"(title)": "(.+)",
-"(category_id)": (.+),
-"(release_year)": (.+),
-"(price)": (.+),
-"(created_at)": (.+),
-"(updated_at)": (.+),
-"(deleted_at)": (.+),
-"(is_flag)": (.+),
-"(data)": (.+),
-"(description)": "(.+)"
-}`)
-
-var patternToml = regexp.MustCompile(`"_source":(.+)desc`)
+type Rrrr struct {
+}
 
 func main() {
 
-	math := patternToml.FindAllStringSubmatch(tpl, -1)
-	fmt.Println(math)
-
-	tt := time.Unix(1661068031, 0)
-	fmt.Println(tt.String())
+	test()
 
 }
 
-var tpl = `
-{
-  "took": 929,
-  "timed_out": false,
-  "hits": {
-    "total": 21614,
-    "total_relation": "eq",
-    "hits": [
-      {
-        "_id": "3000007",
-        "_score": 1,
-        "_source": {
-          "title": "Дом на берегу озера : \"popcorn\" a",
-          "category_id": -456,
-          "release_year": 4294965281,
-          "price": -8.120000,
-          "created_at": 1660326449,
-          "updated_at": 1661068031,
-          "deleted_at": 0,
-          "is_flag": true,
-          "data": {
-            "id": 12,
-            "name": "funtik",
-            "price": 34.670000
-          },
-          "description": "Я люблю по долгу жить в своём доме. "
-        }
-      },
-      {
-        "_id": "3000008",
-        "_score": 1,
-        "_source": {
-          "title": "Дом на холме",
-          "category_id": -999,
-          "release_year": 4294965282,
-          "price": -2.780000,
-          "created_at": 1660324017,
-          "updated_at": 1660849435,
-          "deleted_at": 0,
-          "is_flag": true,
-          "data": {
-            "id": 12,
-            "name": "funtik",
-            "price": 34.670000
-          },
-          "description": "Мой дом на холме очень красив. Я люблю по долгу жить в своём доме. Со мной живёт мой домовой. Я его очень люблю. Также у меня дома живёт рыжая кошка. Мой домостроитель обещал мне построить возле дома лужайку."
-        }
-      },
-      {
-        "_id": "3001452",
-        "_score": 1,
-        "_source": {
-          "title": "Диагностико-терапавтический аппарат Пролог-02ЭП.",
-          "category_id": 3,
-          "release_year": 2005,
-          "price": 2.760000,
-          "created_at": 1622275200,
-          "updated_at": 1622275200,
-          "deleted_at": 0,
-          "is_flag": true,
-          "data": {
-            "id": 12,
-            "name": "funtik",
-            "price": 34.670000
-          },
-          "description": "Пролог-02ЭП «Прогноз Classic» предназначен для определения проводимости в точке воздействия при электропунктурной диагностике (в том числе по методу Фолля), медикаментозного тестирования, потенцирования субстанций и копирования их свойств на различные носители, адаптационной (биорезонансной) терапии (БРТ). \r\nПрименение в стационарных условиях, непосредственно в больничной палате, при выездах к пациенту на дом, а также непосредственно в транспортных средствах любого типа."
-        }
-      }
-    ]
-  }
+func test() {
+
+	for i := 0; i < 100; i++ {
+		var h *Rrrr
+		if h == nil {
+			fmt.Println("OK")
+			h = &Rrrr{}
+		}
+	}
+
 }
-`
