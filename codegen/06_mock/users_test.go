@@ -2,12 +2,10 @@ package users
 
 import (
 	"fmt"
-	"testing"
-
 	"github.com/golang/mock/gomock"
-
-	"github.com/kshamiev/urok/codegen/06_mock/mocks"
-	"github.com/kshamiev/urok/codegen/06_mock/users"
+	"msu-go-11/6/06_mock/mocks"
+	"msu-go-11/6/06_mock/users"
+	"testing"
 )
 
 func doSomeWork(u users.UserInterface) {
@@ -18,7 +16,6 @@ func doSomeWork(u users.UserInterface) {
 	// u.SetName("Ivan Petrov")
 }
 
-//go:generate mockgen -destination=mocks users
 func TestDoSomethingWithUsers(t *testing.T) {
 	ctrl := gomock.NewController(t) // обратите внимание - мы передаём t сюда, это надо чтобы гомок вывел корректное сообщение если тесты не пройдут
 	defer ctrl.Finish()             // при завершении функции TestDoSomethingWithUsers вызовется Finish и сравнит последовательсноть вызовов

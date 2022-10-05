@@ -15,6 +15,7 @@ func (u *User) SetName(newName string) {
 	u.Name = newName
 }
 
+//go:generate mockgen -destination=../mocks/users_mock_new.go . UserInterface
 type UserInterface interface {
 	GetName() string
 	SetName(string)
