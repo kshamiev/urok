@@ -1,10 +1,10 @@
 // Комментарий к пакету
 
-package mockone
+package mockery
 
 import "context"
 
-//go:generate mockery  --dir . --name IOAuthProvider --output bublik
+//go:generate mockery  --dir . --name IOAuthProvider --output mockerytest
 type IOAuthProvider interface {
 	GetConfig() Employee
 	GetAuthURL() string

@@ -2,10 +2,12 @@ package users
 
 import (
 	"fmt"
-	"github.com/golang/mock/gomock"
-	"msu-go-11/6/06_mock/mocks"
-	"msu-go-11/6/06_mock/users"
 	"testing"
+
+	"github.com/golang/mock/gomock"
+
+	"github.com/kshamiev/urok/codegen/06_mock/mocks"
+	"github.com/kshamiev/urok/codegen/06_mock/users"
 )
 
 func doSomeWork(u users.UserInterface) {
