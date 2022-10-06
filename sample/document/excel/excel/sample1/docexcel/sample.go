@@ -7,8 +7,8 @@ import (
 
 	"github.com/xuri/excelize/v2"
 
-	"github.com/kshamiev/urok/sample/excel/excel"
-	"github.com/kshamiev/urok/sample/excel/excel/sample1/typs"
+	excel2 "github.com/kshamiev/urok/sample/document/excel/excel"
+	"github.com/kshamiev/urok/sample/document/excel/excel/sample1/typs"
 )
 
 type Sample struct {
@@ -23,7 +23,7 @@ func NewSample(tplPath string) Sample {
 }
 
 func (doc Sample) Compile(data []typs.InvoiceTC) (*excelize.File, error) {
-	bu, err := excel.NewBuilderFile(doc.tplPath)
+	bu, err := excel2.NewBuilderFile(doc.tplPath)
 	if err != nil {
 		return nil, err
 	}
@@ -61,14 +61,14 @@ func (doc Sample) Compile(data []typs.InvoiceTC) (*excelize.File, error) {
 	return bu.GetFp(), nil
 }
 
-func (doc Sample) headerMain(b *excel.Build, inv typs.InvoiceTC) (err error) {
+func (doc Sample) headerMain(b *excel2.Build, inv typs.InvoiceTC) (err error) {
 	doc.s.Head1(b).Cell("B", "S").Height(21).
 		Value("Заявка на организацию транспортно-экспедиционного обслуживания № " + inv.Number)
 	b.Row++
 	return b.Err
 }
 
-func (doc Sample) initiatorA(b *excel.Build, inv typs.InvoiceTC) (err error) {
+func (doc Sample) initiatorA(b *excel2.Build, inv typs.InvoiceTC) (err error) {
 	doc.s.Head3(b).CellRow("B", b.Row, "S", b.Row).Height(18).Value("Инициатор")
 	b.Row++
 	doc.s.Head4(b).Cell("B", "B").Height(16).Value("ФИО")
@@ -81,15 +81,15 @@ func (doc Sample) initiatorA(b *excel.Build, inv typs.InvoiceTC) (err error) {
 	return b.Err
 }
 
-func (doc Sample) fromA(b *excel.Build, inv typs.InvoiceTC) (err error) {
+func (doc Sample) fromA(b *excel2.Build, inv typs.InvoiceTC) (err error) {
 	return doc.fromToA(b, inv.From, false)
 }
 
-func (doc Sample) toA(b *excel.Build, inv typs.InvoiceTC) (err error) {
+func (doc Sample) toA(b *excel2.Build, inv typs.InvoiceTC) (err error) {
 	return doc.fromToA(b, inv.To, true)
 }
 
-func (doc Sample) fromToA(b *excel.Build, inv typs.Participant, flag bool) (err error) {
+func (doc Sample) fromToA(b *excel2.Build, inv typs.Participant, flag bool) (err error) {
 	actor := "Грузоотправитель"
 	date := "Дата отправления"
 	point := "Пункт отправления"
@@ -126,7 +126,7 @@ func (doc Sample) fromToA(b *excel.Build, inv typs.Participant, flag bool) (err 
 	return b.Err
 }
 
-func (doc Sample) cargosA(b *excel.Build, inv typs.InvoiceTC) (err error) {
+func (doc Sample) cargosA(b *excel2.Build, inv typs.InvoiceTC) (err error) {
 
 	var formula string
 	// header
@@ -185,12 +185,12 @@ func (doc Sample) cargosA(b *excel.Build, inv typs.InvoiceTC) (err error) {
 
 	return b.Err
 }
-func (doc Sample) headerAdditional(b *excel.Build, inv typs.InvoiceTC) (err error) {
+func (doc Sample) headerAdditional(b *excel2.Build, inv typs.InvoiceTC) (err error) {
 	doc.s.Head2(b).Cell("B", "S").Height(21).Value("Дополнительные условия перевозки")
 	b.Row += 2
 	return b.Err
 }
-func (doc Sample) additional(b *excel.Build, inv typs.InvoiceTC) (err error) {
+func (doc Sample) additional(b *excel2.Build, inv typs.InvoiceTC) (err error) {
 	if len(inv.PackageList) > 0 {
 		doc.s.Head3(b).Cell("B", "I").Height(18).Value("Упаковка")
 		doc.s.Head3(b).Cell("J", "K").Height(18).Value("количество")
@@ -204,7 +204,7 @@ func (doc Sample) additional(b *excel.Build, inv typs.InvoiceTC) (err error) {
 	b.Row += 2
 	return b.Err
 }
-func (doc Sample) commentA(b *excel.Build, inv typs.InvoiceTC) (err error) {
+func (doc Sample) commentA(b *excel2.Build, inv typs.InvoiceTC) (err error) {
 	// header
 	doc.s.Head3(b).Cell("B", "S").Height(16).Value("Комментарий")
 	b.Row++
@@ -220,24 +220,24 @@ func (doc Sample) commentA(b *excel.Build, inv typs.InvoiceTC) (err error) {
 type styleSheet struct {
 }
 
-func (doc styleSheet) Head1(b *excel.Build) *excel.Build {
+func (doc styleSheet) Head1(b *excel2.Build) *excel2.Build {
 	return b.Style("C2")
 }
-func (doc styleSheet) Head2(b *excel.Build) *excel.Build {
+func (doc styleSheet) Head2(b *excel2.Build) *excel2.Build {
 	return b.Style("C4")
 }
-func (doc styleSheet) Head3(b *excel.Build) *excel.Build {
+func (doc styleSheet) Head3(b *excel2.Build) *excel2.Build {
 	return b.Style("C6")
 }
-func (doc styleSheet) Head4(b *excel.Build) *excel.Build {
+func (doc styleSheet) Head4(b *excel2.Build) *excel2.Build {
 	return b.Style("C8")
 }
-func (doc styleSheet) Body1(b *excel.Build) *excel.Build {
+func (doc styleSheet) Body1(b *excel2.Build) *excel2.Build {
 	return b.Style("C15")
 }
-func (doc styleSheet) Footer1(b *excel.Build) *excel.Build {
+func (doc styleSheet) Footer1(b *excel2.Build) *excel2.Build {
 	return b.Style("C29")
 }
-func (doc styleSheet) Formula1(b *excel.Build) *excel.Build {
+func (doc styleSheet) Formula1(b *excel2.Build) *excel2.Build {
 	return b.Style("C22")
 }

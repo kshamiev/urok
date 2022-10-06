@@ -3,8 +3,8 @@ package docexcel
 import (
 	"github.com/xuri/excelize/v2"
 
-	"github.com/kshamiev/urok/sample/excel/excel"
-	"github.com/kshamiev/urok/sample/excel/excel/sample2/typs"
+	"github.com/kshamiev/urok/sample/document/excel/excel"
+	"github.com/kshamiev/urok/sample/document/excel/excel/sample2/typs"
 )
 
 type Sample struct{}

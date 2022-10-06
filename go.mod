@@ -3,6 +3,7 @@ module github.com/kshamiev/urok
 go 1.17
 
 require (
+	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.7.2
 	github.com/boombuler/barcode v1.0.1
 	github.com/disintegration/imaging v1.6.2
 	github.com/go-redis/cache/v8 v8.4.3

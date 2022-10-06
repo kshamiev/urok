@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/kshamiev/urok/sample/excel/excel/sample2/docexcel"
-	"github.com/kshamiev/urok/sample/excel/excel/sample2/typs"
+	"github.com/kshamiev/urok/sample/document/excel/excel/sample1/docexcel"
+	"github.com/kshamiev/urok/sample/document/excel/excel/sample1/typs"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 		typs.NewInvoiceTC("6578"),
 		typs.NewInvoiceTC("83464"),
 	}
-	doc := docexcel.NewSample()
+	doc := docexcel.NewSample(filePath + "/combined.xlsx")
 	fp, err := doc.Compile(data)
 	if err != nil {
 		log.Fatal(err)
