@@ -38,7 +38,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 	// Embed into an html without PNG file
 	img2html := "<html><body><img src=\"data:image/png;base64," + imgBase64Str + "\" /></body></html>"
-
+	_ = os.WriteFile("test.html", []byte(img2html), 0o666)
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write([]byte(fmt.Sprintf(img2html)))
 }
