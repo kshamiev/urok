@@ -37,7 +37,11 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	imgBase64Str := base64.StdEncoding.EncodeToString(buf)
 
 	// Embed into an html without PNG file
-	img2html := "<html><body><img src=\"data:image/png;base64," + imgBase64Str + "\" /></body></html>"
+	img2html := "<html><body>"
+	img2html += "<img src=\"data:image/png;base64," + imgBase64Str + "\" /></br></br></br>"
+	img2html += "<a href=\"data:image/png;base64," + imgBase64Str + "\" target=\"_blank\">КАРТИНКА</a></br></br></br>"
+	img2html += "<a href=\"data:image/png;base64," + imgBase64Str + "\" download>СКАЧАТЬ КАРТИНКУ</a></br></br></br>"
+	img2html += "</body></html>"
 	_ = os.WriteFile("test.html", []byte(img2html), 0o666)
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write([]byte(fmt.Sprintf(img2html)))
