@@ -24,9 +24,6 @@ func Sum[T Numeric](args ...T) T {
 // SumFn is a type alias of a generic function
 type SumFn[T Numeric] func(...T) T
 
-// id is a type alias for a string
-type id string
-
 // PrintIDAndSum prints the provided ID and sum of the given values to stdout.
 func PrintIDAndSum[T ~string, K Numeric](id T, sum SumFn[K], values ...K) {
 
@@ -35,6 +32,15 @@ func PrintIDAndSum[T ~string, K Numeric](id T, sum SumFn[K], values ...K) {
 	fmt.Printf("%s has a sum of %v\n", id, sum(values...))
 }
 
+// PrintIDAndSumNative prints the provided ID and sum of the given values to stdout.
+func PrintIDAndSumNative[T ~string, K Numeric](id T, sum func(...K) K, values ...K) {
+
+	// The format string uses "%v" to emit the sum since using "%d" would
+	// be invalid if the value type was a float or complex variant.
+	fmt.Printf("%s has a sum of %v\n", id, sum(values...))
+}
+
 func main() {
 	PrintIDAndSum("acct-1", Sum[int], 1, 2, 3)
+	PrintIDAndSumNative("acct-1", Sum[float64], 1, 2, 3)
 }
