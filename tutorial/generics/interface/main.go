@@ -3,28 +3,10 @@ package main
 import "fmt"
 
 func main() {
-	Ledger[string, int16]{
-		ID:      "acct-1",
-		Amounts: []int16{1, 2, 3},
-		SumFn:   Sum[int16],
-	}.PrintIDAndSum()
-
-	SomeFunc(Ledger[string, int]{
-		ID:      "acct-1",
-		Amounts: []int{1, 2, 3},
-		SumFn:   Sum[int],
-	})
-
-	SomeFunc(CustomLedger{
-		ID:      "acct-1",
-		Amounts: []uint64{1, 2, 3},
-		SumFn:   Sum[uint64],
-	})
-
-	SomeFuncParam[string, int](Ledger[string, int]{
-		ID:      "acct-1",
-		Amounts: []int{1, 2, 3},
-		SumFn:   Sum[int],
+	PrintLedger(Ledger[string, complex64]{
+		ID:      "fake",
+		Amounts: []complex64{1, 2, 3},
+		SumFn:   Sum[complex64],
 	})
 }
 
@@ -68,27 +50,19 @@ func (l Ledger[T, K]) PrintIDAndSum() {
 
 // //
 
-func SomeFuncParam[T ~string, K Numeric](l Ledger[T, K]) {
-	l.PrintIDAndSum()
-}
-
-func SomeFunc[
-	T ~string,
-	K Numeric,
-	L ~struct {
+// Ledgerish expresses a constraint that may be satisfied by types that have
+// ledger-like qualities.
+type Ledgerish[T ~string, K Numeric] interface {
+	~struct {
 		ID      T
 		Amounts []K
 		SumFn   SumFn[K]
-	},
-](l L) {
+	}
+	PrintIDAndSum()
 }
 
-// //
-
-type ID string
-
-type CustomLedger struct {
-	ID      ID
-	Amounts []uint64
-	SumFn   SumFn[uint64]
+// PrintLedger emits a ledger's ID and total amount on a single line
+// to stdout.
+func PrintLedger[T ~string, K Numeric, L Ledgerish[T, K]](l L) {
+	l.PrintIDAndSum()
 }
