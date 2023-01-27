@@ -21,6 +21,12 @@ type CanGetID interface {
 	GetID() string
 }
 
+// CanSetID is an interface constraint satisfied by a type that has a function
+// with the signature "GetID(string)".
+type CanSetID interface {
+	GetID(string)
+}
+
 // Unique satisfies the structural constraint "HasID" *and* the interface
 // constraint "CanGetID."
 type Unique struct {
