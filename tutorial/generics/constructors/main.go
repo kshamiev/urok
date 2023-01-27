@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
 	fmt.Printf("%T\n", NewHasT[Unique]())
@@ -81,4 +83,5 @@ func NewCanSetT[T CanSetID]() T {
 
 	// Return the new T by value.
 	return t
+	// return reflect.New(reflect.TypeOf(*(new(T))).Elem()).Interface().(T)
 }
