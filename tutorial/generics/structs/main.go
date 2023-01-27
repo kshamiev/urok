@@ -9,19 +9,7 @@ func main() {
 		SumFn:   Sum[int16],
 	}.PrintIDAndSum()
 
-	SomeFunc(Ledger[string, int]{
-		ID:      "acct-1",
-		Amounts: []int{1, 2, 3},
-		SumFn:   Sum[int],
-	})
-
-	SomeFunc(CustomLedger{
-		ID:      "acct-1",
-		Amounts: []uint64{1, 2, 3},
-		SumFn:   Sum[uint64],
-	})
-
-	SomeFuncParam[string, int](Ledger[string, int]{
+	SomeFunc[string, int](Ledger[string, int]{
 		ID:      "acct-1",
 		Amounts: []int{1, 2, 3},
 		SumFn:   Sum[int],
@@ -66,29 +54,8 @@ func (l Ledger[T, K]) PrintIDAndSum() {
 	fmt.Printf("%s has a sum of %v\n", l.ID, l.SumFn(l.Amounts...))
 }
 
-// //
+// ////
 
-func SomeFuncParam[T ~string, K Numeric](l Ledger[T, K]) {
+func SomeFunc[T ~string, K Numeric](l Ledger[T, K]) {
 	l.PrintIDAndSum()
-}
-
-func SomeFunc[
-	T ~string,
-	K Numeric,
-	L ~struct {
-		ID      T
-		Amounts []K
-		SumFn   SumFn[K]
-	},
-](l L) {
-}
-
-// //
-
-type ID string
-
-type CustomLedger struct {
-	ID      ID
-	Amounts []uint64
-	SumFn   SumFn[uint64]
 }

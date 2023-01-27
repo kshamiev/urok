@@ -4,9 +4,15 @@ import "fmt"
 
 func main() {
 	PrintLedger(Ledger[string, complex64]{
-		ID:      "fake",
+		ID:      "fikus",
 		Amounts: []complex64{1, 2, 3},
 		SumFn:   Sum[complex64],
+	})
+
+	PrintLedger(CustomLedger{
+		ID:      "acct-1",
+		Amounts: []uint64{1, 2, 3},
+		SumFn:   Sum[uint64],
 	})
 }
 
@@ -65,4 +71,18 @@ type Ledgerish[T ~string, K Numeric] interface {
 // to stdout.
 func PrintLedger[T ~string, K Numeric, L Ledgerish[T, K]](l L) {
 	l.PrintIDAndSum()
+}
+
+// ////
+
+type ID string
+
+type CustomLedger struct {
+	ID      ID
+	Amounts []uint64
+	SumFn   SumFn[uint64]
+}
+
+func (l CustomLedger) PrintIDAndSum() {
+	fmt.Printf("%s has a sum of %v\n", l.ID, l.SumFn(l.Amounts...))
 }
