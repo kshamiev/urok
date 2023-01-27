@@ -5,6 +5,7 @@ import "fmt"
 func main() {
 	fmt.Printf("%T\n", NewHasT[Unique]())
 	fmt.Printf("%T\n", NewCanGetT[UniqueName]())
+	fmt.Printf("%T\n", NewCanSetT[*UniqueName]())
 }
 
 // HasID is a structural constraint satisfied by structs with a single field
@@ -24,7 +25,7 @@ type CanGetID interface {
 // CanSetID is an interface constraint satisfied by a type that has a function
 // with the signature "GetID(string)".
 type CanSetID interface {
-	GetID(string)
+	SetID(string)
 }
 
 // Unique satisfies the structural constraint "HasID" *and* the interface
@@ -49,6 +50,10 @@ type UniqueName struct {
 	Name string
 }
 
+func (u *UniqueName) SetID(s string) {
+	u.ID = s
+}
+
 // NewHasT returns a new instance of T.
 func NewHasT[T HasID]() T {
 	// Declare a new instance of T on the stack.
@@ -61,6 +66,16 @@ func NewHasT[T HasID]() T {
 // NewCanGetT returns a new instance of T.
 func NewCanGetT[T CanGetID]() T {
 	// Declare a new instance of T on the stack.
+	var t T
+
+	// Return the new T by value.
+	return t
+}
+
+// NewCanSetT returns a new instance of T.
+func NewCanSetT[T CanSetID]() T {
+	// Declare a new instance of T. Because T is constrained to be a
+	// concrete type, it can easily be declared on the stack.
 	var t T
 
 	// Return the new T by value.
