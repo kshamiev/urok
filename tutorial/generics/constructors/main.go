@@ -6,6 +6,7 @@ func main() {
 	fmt.Printf("%T\n", NewHasT[Unique]())
 	fmt.Printf("%T\n", NewCanGetT[UniqueName]())
 	fmt.Printf("%T\n", NewCanSetT[*UniqueName]())
+	fmt.Printf("%T\n", *NewCanSetT[*UniqueName]()) // panic
 }
 
 // HasID is a structural constraint satisfied by structs with a single field
