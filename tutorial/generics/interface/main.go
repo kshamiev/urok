@@ -86,12 +86,3 @@ type CustomLedger struct {
 func (l CustomLedger) PrintIDAndSum() {
 	fmt.Printf("%s has a sum of %v\n", l.ID, l.SumFn(l.Amounts...))
 }
-
-type Test[T ~string, K Numeric] struct {
-
-	~struct {
-		ID      T
-		Amounts []K
-		SumFn   SumFn[K]
-	}
-}
