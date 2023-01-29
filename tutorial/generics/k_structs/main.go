@@ -3,23 +3,23 @@ package main
 import "fmt"
 
 func main() {
-	PrintLedger(Ledger[string, complex64]{
-		ID:      "fikus",
-		Amounts: []complex64{1, 2, 3},
-		SumFn:   Sum[complex64],
-	})
-
-	PrintLedger(CustomLedger{
+	Ledger[string, int16]{
 		ID:      "acct-1",
-		Amounts: []uint64{1, 2, 3},
-		SumFn:   Sum[uint64],
+		Amounts: []int16{1, 2, 3},
+		SumFn:   Sum[int16],
+	}.PrintIDAndSum()
+
+	SomeFunc[string, int](Ledger[string, int]{
+		ID:      "acct-1",
+		Amounts: []int{1, 2, 3},
+		SumFn:   Sum[int],
 	})
 }
 
 // Numeric expresses a type constraint satisfied by any numeric type.
 type Numeric interface {
 	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~int | ~int8 | ~int16 | ~int32 |
-		~int64 | ~float32 | ~float64 | ~complex64 | ~complex128
+		~int64 | ~float32 | ~float64
 }
 
 // Sum returns the sum of the provided arguments.
@@ -33,6 +33,8 @@ func Sum[T Numeric](args ...T) T {
 
 // SumFn is a type alias of a generic function
 type SumFn[T Numeric] func(...T) T
+
+// ////
 
 // Ledger is an identifiable, financial record.
 type Ledger[T ~string, K Numeric] struct {
@@ -54,35 +56,8 @@ func (l Ledger[T, K]) PrintIDAndSum() {
 	fmt.Printf("%s has a sum of %v\n", l.ID, l.SumFn(l.Amounts...))
 }
 
-// //
-
-// Ledgerish expresses a constraint that may be satisfied by types that have
-// ledger-like qualities.
-type Ledgerish[T ~string, K Numeric] interface {
-	~struct {
-		ID      T
-		Amounts []K
-		SumFn   SumFn[K]
-	}
-	PrintIDAndSum()
-}
-
-// PrintLedger emits a ledger's ID and total amount on a single line
-// to stdout.
-func PrintLedger[T ~string, K Numeric, L Ledgerish[T, K]](l L) {
-	l.PrintIDAndSum()
-}
-
 // ////
 
-type ID string
-
-type CustomLedger struct {
-	ID      ID
-	Amounts []uint64
-	SumFn   SumFn[uint64]
-}
-
-func (l CustomLedger) PrintIDAndSum() {
-	fmt.Printf("%s has a sum of %v\n", l.ID, l.SumFn(l.Amounts...))
+func SomeFunc[T ~string, K Numeric](l Ledger[T, K]) {
+	l.PrintIDAndSum()
 }
