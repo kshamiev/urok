@@ -13,7 +13,7 @@ func main() {
 		SumFn:   zzz.Sum[int16],
 	}.PrintIDAndSum()
 
-	SomeFunc[string, int](Ledger[string, int]{
+	SomeFunc(Ledger[string, int]{
 		ID:      "acct-1",
 		Amounts: []int{1, 2, 3},
 		SumFn:   zzz.Sum[int],
