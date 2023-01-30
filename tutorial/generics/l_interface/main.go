@@ -1,88 +1,52 @@
 package main
 
-import "fmt"
+import (
+	"github.com/kshamiev/urok/tutorial/generics/zzz"
+	"github.com/kshamiev/urok/tutorial/generics/zzz/nafnaf"
+	"github.com/kshamiev/urok/tutorial/generics/zzz/nifnif"
+	"github.com/kshamiev/urok/tutorial/generics/zzz/nufnuf"
+)
 
 func main() {
-	PrintLedger(Ledger[string, complex64]{
-		ID:      "fikus",
-		Amounts: []complex64{1, 2, 3},
-		SumFn:   Sum[complex64],
-	})
-
-	PrintLedger(CustomLedger{
-		ID:      "acct-1",
-		Amounts: []uint64{1, 2, 3},
-		SumFn:   Sum[uint64],
-	})
-}
-
-// Numeric expresses a type constraint satisfied by any numeric type.
-type Numeric interface {
-	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~int | ~int8 | ~int16 | ~int32 |
-		~int64 | ~float32 | ~float64 | ~complex64 | ~complex128
-}
-
-// Sum returns the sum of the provided arguments.
-func Sum[T Numeric](args ...T) T {
-	var sum T
-	for i := 0; i < len(args); i++ {
-		sum += args[i]
+	//
+	obj1 := nufnuf.NufNuf{
+		ID:      "NUFNUF",
+		Amounts: []uint64{1, 3, 5, 7, 9, 20, 60},
+		SumFn:   zzz.Sum[uint64],
 	}
-	return sum
-}
+	calc1 := nufnuf.NewCalc[string](obj1)
+	calc1.PrintIDAndSum()
 
-// SumFn is a type alias of a generic function
-type SumFn[T Numeric] func(...T) T
+	calc1 = obj1.GetCalc()
+	calc1.PrintIDAndSum()
 
-// Ledger is an identifiable, financial record.
-type Ledger[T ~string, K Numeric] struct {
+	zzz.PrintLedger(calc1)
 
-	// ID identifies the ledger.
-	ID T
-
-	// Amounts is a list of monies associated with this ledger.
-	Amounts []K
-
-	// SumFn is a function that can be used to sum the amounts
-	// in this ledger.
-	SumFn SumFn[K]
-}
-
-// PrintIDAndSum emits the ID of the ledger and a sum of its amounts on a
-// single line to stdout.
-func (l Ledger[T, K]) PrintIDAndSum() {
-	fmt.Printf("%s has a sum of %v\n", l.ID, l.SumFn(l.Amounts...))
-}
-
-// ////
-
-// Ledgerish expresses a constraint that may be satisfied by types that have
-// ledger-like qualities.
-type Ledgerish[T ~string, K Numeric] interface {
-	~struct {
-		ID      T
-		Amounts []K
-		SumFn   SumFn[K]
+	//
+	obj2 := nafnaf.NafNaf{
+		ID:      "NAFNAF",
+		Amounts: []int{2, 4, 6, 8, 10, 30, 70},
+		SumFn:   zzz.Sum[int],
 	}
-	PrintIDAndSum()
-}
+	calc2 := nafnaf.NewCalc(obj2)
+	calc2.PrintIDAndSum()
 
-// PrintLedger emits a ledger's ID and total amount on a single line
-// to stdout.
-func PrintLedger[T ~string, K Numeric, L Ledgerish[T, K]](l L) {
-	l.PrintIDAndSum()
-}
+	calc2 = obj2.GetCalc()
+	calc2.PrintIDAndSum()
 
-// ////
+	zzz.PrintLedger(calc2)
 
-type ID string
+	//
+	obj3 := nifnif.NifNif{
+		ID:      "NIFNIF",
+		Amounts: []float64{1.34, 3.65, 5.39, 7.95, 9.82, 20.46, 60.84},
+		SumFn:   zzz.Sum[float64],
+	}
+	calc3 := nifnif.NewCalc[string](obj3)
+	calc3.PrintIDAndSum()
 
-type CustomLedger struct {
-	ID      ID
-	Amounts []uint64
-	SumFn   SumFn[uint64]
-}
+	calc3 = obj3.GetCalc()
+	calc3.PrintIDAndSum()
 
-func (l CustomLedger) PrintIDAndSum() {
-	fmt.Printf("%s has a sum of %v\n", l.ID, l.SumFn(l.Amounts...))
+	zzz.PrintLedger(calc3)
 }
