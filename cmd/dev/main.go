@@ -1,55 +1,58 @@
 package main
 
 import (
+	"fmt"
 	_ "fmt"
-
-	uuidc "github.com/gofrs/uuid"
-	"github.com/google/uuid"
 )
 
-type Funtik struct {
-	ID    uuidc.UUID
-	Name  string
-	Price int64
+type Ping struct {
+	Name string
 }
 
-type Fantik struct {
-	ID    uuid.UUID
-	Nane  string
-	Price int
+func (o Ping) Hash() uintptr {
+	return uintptr(0)
 }
 
-//
+type B int
 
-type Calcer[ID uuid.UUID | uuidc.UUID, P int | int64] interface {
-	~struct {
-		ID    ID
-		Nane  string
-		Price P
-	}
-	Calc()
+func (o B) Hash() uintptr {
+	return uintptr(0)
 }
-
-type Calc[ID uuid.UUID | uuidc.UUID, P int | int64, T Calcer[ID, P]] struct {
-	ID    ID
-	Nane  string
-	Price P
-}
-
-func NewCalc[ID uuid.UUID | uuidc.UUID, P int | int64, T Calcer[ID, P]](obj T) Calc[ID, P, T] {
-	obj.
-
-	return Calc[ID, P, T]{
-
-	}
-}
-
-func (self *Calc[ID, P, T]) Calc() {
-	//
-}
-
-//
 
 func main() {
 
+	obj := Ping{}
+	test(obj)
+
+	obj1 := B(20)
+
+	test1(obj1)
+}
+
+func test[T ComparableHasher](n T) {
+	fmt.Println(n)
+}
+
+func test1[T ComparableHasher1](n T) {
+	fmt.Println(n)
+}
+
+// ComparableHasher is a type constraint that matches all
+// comparable types with a Hash method.
+type ComparableHasher interface {
+	comparable
+	Hash() uintptr
+}
+type ComparableHasher1 interface {
+	~int
+	Hash() uintptr
+}
+
+func DoubleDefined[S ~[]E, E int](s S) E {
+
+	var r := make(S, len(s))
+	for i, v := range s {
+		r[i] = v + v
+	}
+	return r
 }
