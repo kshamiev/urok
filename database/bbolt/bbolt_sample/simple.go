@@ -39,6 +39,11 @@ func TransactionUpdate(db *bolt.DB) error {
 		v1 = b.Get([]byte("answerZeroValue"))
 		fmt.Printf("The answerZeroValue is: %s\n", v1)
 
+		err = b.Delete([]byte("answer"))
+		if err != nil {
+			return err
+		}
+
 		return nil
 	})
 
