@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/binary"
 	"encoding/json"
+	"fmt"
 	"log"
 	"strconv"
 	"time"
@@ -60,6 +61,14 @@ func Buckets(db *bolt.DB, accountID uint64, it *Item) error {
 		if buf, err := json.Marshal(it); err != nil {
 			return err
 		} else if err := bkt.Put(itob(it.ID), buf); err != nil {
+			return err
+		}
+
+		err = bRoot.ForEach(func(k, v []byte) error {
+			fmt.Printf("key=%s, value=%s\n", k, v)
+			return nil
+		})
+		if err != nil {
 			return err
 		}
 
