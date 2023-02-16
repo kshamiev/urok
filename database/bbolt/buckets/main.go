@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/binary"
 	"encoding/json"
-	"fmt"
 	"log"
+	"strconv"
 	"time"
 
 	"github.com/shopspring/decimal"
@@ -27,49 +27,41 @@ func main() {
 		Price:    decimal.NewFromFloat(34.76),
 		CreateAt: time.Now(),
 	}
-	err = CreateItem(db, it)
+	err = Buckets(db, 230, it)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-// CreateItem saves u to the store. The new item ID is set on u once the data is persisted.
-func CreateItem(db *bolt.DB, item1 *Item) error {
+// Buckets Работа с вложенными (зависимыми) buckets "таблицами"
+func Buckets(db *bolt.DB, accountID uint64, it *Item) error {
 	return db.Update(func(tx *bolt.Tx) error {
 
+		bName := strconv.FormatUint(accountID, 10)
 		// Создание и удаление "таблицы"
-		b, err := tx.CreateBucketIfNotExists([]byte("MyBucket"))
-		// b, err := tx.CreateBucket([]byte("MyBucket"))
+		bRoot, err := tx.CreateBucketIfNotExists([]byte(bName))
+		// bRoot, err := tx.CreateBucket([]byte(bName))
 		if err != nil {
 			return err
 		}
-		// defer tx.DeleteBucket([]byte("MyBucket"))
-		b = tx.Bucket([]byte("MyBucket"))
+		// defer tx.DeleteBucket([]byte(bName))
+		bRoot = tx.Bucket([]byte(bName))
 
-		// Generate ID for the user.
-		// This returns an error only if the Tx is closed or not writeable.
-		// That can't happen in an Update() call so I ignore the error check.
-		fmt.Println(b.Sequence())
-		id, _ := b.NextSequence()
-		item1.ID = id
-		fmt.Println(b.Sequence())
-
-		buf, err := json.Marshal(item1)
-		if err != nil {
-			return err
-		}
-		err = b.Put(itob(item1.ID), buf)
+		bkt, err := bRoot.CreateBucketIfNotExists([]byte("ITEMS"))
 		if err != nil {
 			return err
 		}
 
-		res := b.Get(itob(item1.ID))
-		us := &Item{}
-		err = json.Unmarshal(res, us)
+		it.ID, err = bkt.NextSequence()
 		if err != nil {
 			return err
 		}
-		fmt.Println(us)
+
+		if buf, err := json.Marshal(it); err != nil {
+			return err
+		} else if err := bkt.Put(itob(it.ID), buf); err != nil {
+			return err
+		}
 
 		return nil
 	})

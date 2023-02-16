@@ -72,6 +72,6 @@ func Cursor(db *bolt.DB) error {
 }
 
 // btoi returns an 8-byte big endian representation of v.
-func btoi(v []byte) int64 {
-	return int64(binary.BigEndian.Uint64(v))
+func btoi(v []byte) uint64 {
+	return binary.BigEndian.Uint64(v)
 }
