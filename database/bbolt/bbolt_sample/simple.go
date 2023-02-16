@@ -1,44 +1,30 @@
-package main
+package bbolt_sample
 
 import (
 	"fmt"
-	"log"
 
 	bolt "go.etcd.io/bbolt"
 )
 
-var dbPath = "/home/konstantin/work/urok/database/bbolt/data.db"
-
-func main() {
-	db, err := bolt.Open(dbPath, 0666, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	err = transactionUpdate(db)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("OK")
-}
-
+// Используется для определения пустых значений
+// Так как несуществующие и пустые значения вернут одно и тоже 0 байтов
 const null = "nil"
 
-// транзакция на чтение и запись
-func transactionUpdate(db *bolt.DB) error {
+// TransactionUpdate транзакция на чтение и запись
+func TransactionUpdate(db *bolt.DB) error {
 	var v, v1 []byte
 
 	err := db.Update(func(tx *bolt.Tx) error {
 
-		// b, err := tx.CreateBucket([]byte("MyBucket"))
-		b, err := tx.CreateBucketIfNotExists([]byte("MyBucket"))
+		// Создание и удаление "таблицы"
+		b, err := tx.CreateBucket([]byte("MyBucket"))
+		// b, err := tx.CreateBucketIfNotExists([]byte("MyBucket"))
 		if err != nil {
 			return err
 		}
 		defer tx.DeleteBucket([]byte("MyBucket"))
 
+		// Сохранение данных
 		err = b.Put([]byte("answer"), []byte("42"))
 		if err != nil {
 			return err
@@ -47,6 +33,8 @@ func transactionUpdate(db *bolt.DB) error {
 		if err != nil {
 			return err
 		}
+
+		// Получение данных
 		v = b.Get([]byte("answer"))
 		fmt.Printf("The answer is: %s\n", v)
 		v1 = b.Get([]byte("answerZeroValue"))
@@ -56,12 +44,11 @@ func transactionUpdate(db *bolt.DB) error {
 	})
 
 	fmt.Println(string(v), string(v1))
-
 	return err
 }
 
-// транзакция на чтение
-func transactionView(db *bolt.DB) error {
+// TransactionView транзакция на чтение
+func TransactionView(db *bolt.DB) error {
 	err := db.View(func(tx *bolt.Tx) error {
 		//
 		return nil
@@ -69,8 +56,8 @@ func transactionView(db *bolt.DB) error {
 	return err
 }
 
-// транзакция на конкурентную запись
-func transactionBatch(db *bolt.DB) error {
+// TransactionBatch транзакция на конкурентную запись
+func TransactionBatch(db *bolt.DB) error {
 	var id uint64
 	// Пакетная обработка полезна только тогда, когда ее вызывает несколько горутин.
 	// Подходит для генерации идентификатора
