@@ -9,6 +9,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// https://github.com/joncrlsn/go-examples
+
 var schema = `
 DROP TABLE IF EXISTS user;
 CREATE TABLE user (
