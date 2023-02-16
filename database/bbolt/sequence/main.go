@@ -1,19 +1,50 @@
-package bbolt_sample
+package main
 
 import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/shopspring/decimal"
 	bolt "go.etcd.io/bbolt"
 )
 
+// Используется для определения пустых значений
+// Так как несуществующие и пустые значения вернут одно и тоже 0 байтов
+const null = "nil"
+
+func main() {
+	db, err := bolt.Open("database/bbolt/data.db", 0666, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	it := &Item{
+		Name:     "Фикус губоцветный",
+		Price:    decimal.NewFromFloat(34.76),
+		CreateAt: time.Now(),
+	}
+	err = CreateItem(db, it)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 // CreateItem saves u to the store. The new item ID is set on u once the data is persisted.
 func CreateItem(db *bolt.DB, item1 *Item) error {
 	return db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("MyBucket"))
+
+		// Создание и удаление "таблицы"
+		b, err := tx.CreateBucketIfNotExists([]byte("MyBucket"))
+		// b, err := tx.CreateBucket([]byte("MyBucket"))
+		if err != nil {
+			return err
+		}
+		// defer tx.DeleteBucket([]byte("MyBucket"))
+		b = tx.Bucket([]byte("MyBucket"))
 
 		// Generate ID for the user.
 		// This returns an error only if the Tx is closed or not writeable.

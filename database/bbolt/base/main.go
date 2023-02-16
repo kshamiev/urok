@@ -1,7 +1,8 @@
-package bbolt_sample
+package main
 
 import (
 	"fmt"
+	"log"
 
 	bolt "go.etcd.io/bbolt"
 )
@@ -10,10 +11,22 @@ import (
 // Так как несуществующие и пустые значения вернут одно и тоже 0 байтов
 const null = "nil"
 
+func main() {
+	db, err := bolt.Open("database/bbolt/data.db", 0666, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	err = TransactionUpdate(db)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 // TransactionUpdate транзакция на чтение и запись
 func TransactionUpdate(db *bolt.DB) error {
 	var v, v1 []byte
-
 	err := db.Update(func(tx *bolt.Tx) error {
 
 		// Создание и удаление "таблицы"
@@ -23,6 +36,7 @@ func TransactionUpdate(db *bolt.DB) error {
 			return err
 		}
 		// defer tx.DeleteBucket([]byte("MyBucket"))
+		b = tx.Bucket([]byte("MyBucket"))
 
 		// Сохранение данных
 		err = b.Put([]byte("answer"), []byte("42"))
@@ -52,7 +66,6 @@ func TransactionUpdate(db *bolt.DB) error {
 
 		return nil
 	})
-
 	fmt.Println(string(v), string(v1))
 	return err
 }
