@@ -18,7 +18,6 @@ func TransactionUpdate(db *bolt.DB) error {
 
 		// Создание и удаление "таблицы"
 		b, err := tx.CreateBucket([]byte("MyBucket"))
-		// b, err := tx.CreateBucketIfNotExists([]byte("MyBucket"))
 		if err != nil {
 			return err
 		}
