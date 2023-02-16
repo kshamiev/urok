@@ -17,11 +17,12 @@ func TransactionUpdate(db *bolt.DB) error {
 	err := db.Update(func(tx *bolt.Tx) error {
 
 		// Создание и удаление "таблицы"
-		b, err := tx.CreateBucket([]byte("MyBucket"))
+		b, err := tx.CreateBucketIfNotExists([]byte("MyBucket"))
+		// b, err := tx.CreateBucket([]byte("MyBucket"))
 		if err != nil {
 			return err
 		}
-		defer tx.DeleteBucket([]byte("MyBucket"))
+		// defer tx.DeleteBucket([]byte("MyBucket"))
 
 		// Сохранение данных
 		err = b.Put([]byte("answer"), []byte("42"))
@@ -39,9 +40,14 @@ func TransactionUpdate(db *bolt.DB) error {
 		v1 = b.Get([]byte("answerZeroValue"))
 		fmt.Printf("The answerZeroValue is: %s\n", v1)
 
+		// Удаление данных
 		err = b.Delete([]byte("answer"))
 		if err != nil {
 			return err
+		}
+
+		if b.Get([]byte("answer")) == nil {
+			fmt.Printf("The answer is delete\n")
 		}
 
 		return nil

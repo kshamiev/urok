@@ -24,6 +24,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println()
 
 	it := &bb.Item{
 		Name:     "Фикус губоцветный",
@@ -34,6 +35,5 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println("OK")
+	fmt.Println()
 }

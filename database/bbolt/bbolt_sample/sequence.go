@@ -13,12 +13,7 @@ import (
 // CreateItem saves u to the store. The new item ID is set on u once the data is persisted.
 func CreateItem(db *bolt.DB, item1 *Item) error {
 	return db.Update(func(tx *bolt.Tx) error {
-
-		b, err := tx.CreateBucketIfNotExists([]byte("MyBucket"))
-		if err != nil {
-			return err
-		}
-		defer tx.DeleteBucket([]byte("MyBucket"))
+		b := tx.Bucket([]byte("MyBucket"))
 
 		// Generate ID for the user.
 		// This returns an error only if the Tx is closed or not writeable.
