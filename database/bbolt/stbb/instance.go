@@ -48,7 +48,7 @@ func (self *Instance) Load(obj Modeler) error {
 			return ErrNotFound
 		}
 		res := b.Get(Itob(obj.GetID()))
-		if string(res) == null {
+		if string(res) == emptyValue {
 			return ErrNotFound
 		}
 		err := json.Unmarshal(res, obj)

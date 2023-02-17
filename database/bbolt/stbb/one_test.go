@@ -1,7 +1,7 @@
-package domain
+package stbb
 
 import (
-	"encoding/json"
+	"testing"
 	"time"
 
 	"github.com/google/uuid"
@@ -9,6 +9,16 @@ import (
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/types"
 )
+
+func TestOrder(t *testing.T) {
+
+	obj := Order{
+		ID:   34,
+		Name: "Popcorn",
+	}
+	t.Log(obj)
+
+}
 
 type Order struct {
 	ID          uint64            `db:"id" pg:"id,pk" boil:"id" json:"id"`
@@ -36,22 +46,4 @@ func (self *Order) SetID(id uint64) {
 
 func (self Order) GetIndex() string {
 	return "orders"
-}
-
-// ////
-
-type OrderSlice []*Order
-
-func (self OrderSlice) GetIndex() string {
-	return "orders"
-}
-
-func (self *OrderSlice) ParseByte(_, value []byte) error {
-	o := &Order{}
-	err := json.Unmarshal(value, o)
-	if err != nil {
-		return err
-	}
-	*self = append(*self, o)
-	return nil
 }
