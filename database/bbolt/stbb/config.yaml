@@ -1,0 +1,13 @@
+pathDB: "data/bbolt.db"
+fileDBMode: 0o666
+timeout: 10s
+noGrowSync: false
+noFreelistSync: false
+preLoadFreelist: false
+freelistType: "hashmap"
+readOnly: false
+mmapFlags: 0
+initialMmapSize: 0
+pageSize: 0
+noSync: false
+mlock: false
