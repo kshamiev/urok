@@ -8,12 +8,8 @@ func (self OrderSlice) GetIndex() string {
 	return "orders"
 }
 
-func (self *OrderSlice) ParseByte(_, value []byte) error {
+func (self *OrderSlice) ParseByte(_, value []byte) {
 	o := &Order{}
-	err := json.Unmarshal(value, o)
-	if err != nil {
-		return err
-	}
+	_ = json.Unmarshal(value, o)
 	*self = append(*self, o)
-	return nil
 }

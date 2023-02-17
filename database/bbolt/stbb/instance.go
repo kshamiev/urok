@@ -1,13 +1,55 @@
 package stbb
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path"
 
 	"go.etcd.io/bbolt"
 )
 
+// SelectRange Поиск и получение значений по диапазону ключей
+// Sample:
+// min := []byte("1990-01-01T00:00:00Z")
+// max := []byte("2000-01-01T00:00:00Z")
+func (self *Instance) SelectRange(objSlice Modelers, min, max []byte) error {
+	return self.db.View(func(tx *bbolt.Tx) error {
+		b := tx.Bucket([]byte(objSlice.GetIndex()))
+		if b == nil {
+			return ErrNotFound
+		}
+
+		c := b.Cursor()
+		for k, v := c.Seek(min); k != nil && bytes.Compare(k, max) < 0; k, v = c.Next() {
+			fmt.Printf("%s: %s\n", k, v)
+		}
+
+		return nil
+	})
+}
+
+// SelectPrefix Поиск и получение значений по префиксу ключа
+// Sample:
+// prefix := []byte("1234")
+func (self *Instance) SelectPrefix(objSlice Modelers, prefix []byte) error {
+	return self.db.View(func(tx *bbolt.Tx) error {
+		b := tx.Bucket([]byte(objSlice.GetIndex()))
+		if b == nil {
+			return ErrNotFound
+		}
+
+		c := b.Cursor()
+		for k, v := c.Seek(prefix); k != nil && bytes.HasPrefix(k, prefix); k, v = c.Next() {
+			objSlice.ParseByte(k, v)
+		}
+
+		return nil
+	})
+}
+
+// Select Получение всех элементов
 func (self *Instance) Select(objSlice Modelers) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
 		b := tx.Bucket([]byte(objSlice.GetIndex()))
@@ -15,14 +57,11 @@ func (self *Instance) Select(objSlice Modelers) error {
 			return ErrNotFound
 		}
 
-		var err error
 		c := b.Cursor()
 		for k, v := c.First(); k != nil; k, v = c.Next() {
-			err = objSlice.ParseByte(k, v)
-			if err != nil {
-				return err
-			}
+			objSlice.ParseByte(k, v)
 		}
+
 		return nil
 	})
 }
@@ -33,7 +72,7 @@ func (self *Instance) Delete(obj Modeler) error {
 		if b == nil {
 			return nil
 		}
-		err := b.Delete(Itob(obj.GetID()))
+		err := b.Delete(obj.GetID())
 		if err != nil {
 			return err
 		}
@@ -47,7 +86,7 @@ func (self *Instance) Load(obj Modeler) error {
 		if b == nil {
 			return ErrNotFound
 		}
-		res := b.Get(Itob(obj.GetID()))
+		res := b.Get(obj.GetID())
 		if string(res) == emptyValue {
 			return ErrNotFound
 		}
@@ -67,7 +106,7 @@ func (self *Instance) Save(obj Modeler) error {
 		}
 
 		id, _ := b.NextSequence()
-		obj.SetID(id)
+		obj.SetID(Itob(id))
 
 		buf, err := json.Marshal(obj)
 		if err != nil {

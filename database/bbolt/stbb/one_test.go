@@ -36,12 +36,12 @@ type Order struct {
 	DeletedAt   null.Time         `db:"deleted_at" pg:"deleted_at,use_zero" boil:"deleted_at" json:"deleted_at,omitempty" example:"2006-01-02T15:04:05Z"`
 }
 
-func (self Order) GetID() uint64 {
-	return self.ID
+func (self Order) GetID() []byte {
+	return Itob(self.ID)
 }
 
-func (self *Order) SetID(id uint64) {
-	self.ID = id
+func (self *Order) SetID(id []byte) {
+	self.ID = Btoi(id)
 }
 
 func (self Order) GetIndex() string {

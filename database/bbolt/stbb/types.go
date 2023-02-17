@@ -85,12 +85,12 @@ type Instance struct {
 // ////
 
 type Modeler interface {
-	GetID() uint64    // get object ID
-	SetID(uint64)     // set object ID
+	GetID() []byte    // get object ID
+	SetID([]byte)     // set object ID
 	GetIndex() string // index (manticore), bucket (bolt, minio), table (postgres, mysql ...)
 }
 
 type Modelers interface {
-	ParseByte(key, value []byte) error // Обработка одного элемента
-	GetIndex() string                  // index (manticore), bucket (bolt, minio), table (postgres, mysql ...)
+	ParseByte(key, value []byte) // Обработка одного элемента
+	GetIndex() string            // index (manticore), bucket (bolt, minio), table (postgres, mysql ...)
 }
