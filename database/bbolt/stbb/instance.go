@@ -8,13 +8,32 @@ import (
 	"go.etcd.io/bbolt"
 )
 
+func (self *Instance) Select(objSlice Modelers) error {
+	return self.db.View(func(tx *bbolt.Tx) error {
+		b := tx.Bucket([]byte(objSlice.GetIndex()))
+		if b == nil {
+			return ErrNotFound
+		}
+
+		var err error
+		c := b.Cursor()
+		for k, v := c.First(); k != nil; k, v = c.Next() {
+			err = objSlice.ParseByte(k, v)
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+}
+
 func (self *Instance) Delete(obj Modeler) error {
 	return self.db.Update(func(tx *bbolt.Tx) error {
 		b := tx.Bucket([]byte(obj.GetIndex()))
 		if b == nil {
 			return nil
 		}
-		err := b.Delete(itob(obj.GetID()))
+		err := b.Delete(Itob(obj.GetID()))
 		if err != nil {
 			return err
 		}
@@ -28,7 +47,7 @@ func (self *Instance) Load(obj Modeler) error {
 		if b == nil {
 			return ErrNotFound
 		}
-		res := b.Get(itob(obj.GetID()))
+		res := b.Get(Itob(obj.GetID()))
 		if string(res) == null {
 			return ErrNotFound
 		}
@@ -54,7 +73,7 @@ func (self *Instance) Save(obj Modeler) error {
 		if err != nil {
 			return err
 		}
-		err = b.Put(itob(id), buf)
+		err = b.Put(Itob(id), buf)
 		if err != nil {
 			return err
 		}

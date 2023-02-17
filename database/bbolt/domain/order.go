@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
@@ -35,4 +36,22 @@ func (self *Order) SetID(id uint64) {
 
 func (self Order) GetIndex() string {
 	return "orders"
+}
+
+// ////
+
+type OrderSlice []*Order
+
+func (self OrderSlice) GetIndex() string {
+	return "orders"
+}
+
+func (self *OrderSlice) ParseByte(_, value []byte) error {
+	o := &Order{}
+	err := json.Unmarshal(value, o)
+	if err != nil {
+		return err
+	}
+	*self = append(*self, o)
+	return nil
 }
