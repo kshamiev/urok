@@ -1,10 +1,12 @@
-package stbb
+package test
 
 import (
 	"os"
 	"testing"
 
 	"gopkg.in/yaml.v3"
+
+	"github.com/kshamiev/urok/database/bbolt/stbb"
 )
 
 func TestNewInstance(t *testing.T) {
@@ -12,12 +14,12 @@ func TestNewInstance(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	cfg := &Config{}
+	cfg := &stbb.Config{}
 	err = yaml.Unmarshal(data, cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = NewInstance(cfg)
+	_, err = stbb.NewInstance(cfg)
 	if err != nil {
 		t.Fatal(err)
 	}

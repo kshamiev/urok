@@ -1,4 +1,4 @@
-package stbb
+package test
 
 import "encoding/json"
 

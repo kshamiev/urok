@@ -1,22 +1,18 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"time"
 )
 
 func main() {
 
-	fmt.Println(time.Now().Format(time.RFC3339))
-	fmt.Println(time.Now().Format("2006-01-02T15:04:05Z"))
-	fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
+	obj := Model(0)
 
-	obj := &Item{
-		ID: 23,
-	}
+	d, _ := json.Marshal(obj)
 
-	fmt.Println(obj)
-	fmt.Println(obj.GetID())
+	fmt.Println(string(d))
+	fmt.Println(d)
 
 }
 
@@ -25,10 +21,4 @@ type Item struct {
 	ID int64
 }
 
-type Model struct {
-	ID int64
-}
-
-func (m Model) GetID() int64 {
-	return m.ID
-}
+type Model int

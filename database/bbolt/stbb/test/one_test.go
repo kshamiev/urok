@@ -1,4 +1,4 @@
-package stbb
+package test
 
 import (
 	"testing"
@@ -8,6 +8,8 @@ import (
 	"github.com/shopspring/decimal"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/types"
+
+	"github.com/kshamiev/urok/database/bbolt/stbb"
 )
 
 func TestOrder(t *testing.T) {
@@ -37,11 +39,11 @@ type Order struct {
 }
 
 func (self Order) GetID() []byte {
-	return Itob(self.ID)
+	return stbb.Itob(self.ID)
 }
 
 func (self *Order) SetID(id []byte) {
-	self.ID = Btoi(id)
+	self.ID = stbb.Btoi(id)
 }
 
 func (self Order) GetIndex() string {

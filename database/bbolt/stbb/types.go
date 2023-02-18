@@ -9,11 +9,7 @@ import (
 )
 
 const (
-	bucketRelation = "RELATION"
-
-	// Используется для определения пустых значений
-	// Так как несуществующие и пустые значения вернут одно и тоже 0 байтов
-	emptyValue = "nil"
+	bucketRelation = "_RELATION"
 )
 
 var ErrNotFound = errors.New("объект не найден")

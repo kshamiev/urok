@@ -3,6 +3,7 @@ package stbb
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path"
@@ -10,19 +11,120 @@ import (
 	"go.etcd.io/bbolt"
 )
 
+func (self *Instance) DeleteRelation(obj Modeler, objSlice []Modeler) error {
+	return self.db.Update(func(tx *bbolt.Tx) error {
+		b := tx.Bucket([]byte(bucketRelation))
+		if b == nil {
+			return nil
+		}
+		if len(objSlice) == 0 {
+			return nil
+		}
+		var err error
+
+		// связь от родителя
+		var i int
+		index := obj.GetIndex() + ":" + objSlice[0].GetIndex() + ":" + string(obj.GetID()) + ":"
+		for i = range objSlice {
+			err = b.Delete([]byte(index + string(objSlice[i].GetID())))
+			if err != nil {
+				return err
+			}
+		}
+
+		// связь от потомка
+		for i = range objSlice {
+			index = objSlice[0].GetIndex() + ":" + obj.GetIndex() + ":" + string(objSlice[i].GetID()) + ":"
+			err = b.Delete([]byte(index + string(obj.GetID())))
+			if err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+}
+
+func (self *Instance) LoadRelation(obj Modeler, objSlice Modelers) error {
+	return self.db.View(func(tx *bbolt.Tx) error {
+		bRel := tx.Bucket([]byte(bucketRelation))
+		if bRel == nil {
+			return nil
+		}
+		bObj := tx.Bucket([]byte(objSlice.GetIndex()))
+		if bObj == nil {
+			return nil
+		}
+		var err error
+
+		// связь от родителя
+		index := obj.GetIndex() + ":" + objSlice.GetIndex() + ":" + string(obj.GetID()) + ":"
+		c := bRel.Cursor()
+		for k, v := c.Seek([]byte(index)); k != nil && bytes.HasPrefix(k, []byte(index)); k, v = c.Next() {
+			res := bObj.Get(v)
+			if res == nil { // Связанный объект был удалён. Удаляем устаревшую связь
+				err = bRel.Delete(k)
+				if err != nil {
+					return err
+				}
+			}
+			if len(res) == 0 {
+				return errors.New("Мы нашли ведро либо антиматерию: " + objSlice.GetIndex() + "/" + string(v))
+			}
+			objSlice.ParseByte(v, res)
+		}
+		return nil
+	})
+}
+
+func (self *Instance) SaveRelation(obj Modeler, objSlice []Modeler) error {
+	return self.db.Update(func(tx *bbolt.Tx) error {
+		b, err := tx.CreateBucketIfNotExists([]byte(bucketRelation))
+		if err != nil {
+			return err
+		}
+
+		if len(objSlice) == 0 {
+			return nil
+		}
+
+		// связь от родителя
+		var i int
+		index := obj.GetIndex() + ":" + objSlice[0].GetIndex() + ":" + string(obj.GetID()) + ":"
+		for i = range objSlice {
+			err = b.Put([]byte(index+string(objSlice[i].GetID())), objSlice[i].GetID())
+			if err != nil {
+				return err
+			}
+		}
+
+		// связь от потомка
+		for i = range objSlice {
+			index = objSlice[0].GetIndex() + ":" + obj.GetIndex() + ":" + string(objSlice[i].GetID()) + ":"
+			err = b.Put([]byte(index+string(obj.GetID())), obj.GetID())
+			if err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+}
+
 // SelectRange Поиск и получение значений по диапазону ключей
 // Sample:
-// min := []byte("1990-01-01T00:00:00Z")
-// max := []byte("2000-01-01T00:00:00Z")
-func (self *Instance) SelectRange(objSlice Modelers, min, max []byte) error {
+// min := "1990-01-01T00:00:00Z"
+// max := "2000-01-01T00:00:00Z"
+func (self *Instance) SelectRange(objSlice Modelers, min, max string) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
 		b := tx.Bucket([]byte(objSlice.GetIndex()))
 		if b == nil {
 			return ErrNotFound
 		}
 
+		var k, v []byte
 		c := b.Cursor()
-		for k, v := c.Seek(min); k != nil && bytes.Compare(k, max) < 0; k, v = c.Next() {
+		for k, v = c.Seek([]byte(min)); k != nil && bytes.Compare(k, []byte(max)) < 0; k, v = c.Next() {
 			fmt.Printf("%s: %s\n", k, v)
 		}
 
@@ -33,15 +135,16 @@ func (self *Instance) SelectRange(objSlice Modelers, min, max []byte) error {
 // SelectPrefix Поиск и получение значений по префиксу ключа
 // Sample:
 // prefix := []byte("1234")
-func (self *Instance) SelectPrefix(objSlice Modelers, prefix []byte) error {
+func (self *Instance) SelectPrefix(objSlice Modelers, prefix string) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
 		b := tx.Bucket([]byte(objSlice.GetIndex()))
 		if b == nil {
 			return ErrNotFound
 		}
 
+		var k, v []byte
 		c := b.Cursor()
-		for k, v := c.Seek(prefix); k != nil && bytes.HasPrefix(k, prefix); k, v = c.Next() {
+		for k, v = c.Seek([]byte(prefix)); k != nil && bytes.HasPrefix(k, []byte(prefix)); k, v = c.Next() {
 			objSlice.ParseByte(k, v)
 		}
 
@@ -57,8 +160,9 @@ func (self *Instance) Select(objSlice Modelers) error {
 			return ErrNotFound
 		}
 
+		var k, v []byte
 		c := b.Cursor()
-		for k, v := c.First(); k != nil; k, v = c.Next() {
+		for k, v = c.First(); k != nil; k, v = c.Next() {
 			objSlice.ParseByte(k, v)
 		}
 
@@ -87,8 +191,11 @@ func (self *Instance) Load(obj Modeler) error {
 			return ErrNotFound
 		}
 		res := b.Get(obj.GetID())
-		if string(res) == emptyValue {
+		if res == nil {
 			return ErrNotFound
+		}
+		if len(res) == 0 {
+			return errors.New("Мы нашли ведро либо антиматерию: " + obj.GetIndex() + "/" + string(obj.GetID()))
 		}
 		err := json.Unmarshal(res, obj)
 		if err != nil {
