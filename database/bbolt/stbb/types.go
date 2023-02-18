@@ -11,6 +11,7 @@ import (
 const (
 	bucketRelation = "_RELATION"
 	errEmpty       = "Мы нашли ведро либо антиматерию: "
+	errNil         = "Целостность данных нарушена: "
 )
 
 var ErrNotFound = errors.New("Не найдено")

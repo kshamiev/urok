@@ -12,8 +12,8 @@ import (
 
 func (self *Instance) DeleteRelation(obj Modeler, indexRel string, ids [][]byte) error {
 	return self.db.Update(func(tx *bbolt.Tx) error {
-		b := tx.Bucket([]byte(bucketRelation))
-		if b == nil {
+		bRel := tx.Bucket([]byte(bucketRelation))
+		if bRel == nil {
 			return nil
 		}
 		if len(ids) == 0 {
@@ -23,19 +23,19 @@ func (self *Instance) DeleteRelation(obj Modeler, indexRel string, ids [][]byte)
 
 		// связь от родителя
 		var i int
-		index := obj.GetIndex() + ":" + indexRel + ":" + string(obj.GetID()) + ":"
+		idx := obj.GetIndex() + ":" + indexRel + ":" + string(obj.GetID()) + ":"
 		for i = range ids {
-			err = b.Delete([]byte(index + string(ids[i])))
+			err = bRel.Delete([]byte(idx + string(ids[i])))
 			if err != nil {
 				return err
 			}
 		}
 
 		// связь от потомка
-		index = indexRel + ":" + obj.GetIndex() + ":"
+		idx = indexRel + ":" + obj.GetIndex() + ":"
 		id := string(obj.GetID())
 		for i = range ids {
-			err = b.Delete([]byte(index + string(ids[i]) + ":" + id))
+			err = bRel.Delete([]byte(idx + string(ids[i]) + ":" + id))
 			if err != nil {
 				return err
 			}
@@ -55,18 +55,14 @@ func (self *Instance) LoadRelation(obj Modeler, objSlice Modelers, isLoad bool) 
 		if bObj == nil {
 			return nil
 		}
-		var err error
 
 		// связь от родителя
-		index := obj.GetIndex() + ":" + objSlice.GetIndex() + ":" + string(obj.GetID()) + ":"
+		idx := obj.GetIndex() + ":" + objSlice.GetIndex() + ":" + string(obj.GetID()) + ":"
 		c := bRel.Cursor()
-		for k, v := c.Seek([]byte(index)); k != nil && bytes.HasPrefix(k, []byte(index)); k, v = c.Next() {
+		for k, v := c.Seek([]byte(idx)); k != nil && bytes.HasPrefix(k, []byte(idx)); k, v = c.Next() {
 			res := bObj.Get(v)
-			if res == nil { // Связанный объект был удалён. Удаляем устаревшую связь
-				err = bRel.Delete(k)
-				if err != nil {
-					return err
-				}
+			if res == nil {
+				return errors.New(errNil + string(k))
 			}
 			if len(res) == 0 {
 				return errors.New(errEmpty + objSlice.GetIndex() + "/" + string(v))
@@ -77,13 +73,14 @@ func (self *Instance) LoadRelation(obj Modeler, objSlice Modelers, isLoad bool) 
 				objSlice.ParseIds(v)
 			}
 		}
+
 		return nil
 	})
 }
 
 func (self *Instance) SaveRelation(obj Modeler, indexRel string, ids [][]byte) error {
 	return self.db.Update(func(tx *bbolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte(bucketRelation))
+		bRel, err := tx.CreateBucketIfNotExists([]byte(bucketRelation))
 		if err != nil {
 			return err
 		}
@@ -93,21 +90,28 @@ func (self *Instance) SaveRelation(obj Modeler, indexRel string, ids [][]byte) e
 
 		// связь от родителя
 		var i int
-		index := obj.GetIndex() + ":" + indexRel + ":" + string(obj.GetID()) + ":"
+		idx := obj.GetIndex() + ":" + indexRel + ":" + string(obj.GetID()) + ":"
 		for i = range ids {
-			err = b.Put([]byte(index+string(ids[i])), ids[i])
+			err = bRel.Put([]byte(idx+string(ids[i])), ids[i])
 			if err != nil {
 				return err
 			}
 		}
 
 		// связь от потомка
+		idx = indexRel + ":" + obj.GetIndex() + ":"
+		id := string(obj.GetID())
 		for i = range ids {
-			index = indexRel + ":" + obj.GetIndex() + ":" + string(ids[i]) + ":" + string(obj.GetID())
-			err = b.Put([]byte(index), obj.GetID())
+			err = bRel.Put([]byte(idx+string(ids[i])+":"+id), obj.GetID())
 			if err != nil {
 				return err
 			}
+		}
+
+		// связь с хранилищем
+		err = bRel.Put([]byte(obj.GetIndex()+":"+indexRel), []byte(indexRel))
+		if err != nil {
+			return err
 		}
 
 		return nil
@@ -120,13 +124,13 @@ func (self *Instance) SaveRelation(obj Modeler, indexRel string, ids [][]byte) e
 // max := "2000-01-01T00:00:00Z"
 func (self *Instance) SelectRange(objSlice Modelers, min, max string, isLoad bool) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
-		b := tx.Bucket([]byte(objSlice.GetIndex()))
-		if b == nil {
+		bObj := tx.Bucket([]byte(objSlice.GetIndex()))
+		if bObj == nil {
 			return ErrNotFound
 		}
 
 		var k, v []byte
-		c := b.Cursor()
+		c := bObj.Cursor()
 		if isLoad {
 			for k, v = c.Seek([]byte(min)); k != nil && bytes.Compare(k, []byte(max)) < 0; k, v = c.Next() {
 				objSlice.ParseObject(k, v)
@@ -146,13 +150,13 @@ func (self *Instance) SelectRange(objSlice Modelers, min, max string, isLoad boo
 // prefix := []byte("1234")
 func (self *Instance) SelectPrefix(objSlice Modelers, prefix string, isLoad bool) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
-		b := tx.Bucket([]byte(objSlice.GetIndex()))
-		if b == nil {
+		bObj := tx.Bucket([]byte(objSlice.GetIndex()))
+		if bObj == nil {
 			return ErrNotFound
 		}
 
 		var k, v []byte
-		c := b.Cursor()
+		c := bObj.Cursor()
 		if isLoad {
 			for k, v = c.Seek([]byte(prefix)); k != nil && bytes.HasPrefix(k, []byte(prefix)); k, v = c.Next() {
 				objSlice.ParseObject(k, v)
@@ -170,13 +174,13 @@ func (self *Instance) SelectPrefix(objSlice Modelers, prefix string, isLoad bool
 // Select Получение всех элементов
 func (self *Instance) Select(objSlice Modelers, isLoad bool) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
-		b := tx.Bucket([]byte(objSlice.GetIndex()))
-		if b == nil {
+		bObj := tx.Bucket([]byte(objSlice.GetIndex()))
+		if bObj == nil {
 			return nil
 		}
 
 		var k, v []byte
-		c := b.Cursor()
+		c := bObj.Cursor()
 		if isLoad {
 			for k, v = c.First(); k != nil; k, v = c.Next() {
 				objSlice.ParseObject(k, v)
@@ -192,39 +196,68 @@ func (self *Instance) Select(objSlice Modelers, isLoad bool) error {
 }
 
 func (self *Instance) Delete(obj Modeler) error {
-	return self.DeleteByIndex(obj, string(obj.GetID()))
+	return self.DeleteByID(obj, string(obj.GetID()))
 }
 
-func (self *Instance) DeleteByIndex(obj Modeler, index string) error {
+func (self *Instance) DeleteByID(obj Modeler, id string) error {
 	return self.db.Update(func(tx *bbolt.Tx) error {
-		b := tx.Bucket([]byte(obj.GetIndex()))
-		if b == nil {
+		bObj := tx.Bucket([]byte(obj.GetIndex()))
+		if bObj == nil {
 			return nil
 		}
-		err := b.Delete([]byte(index))
+		err := bObj.Delete([]byte(id))
 		if err != nil {
 			return err
 		}
+
+		bRel := tx.Bucket([]byte(bucketRelation))
+		if bRel == nil {
+			return nil
+		}
+
+		var k, k1, v, v1 []byte
+		var idxP, idxC string
+		idx := obj.GetIndex() + ":"
+		c := bRel.Cursor()
+		cc := bRel.Cursor()
+		for k, v = c.Seek([]byte(idx)); k != nil && bytes.HasPrefix(k, []byte(idx)); k, v = c.Next() {
+			//
+			idxP = obj.GetIndex() + ":" + string(v) + ":" + id + ":"
+			idxC = string(v) + ":" + obj.GetIndex() + ":"
+			for k1, v1 = cc.Seek([]byte(idxP)); k1 != nil && bytes.HasPrefix(k1, []byte(idxP)); k1, v1 = c.Next() {
+				// связь от родителя
+				err = bRel.Delete(k1)
+				if err != nil {
+					return err
+				}
+				// связь от потомка
+				err = bRel.Delete([]byte(idxC + string(v1) + ":" + id))
+				if err != nil {
+					return err
+				}
+			}
+		}
+
 		return nil
 	})
 }
 
 func (self *Instance) Load(obj Modeler) error {
-	return self.LoadByIndex(obj, string(obj.GetID()))
+	return self.LoadByID(obj, string(obj.GetID()))
 }
 
-func (self *Instance) LoadByIndex(obj Modeler, index string) error {
+func (self *Instance) LoadByID(obj Modeler, id string) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
-		b := tx.Bucket([]byte(obj.GetIndex()))
-		if b == nil {
+		bObj := tx.Bucket([]byte(obj.GetIndex()))
+		if bObj == nil {
 			return ErrNotFound
 		}
-		res := b.Get([]byte(index))
+		res := bObj.Get([]byte(id))
 		if res == nil {
 			return ErrNotFound
 		}
 		if len(res) == 0 {
-			return errors.New(errEmpty + obj.GetIndex() + "/" + index)
+			return errors.New(errEmpty + obj.GetIndex() + "/" + id)
 		}
 		err := json.Unmarshal(res, obj)
 		if err != nil {
@@ -236,19 +269,19 @@ func (self *Instance) LoadByIndex(obj Modeler, index string) error {
 
 func (self *Instance) Save(obj Modeler) error {
 	return self.db.Update(func(tx *bbolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte(obj.GetIndex()))
+		bObj, err := tx.CreateBucketIfNotExists([]byte(obj.GetIndex()))
 		if err != nil {
 			return err
 		}
 		if bytes.Equal(Itob(0), obj.GetID()) {
-			id, _ := b.NextSequence()
+			id, _ := bObj.NextSequence()
 			obj.SetID(Itob(id))
 		}
 		buf, err := json.Marshal(obj)
 		if err != nil {
 			return err
 		}
-		err = b.Put(obj.GetID(), buf)
+		err = bObj.Put(obj.GetID(), buf)
 		if err != nil {
 			return err
 		}
@@ -256,9 +289,9 @@ func (self *Instance) Save(obj Modeler) error {
 	})
 }
 
-func (self *Instance) SaveByIndex(obj Modeler, index string) error {
+func (self *Instance) SaveByID(obj Modeler, id string) error {
 	return self.db.Update(func(tx *bbolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte(obj.GetIndex()))
+		bObj, err := tx.CreateBucketIfNotExists([]byte(obj.GetIndex()))
 		if err != nil {
 			return err
 		}
@@ -266,7 +299,7 @@ func (self *Instance) SaveByIndex(obj Modeler, index string) error {
 		if err != nil {
 			return err
 		}
-		err = b.Put([]byte(index), buf)
+		err = bObj.Put([]byte(id), buf)
 		if err != nil {
 			return err
 		}
