@@ -10,12 +10,12 @@ func TestOrders(t *testing.T) {
 	objs := OrderSlice{}
 	objs = append(objs, &Order{})
 
-	err := inst.LoadRelation(obj, &objs)
+	err := inst.SaveRelation(obj, objs.GetIndex(), objs.GetIds())
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	err = inst.Select(&objs)
+	err = inst.Select(&objs, true)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -32,9 +32,10 @@ func (self *Instance) DeleteRelation(obj Modeler, indexRel string, ids [][]byte)
 		}
 
 		// связь от потомка
+		index = indexRel + ":" + obj.GetIndex() + ":"
+		id := string(obj.GetID())
 		for i = range ids {
-			index = indexRel + ":" + obj.GetIndex() + ":" + string(ids[i]) + ":" + string(obj.GetID())
-			err = b.Delete([]byte(index))
+			err = b.Delete([]byte(index + string(ids[i]) + ":" + id))
 			if err != nil {
 				return err
 			}
