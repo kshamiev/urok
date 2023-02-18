@@ -9,7 +9,7 @@ func TestOrders(t *testing.T) {
 	inst := newInstance(t)
 	obj := &Order{ID: 23}
 	objs := OrderSlice{}
-	// objs1 := []*Order{}
+	objs = append(objs, &Order{})
 
 	err := inst.LoadRelation(obj, &objs)
 	if err != nil {

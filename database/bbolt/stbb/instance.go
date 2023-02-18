@@ -170,10 +170,10 @@ func (self *Instance) Select(objSlice Modelers) error {
 }
 
 func (self *Instance) Delete(obj Modeler) error {
-	return self.DeleteIndex(obj, string(obj.GetID()))
+	return self.DeleteByIndex(obj, string(obj.GetID()))
 }
 
-func (self *Instance) DeleteIndex(obj Modeler, index string) error {
+func (self *Instance) DeleteByIndex(obj Modeler, index string) error {
 	return self.db.Update(func(tx *bbolt.Tx) error {
 		b := tx.Bucket([]byte(obj.GetIndex()))
 		if b == nil {
@@ -188,10 +188,10 @@ func (self *Instance) DeleteIndex(obj Modeler, index string) error {
 }
 
 func (self *Instance) Load(obj Modeler) error {
-	return self.LoadIndex(obj, string(obj.GetID()))
+	return self.LoadByIndex(obj, string(obj.GetID()))
 }
 
-func (self *Instance) LoadIndex(obj Modeler, index string) error {
+func (self *Instance) LoadByIndex(obj Modeler, index string) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
 		b := tx.Bucket([]byte(obj.GetIndex()))
 		if b == nil {
@@ -234,7 +234,7 @@ func (self *Instance) Save(obj Modeler) error {
 	})
 }
 
-func (self *Instance) SaveIndex(obj Modeler, index string) error {
+func (self *Instance) SaveByIndex(obj Modeler, index string) error {
 	return self.db.Update(func(tx *bbolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte(obj.GetIndex()))
 		if err != nil {
