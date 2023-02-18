@@ -1,8 +1,6 @@
 package test
 
 import (
-	"bytes"
-	"fmt"
 	"os"
 	"testing"
 
@@ -12,11 +10,6 @@ import (
 )
 
 func TestNewInstance(t *testing.T) {
-
-	if bytes.Equal(stbb.Itob(0), stbb.Itob(1)) {
-		fmt.Println(stbb.Itob(0))
-	}
-
 	newInstance(t)
 }
 
