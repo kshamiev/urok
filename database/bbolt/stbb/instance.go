@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"os"
 	"path"
 
@@ -125,7 +124,7 @@ func (self *Instance) SelectRange(objSlice Modelers, min, max string) error {
 		var k, v []byte
 		c := b.Cursor()
 		for k, v = c.Seek([]byte(min)); k != nil && bytes.Compare(k, []byte(max)) < 0; k, v = c.Next() {
-			fmt.Printf("%s: %s\n", k, v)
+			objSlice.ParseByte(k, v)
 		}
 
 		return nil

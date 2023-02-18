@@ -1,11 +1,39 @@
 package test
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"testing"
+
+	"github.com/kshamiev/urok/database/bbolt/stbb"
+)
+
+func TestOrders(t *testing.T) {
+	inst := newInstance(t)
+	obj := &Order{ID: 23}
+	objs := OrderSlice{}
+	objs1 := []*Order{}
+
+	err := inst.LoadRelation(obj, &objs)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = inst.DeleteRelation(obj, objs1...)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Log(objs)
+
+}
 
 type OrderSlice []*Order
 
 func (self OrderSlice) GetIndex() string {
 	return "orders"
+}
+
+func (self OrderSlice) Get() []stbb.Modeler {
+	return self
 }
 
 func (self *OrderSlice) ParseByte(_, value []byte) {

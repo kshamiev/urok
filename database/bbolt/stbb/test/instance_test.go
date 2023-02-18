@@ -10,6 +10,10 @@ import (
 )
 
 func TestNewInstance(t *testing.T) {
+	newInstance(t)
+}
+
+func newInstance(t *testing.T) *stbb.Instance {
 	data, err := os.ReadFile("config.yaml")
 	if err != nil {
 		t.Fatal(err)
@@ -19,8 +23,9 @@ func TestNewInstance(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = stbb.NewInstance(cfg)
+	inst, err := stbb.NewInstance(cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
+	return inst
 }
