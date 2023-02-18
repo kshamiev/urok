@@ -68,7 +68,7 @@ func (self *Instance) LoadRelation(obj Modeler, objSlice Modelers) error {
 				}
 			}
 			if len(res) == 0 {
-				return errors.New("Мы нашли ведро либо антиматерию: " + objSlice.GetIndex() + "/" + string(v))
+				return errors.New(errEmpty + objSlice.GetIndex() + "/" + string(v))
 			}
 			objSlice.ParseByte(v, res)
 		}
@@ -202,7 +202,7 @@ func (self *Instance) LoadIndex(obj Modeler, index string) error {
 			return ErrNotFound
 		}
 		if len(res) == 0 {
-			return errors.New("Мы нашли ведро либо антиматерию: " + obj.GetIndex() + "/" + index)
+			return errors.New(errEmpty + obj.GetIndex() + "/" + index)
 		}
 		err := json.Unmarshal(res, obj)
 		if err != nil {

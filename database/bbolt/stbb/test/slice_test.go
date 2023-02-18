@@ -15,6 +15,11 @@ func TestOrders(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	err = inst.Select(&objs)
+	if err != nil {
+		t.Fatal(err)
+	}
 	// err = inst.DeleteRelation(obj, objs1...)
 	// if err != nil {
 	// 	t.Fatal(err)

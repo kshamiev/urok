@@ -10,9 +10,10 @@ import (
 
 const (
 	bucketRelation = "_RELATION"
+	errEmpty       = "Мы нашли ведро либо антиматерию: "
 )
 
-var ErrNotFound = errors.New("объект не найден")
+var ErrNotFound = errors.New("Не найдено")
 
 type Config struct {
 	PathDB string `yaml:"pathDB"`
