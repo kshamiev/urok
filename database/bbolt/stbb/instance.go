@@ -170,12 +170,16 @@ func (self *Instance) Select(objSlice Modelers) error {
 }
 
 func (self *Instance) Delete(obj Modeler) error {
+	return self.DeleteIndex(obj, string(obj.GetID()))
+}
+
+func (self *Instance) DeleteIndex(obj Modeler, index string) error {
 	return self.db.Update(func(tx *bbolt.Tx) error {
 		b := tx.Bucket([]byte(obj.GetIndex()))
 		if b == nil {
 			return nil
 		}
-		err := b.Delete(obj.GetID())
+		err := b.Delete([]byte(index))
 		if err != nil {
 			return err
 		}
@@ -184,17 +188,21 @@ func (self *Instance) Delete(obj Modeler) error {
 }
 
 func (self *Instance) Load(obj Modeler) error {
+	return self.LoadIndex(obj, string(obj.GetID()))
+}
+
+func (self *Instance) LoadIndex(obj Modeler, index string) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
 		b := tx.Bucket([]byte(obj.GetIndex()))
 		if b == nil {
 			return ErrNotFound
 		}
-		res := b.Get(obj.GetID())
+		res := b.Get([]byte(index))
 		if res == nil {
 			return ErrNotFound
 		}
 		if len(res) == 0 {
-			return errors.New("Мы нашли ведро либо антиматерию: " + obj.GetIndex() + "/" + string(obj.GetID()))
+			return errors.New("Мы нашли ведро либо антиматерию: " + obj.GetIndex() + "/" + index)
 		}
 		err := json.Unmarshal(res, obj)
 		if err != nil {
@@ -210,15 +218,33 @@ func (self *Instance) Save(obj Modeler) error {
 		if err != nil {
 			return err
 		}
-
-		id, _ := b.NextSequence()
-		obj.SetID(Itob(id))
-
+		if bytes.Equal(Itob(0), obj.GetID()) {
+			id, _ := b.NextSequence()
+			obj.SetID(Itob(id))
+		}
 		buf, err := json.Marshal(obj)
 		if err != nil {
 			return err
 		}
-		err = b.Put(Itob(id), buf)
+		err = b.Put(obj.GetID(), buf)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+}
+
+func (self *Instance) SaveIndex(obj Modeler, index string) error {
+	return self.db.Update(func(tx *bbolt.Tx) error {
+		b, err := tx.CreateBucketIfNotExists([]byte(obj.GetIndex()))
+		if err != nil {
+			return err
+		}
+		buf, err := json.Marshal(obj)
+		if err != nil {
+			return err
+		}
+		err = b.Put([]byte(index), buf)
 		if err != nil {
 			return err
 		}
