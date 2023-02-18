@@ -172,7 +172,7 @@ func (self *Instance) Select(objSlice Modelers, isLoad bool) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
 		b := tx.Bucket([]byte(objSlice.GetIndex()))
 		if b == nil {
-			return ErrNotFound
+			return nil
 		}
 
 		var k, v []byte
