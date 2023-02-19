@@ -24,7 +24,6 @@ type Modeler interface {
 
 type Modelers interface {
 	ParseObject(value []byte) // Обработка одного элемента
-	ParseIds(key []byte)      // Обработка ИД одного элемента
 	GetIndex() string         // index (manticore), bucket (bolt, minio), table (postgres, mysql ...)
 	GetIds() [][]byte         // Получение идентификаторов (для работы со связями в bbolt)
 }

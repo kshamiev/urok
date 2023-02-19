@@ -56,12 +56,6 @@ func (self *RoleSlice) ParseObject(value []byte) {
 	*self = append(*self, o)
 }
 
-func (self *RoleSlice) ParseIds(key []byte) {
-	o := &Role{}
-	o.SetBID(key)
-	*self = append(*self, o)
-}
-
 func (self RoleSlice) GetIds() [][]byte {
 	res := make([][]byte, len(self))
 	for i := range self {

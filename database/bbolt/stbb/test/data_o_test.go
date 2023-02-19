@@ -56,12 +56,6 @@ func (self *OrderSlice) ParseObject(value []byte) {
 	*self = append(*self, o)
 }
 
-func (self *OrderSlice) ParseIds(key []byte) {
-	o := &Order{}
-	o.SetBID(key)
-	*self = append(*self, o)
-}
-
 func (self OrderSlice) GetIds() [][]byte {
 	res := make([][]byte, len(self))
 	for i := range self {

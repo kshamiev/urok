@@ -11,12 +11,13 @@ import (
 	"go.etcd.io/bbolt"
 )
 
-func (self *Instance) DeleteRelation(obj Modeler, indexRel string, ids [][]byte) error {
+func (self *Instance) DeleteRelation(obj Modeler, objSlice Modelers) error {
 	return self.db.Update(func(tx *bbolt.Tx) error {
 		bRel := tx.Bucket([]byte(bucketRelation))
 		if bRel == nil {
 			return nil
 		}
+		ids := objSlice.GetIds()
 		if len(ids) == 0 {
 			return nil
 		}
@@ -24,7 +25,7 @@ func (self *Instance) DeleteRelation(obj Modeler, indexRel string, ids [][]byte)
 
 		// связь от родителя
 		var i int
-		idx := obj.GetIndex() + ":" + indexRel + ":" + string(obj.GetBID()) + ":"
+		idx := obj.GetIndex() + ":" + objSlice.GetIndex() + ":" + string(obj.GetBID()) + ":"
 		for i = range ids {
 			err = bRel.Delete([]byte(idx + string(ids[i])))
 			if err != nil {
@@ -33,7 +34,7 @@ func (self *Instance) DeleteRelation(obj Modeler, indexRel string, ids [][]byte)
 		}
 
 		// связь от потомка
-		idx = indexRel + ":" + obj.GetIndex() + ":"
+		idx = objSlice.GetIndex() + ":" + obj.GetIndex() + ":"
 		id := string(obj.GetBID())
 		for i = range ids {
 			err = bRel.Delete([]byte(idx + string(ids[i]) + ":" + id))
@@ -46,7 +47,7 @@ func (self *Instance) DeleteRelation(obj Modeler, indexRel string, ids [][]byte)
 	})
 }
 
-func (self *Instance) LoadRelation(obj Modeler, objSlice Modelers, isLoad bool) error {
+func (self *Instance) LoadRelation(obj Modeler, objSlice Modelers) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
 		bRel := tx.Bucket([]byte(bucketRelation))
 		if bRel == nil {
@@ -69,30 +70,27 @@ func (self *Instance) LoadRelation(obj Modeler, objSlice Modelers, isLoad bool) 
 			if len(res) == 0 {
 				return errors.New(errEmpty + objSlice.GetIndex() + "/" + string(v))
 			}
-			if isLoad {
-				objSlice.ParseObject(res)
-			} else {
-				objSlice.ParseIds(v)
-			}
+			objSlice.ParseObject(res)
 		}
 
 		return nil
 	})
 }
 
-func (self *Instance) SaveRelation(obj Modeler, indexRel string, ids [][]byte) error {
+func (self *Instance) SaveRelation(obj Modeler, objSlice Modelers) error {
 	return self.db.Update(func(tx *bbolt.Tx) error {
 		bRel, err := tx.CreateBucketIfNotExists([]byte(bucketRelation))
 		if err != nil {
 			return err
 		}
+		ids := objSlice.GetIds()
 		if len(ids) == 0 {
 			return nil
 		}
 
 		// связь от родителя
 		var i int
-		idx := obj.GetIndex() + ":" + indexRel + ":" + string(obj.GetBID()) + ":"
+		idx := obj.GetIndex() + ":" + objSlice.GetIndex() + ":" + string(obj.GetBID()) + ":"
 		for i = range ids {
 			err = bRel.Put([]byte(idx+string(ids[i])), ids[i])
 			if err != nil {
@@ -101,7 +99,7 @@ func (self *Instance) SaveRelation(obj Modeler, indexRel string, ids [][]byte) e
 		}
 
 		// связь от потомка
-		idx = indexRel + ":" + obj.GetIndex() + ":"
+		idx = objSlice.GetIndex() + ":" + obj.GetIndex() + ":"
 		id := string(obj.GetBID())
 		for i = range ids {
 			err = bRel.Put([]byte(idx+string(ids[i])+":"+id), obj.GetBID())
@@ -111,7 +109,7 @@ func (self *Instance) SaveRelation(obj Modeler, indexRel string, ids [][]byte) e
 		}
 
 		// связь с хранилищем
-		err = bRel.Put([]byte(obj.GetIndex()+":"+indexRel), []byte(indexRel))
+		err = bRel.Put([]byte(obj.GetIndex()+":"+objSlice.GetIndex()), []byte(objSlice.GetIndex()))
 		if err != nil {
 			return err
 		}
@@ -124,7 +122,7 @@ func (self *Instance) SaveRelation(obj Modeler, indexRel string, ids [][]byte) e
 // Sample:
 // min := "1990-01-01T00:00:00Z"
 // max := "2000-01-01T00:00:00Z"
-func (self *Instance) SelectRange(objSlice Modelers, min, max string, isLoad bool) error {
+func (self *Instance) SelectRange(objSlice Modelers, min, max string) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
 		bObj := tx.Bucket([]byte(objSlice.GetIndex()))
 		if bObj == nil {
@@ -133,14 +131,8 @@ func (self *Instance) SelectRange(objSlice Modelers, min, max string, isLoad boo
 
 		var k, v []byte
 		c := bObj.Cursor()
-		if isLoad {
-			for k, v = c.Seek([]byte(min)); k != nil && bytes.Compare(k, []byte(max)) < 0; k, v = c.Next() {
-				objSlice.ParseObject(v)
-			}
-		} else {
-			for k, _ = c.Seek([]byte(min)); k != nil && bytes.Compare(k, []byte(max)) < 0; k, _ = c.Next() {
-				objSlice.ParseIds(k)
-			}
+		for k, v = c.Seek([]byte(min)); k != nil && bytes.Compare(k, []byte(max)) < 0; k, v = c.Next() {
+			objSlice.ParseObject(v)
 		}
 
 		return nil
@@ -150,7 +142,7 @@ func (self *Instance) SelectRange(objSlice Modelers, min, max string, isLoad boo
 // SelectPrefix Поиск и получение значений по префиксу ключа
 // Sample:
 // prefix := []byte("1234")
-func (self *Instance) SelectPrefix(objSlice Modelers, prefix string, isLoad bool) error {
+func (self *Instance) SelectPrefix(objSlice Modelers, prefix string) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
 		bObj := tx.Bucket([]byte(objSlice.GetIndex()))
 		if bObj == nil {
@@ -159,14 +151,8 @@ func (self *Instance) SelectPrefix(objSlice Modelers, prefix string, isLoad bool
 
 		var k, v []byte
 		c := bObj.Cursor()
-		if isLoad {
-			for k, v = c.Seek([]byte(prefix)); k != nil && bytes.HasPrefix(k, []byte(prefix)); k, v = c.Next() {
-				objSlice.ParseObject(v)
-			}
-		} else {
-			for k, _ = c.Seek([]byte(prefix)); k != nil && bytes.HasPrefix(k, []byte(prefix)); k, _ = c.Next() {
-				objSlice.ParseIds(k)
-			}
+		for k, v = c.Seek([]byte(prefix)); k != nil && bytes.HasPrefix(k, []byte(prefix)); k, v = c.Next() {
+			objSlice.ParseObject(v)
 		}
 
 		return nil
@@ -174,7 +160,7 @@ func (self *Instance) SelectPrefix(objSlice Modelers, prefix string, isLoad bool
 }
 
 // Select Получение всех элементов
-func (self *Instance) Select(objSlice Modelers, isLoad bool) error {
+func (self *Instance) Select(objSlice Modelers) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
 		bObj := tx.Bucket([]byte(objSlice.GetIndex()))
 		if bObj == nil {
@@ -183,14 +169,8 @@ func (self *Instance) Select(objSlice Modelers, isLoad bool) error {
 
 		var k, v []byte
 		c := bObj.Cursor()
-		if isLoad {
-			for k, v = c.First(); k != nil; k, v = c.Next() {
-				objSlice.ParseObject(v)
-			}
-		} else {
-			for k, _ = c.First(); k != nil; k, _ = c.Next() {
-				objSlice.ParseIds(k)
-			}
+		for k, v = c.First(); k != nil; k, v = c.Next() {
+			objSlice.ParseObject(v)
 		}
 
 		return nil

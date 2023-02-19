@@ -10,6 +10,7 @@ import (
 	"github.com/kshamiev/urok/database/bbolt/stbb"
 )
 
+// go test -run=TestStats
 func TestStats(t *testing.T) {
 	inst := newInstance(t)
 	go inst.Stats()
