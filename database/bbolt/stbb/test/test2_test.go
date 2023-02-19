@@ -12,6 +12,11 @@ func TestSlice(t *testing.T) {
 	inst := newInstance(t)
 	selectPrefix(t, inst)
 	selectRange(t, inst)
+	loadRelation(t, inst)
+	saveRelation(t, inst)
+	loadRelation(t, inst)
+	deleteRelation(t, inst)
+	loadRelation(t, inst)
 }
 
 func selectPrefix(t *testing.T, inst *stbb.Instance) {
