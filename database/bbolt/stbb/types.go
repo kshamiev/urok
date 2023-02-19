@@ -93,29 +93,3 @@ type Config struct {
 type Instance struct {
 	db *bbolt.DB
 }
-
-// ////
-
-type Stats struct {
-	FreePageN     int     `json:"FreePageN"`
-	PendingPageN  int     `json:"PendingPageN"`
-	FreeAlloc     int     `json:"FreeAlloc"`
-	FreelistInuse int     `json:"FreelistInuse"`
-	TxN           int     `json:"TxN"`
-	OpenTxN       int     `json:"OpenTxN"`
-	TxStats       TxStats `json:"TxStats"`
-}
-type TxStats struct {
-	PageCount     int `json:"PageCount"`
-	PageAlloc     int `json:"PageAlloc"`
-	CursorCount   int `json:"CursorCount"`
-	NodeCount     int `json:"NodeCount"`
-	NodeDeref     int `json:"NodeDeref"`
-	Rebalance     int `json:"Rebalance"`
-	RebalanceTime int `json:"RebalanceTime"`
-	Split         int `json:"Split"`
-	Spill         int `json:"Spill"`
-	SpillTime     int `json:"SpillTime"`
-	Write         int `json:"Write"`
-	WriteTime     int `json:"WriteTime"`
-}
