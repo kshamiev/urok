@@ -19,7 +19,12 @@ func (self *Instance) DeleteRelation(obj Modeler, objSlice Modelers) error {
 		}
 		ids := objSlice.GetIds()
 		if len(ids) == 0 {
-			return nil
+			var k, v []byte
+			idx := obj.GetIndex() + ":" + objSlice.GetIndex() + ":" + string(obj.GetBID()) + ":"
+			c := bRel.Cursor()
+			for k, v = c.Seek([]byte(idx)); k != nil && bytes.HasPrefix(k, []byte(idx)); k, v = c.Next() {
+				ids = append(ids, v)
+			}
 		}
 		var err error
 
