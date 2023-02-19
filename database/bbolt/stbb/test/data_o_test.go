@@ -50,10 +50,14 @@ func (self OrderSlice) GetIndex() string {
 	return indexOrder
 }
 
-func (self *OrderSlice) ParseObject(value []byte) {
+func (self *OrderSlice) ParseObject(i int, value []byte) {
 	o := &Order{}
 	_ = json.Unmarshal(value, o)
-	*self = append(*self, o)
+	if i > -1 {
+		(*self)[i] = o
+	} else {
+		*self = append(*self, o)
+	}
 }
 
 func (self OrderSlice) GetIds() [][]byte {

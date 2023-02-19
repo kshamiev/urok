@@ -70,7 +70,7 @@ func (self *Instance) LoadRelation(obj Modeler, objSlice Modelers) error {
 			if len(res) == 0 {
 				return errors.New(errEmpty + objSlice.GetIndex() + "/" + string(v))
 			}
-			objSlice.ParseObject(res)
+			objSlice.ParseObject(-1, res)
 		}
 
 		return nil
@@ -132,7 +132,7 @@ func (self *Instance) SelectRange(objSlice Modelers, min, max string) error {
 		var k, v []byte
 		c := bObj.Cursor()
 		for k, v = c.Seek([]byte(min)); k != nil && bytes.Compare(k, []byte(max)) < 0; k, v = c.Next() {
-			objSlice.ParseObject(v)
+			objSlice.ParseObject(-1, v)
 		}
 
 		return nil
@@ -152,7 +152,7 @@ func (self *Instance) SelectPrefix(objSlice Modelers, prefix string) error {
 		var k, v []byte
 		c := bObj.Cursor()
 		for k, v = c.Seek([]byte(prefix)); k != nil && bytes.HasPrefix(k, []byte(prefix)); k, v = c.Next() {
-			objSlice.ParseObject(v)
+			objSlice.ParseObject(-1, v)
 		}
 
 		return nil
@@ -170,7 +170,7 @@ func (self *Instance) Select(objSlice Modelers) error {
 		var k, v []byte
 		c := bObj.Cursor()
 		for k, v = c.First(); k != nil; k, v = c.Next() {
-			objSlice.ParseObject(v)
+			objSlice.ParseObject(-1, v)
 		}
 
 		return nil
