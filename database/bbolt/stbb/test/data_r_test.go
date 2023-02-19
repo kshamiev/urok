@@ -34,11 +34,11 @@ func (self Role) GetIndex() string {
 	return indexRole
 }
 
-func (self Role) GetID() []byte {
+func (self Role) GetBID() []byte {
 	return stbb.Itob(self.ID)
 }
 
-func (self *Role) SetID(id []byte) {
+func (self *Role) SetBID(id []byte) {
 	self.ID = stbb.Btoi(id)
 }
 
@@ -50,7 +50,7 @@ func (self RoleSlice) GetIndex() string {
 	return indexRole
 }
 
-func (self *RoleSlice) ParseObject(_, value []byte) {
+func (self *RoleSlice) ParseObject(value []byte) {
 	o := &Role{}
 	_ = json.Unmarshal(value, o)
 	*self = append(*self, o)
@@ -58,14 +58,14 @@ func (self *RoleSlice) ParseObject(_, value []byte) {
 
 func (self *RoleSlice) ParseIds(key []byte) {
 	o := &Role{}
-	o.SetID(key)
+	o.SetBID(key)
 	*self = append(*self, o)
 }
 
 func (self RoleSlice) GetIds() [][]byte {
 	res := make([][]byte, len(self))
 	for i := range self {
-		res[i] = self[i].GetID()
+		res[i] = self[i].GetBID()
 	}
 	return res
 }

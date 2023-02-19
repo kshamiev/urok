@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/shopspring/decimal"
-	bolt "go.etcd.io/bbolt"
+	"go.etcd.io/bbolt"
 )
 
 // Используется для определения пустых значений
@@ -17,7 +17,7 @@ import (
 const null = "nil"
 
 func main() {
-	db, err := bolt.Open("database/bbolt/data.db", 0666, nil)
+	db, err := bbolt.Open("database/bbolt/data.db", 0666, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,8 +35,8 @@ func main() {
 }
 
 // Buckets Работа с вложенными (зависимыми) buckets "таблицами"
-func Buckets(db *bolt.DB, accountID uint64, it *Item) error {
-	return db.Update(func(tx *bolt.Tx) error {
+func Buckets(db *bbolt.DB, accountID uint64, it *Item) error {
+	return db.Update(func(tx *bbolt.Tx) error {
 
 		bName := strconv.FormatUint(accountID, 10)
 		// Создание и удаление "таблицы"

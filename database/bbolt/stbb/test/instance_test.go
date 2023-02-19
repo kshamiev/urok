@@ -3,11 +3,18 @@ package test
 import (
 	"os"
 	"testing"
+	"time"
 
 	"gopkg.in/yaml.v3"
 
 	"github.com/kshamiev/urok/database/bbolt/stbb"
 )
+
+func TestStats(t *testing.T) {
+	inst := newInstance(t)
+	go inst.Stats()
+	time.Sleep(time.Hour)
+}
 
 func TestNewInstance(t *testing.T) {
 	newInstance(t)

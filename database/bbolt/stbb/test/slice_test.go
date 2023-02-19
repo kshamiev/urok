@@ -2,6 +2,8 @@ package test
 
 import (
 	"testing"
+
+	"github.com/kshamiev/urok/database/bbolt/stbb"
 )
 
 func TestOrders(t *testing.T) {
@@ -9,7 +11,12 @@ func TestOrders(t *testing.T) {
 	obj := &Order{ID: 23}
 	// objs := OrderSlice{}
 	var objs OrderSlice
-	// objs = append(objs, &Order{})
+	objs = append(objs, &Order{})
+
+	objLiist := []stbb.Modeler{}
+	for i := range objs {
+		objLiist = append(objLiist, objs[i])
+	}
 
 	err := inst.SaveRelation(obj, objs.GetIndex(), objs.GetIds())
 	if err != nil {

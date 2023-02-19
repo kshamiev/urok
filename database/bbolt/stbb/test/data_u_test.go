@@ -34,11 +34,11 @@ func (self User) GetIndex() string {
 	return indexUser
 }
 
-func (self User) GetID() []byte {
+func (self User) GetBID() []byte {
 	return stbb.Itob(self.ID)
 }
 
-func (self *User) SetID(id []byte) {
+func (self *User) SetBID(id []byte) {
 	self.ID = stbb.Btoi(id)
 }
 
@@ -50,7 +50,7 @@ func (self UserSlice) GetIndex() string {
 	return indexUser
 }
 
-func (self *UserSlice) ParseObject(_, value []byte) {
+func (self *UserSlice) ParseObject(value []byte) {
 	o := &User{}
 	_ = json.Unmarshal(value, o)
 	*self = append(*self, o)
@@ -58,14 +58,14 @@ func (self *UserSlice) ParseObject(_, value []byte) {
 
 func (self *UserSlice) ParseIds(key []byte) {
 	o := &User{}
-	o.SetID(key)
+	o.SetBID(key)
 	*self = append(*self, o)
 }
 
 func (self UserSlice) GetIds() [][]byte {
 	res := make([][]byte, len(self))
 	for i := range self {
-		res[i] = self[i].GetID()
+		res[i] = self[i].GetBID()
 	}
 	return res
 }

@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/shopspring/decimal"
-	bolt "go.etcd.io/bbolt"
+	"go.etcd.io/bbolt"
 )
 
 // Используется для определения пустых значений
@@ -16,7 +16,7 @@ import (
 const null = "nil"
 
 func main() {
-	db, err := bolt.Open("database/bbolt/data.db", 0666, nil)
+	db, err := bbolt.Open("database/bbolt/data.db", 0666, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -34,8 +34,8 @@ func main() {
 }
 
 // CreateItem saves u to the store. The new item ID is set on u once the data is persisted.
-func CreateItem(db *bolt.DB, item1 *Item) error {
-	return db.Update(func(tx *bolt.Tx) error {
+func CreateItem(db *bbolt.DB, item1 *Item) error {
+	return db.Update(func(tx *bbolt.Tx) error {
 
 		// Создание и удаление "таблицы"
 		b, err := tx.CreateBucketIfNotExists([]byte("MyBucket"))

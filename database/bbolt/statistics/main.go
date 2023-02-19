@@ -6,11 +6,11 @@ import (
 	"os"
 	"time"
 
-	bolt "go.etcd.io/bbolt"
+	"go.etcd.io/bbolt"
 )
 
 func main() {
-	db, err := bolt.Open("database/bbolt/data.db", 0666, &bolt.Options{
+	db, err := bbolt.Open("database/bbolt/data.db", 0666, &bbolt.Options{
 		Timeout:  time.Second * 10,
 		ReadOnly: true,
 	})

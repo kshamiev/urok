@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	bolt "go.etcd.io/bbolt"
+	"go.etcd.io/bbolt"
 )
 
 // Используется для определения пустых значений
@@ -12,7 +12,7 @@ import (
 const null = "nil"
 
 func main() {
-	db, err := bolt.Open("database/bbolt/data.db", 0666, nil)
+	db, err := bbolt.Open("database/bbolt/data.db", 0666, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -25,9 +25,9 @@ func main() {
 }
 
 // TransactionUpdate транзакция на чтение и запись
-func TransactionUpdate(db *bolt.DB) error {
+func TransactionUpdate(db *bbolt.DB) error {
 	var v, v1 []byte
-	err := db.Update(func(tx *bolt.Tx) error {
+	err := db.Update(func(tx *bbolt.Tx) error {
 
 		// Создание и удаление "таблицы"
 		b, err := tx.CreateBucketIfNotExists([]byte("MyBucket"))
@@ -71,8 +71,8 @@ func TransactionUpdate(db *bolt.DB) error {
 }
 
 // TransactionView транзакция на чтение
-func TransactionView(db *bolt.DB) error {
-	err := db.View(func(tx *bolt.Tx) error {
+func TransactionView(db *bbolt.DB) error {
+	err := db.View(func(tx *bbolt.Tx) error {
 		//
 		return nil
 	})
@@ -80,11 +80,11 @@ func TransactionView(db *bolt.DB) error {
 }
 
 // TransactionBatch транзакция на конкурентную запись
-func TransactionBatch(db *bolt.DB) error {
+func TransactionBatch(db *bbolt.DB) error {
 	var id uint64
 	// Пакетная обработка полезна только тогда, когда ее вызывает несколько горутин.
 	// Подходит для генерации идентификатора
-	err := db.Batch(func(tx *bolt.Tx) error {
+	err := db.Batch(func(tx *bbolt.Tx) error {
 		// Find last key in bucket, decode as bigendian uint64, increment
 		// by one, encode back to []byte, and add new key.
 		// id = newValue

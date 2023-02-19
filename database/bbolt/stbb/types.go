@@ -16,6 +16,21 @@ const (
 
 var ErrNotFound = errors.New("Не найдено")
 
+type Modeler interface {
+	GetBID() []byte   // get object ID
+	SetBID([]byte)    // set object ID
+	GetIndex() string // index (manticore), bucket (bolt, minio), table (postgres, mysql ...)
+}
+
+type Modelers interface {
+	ParseObject(value []byte) // Обработка одного элемента
+	ParseIds(key []byte)      // Обработка ИД одного элемента
+	GetIndex() string         // index (manticore), bucket (bolt, minio), table (postgres, mysql ...)
+	GetIds() [][]byte         // Получение идентификаторов (для работы со связями в bbolt)
+}
+
+// ////
+
 type Config struct {
 	PathDB string `yaml:"pathDB"`
 
@@ -82,15 +97,26 @@ type Instance struct {
 
 // ////
 
-type Modeler interface {
-	GetID() []byte    // get object ID
-	SetID([]byte)     // set object ID
-	GetIndex() string // index (manticore), bucket (bolt, minio), table (postgres, mysql ...)
+type Stats struct {
+	FreePageN     int     `json:"FreePageN"`
+	PendingPageN  int     `json:"PendingPageN"`
+	FreeAlloc     int     `json:"FreeAlloc"`
+	FreelistInuse int     `json:"FreelistInuse"`
+	TxN           int     `json:"TxN"`
+	OpenTxN       int     `json:"OpenTxN"`
+	TxStats       TxStats `json:"TxStats"`
 }
-
-type Modelers interface {
-	ParseObject(key, value []byte) // Обработка одного элемента
-	ParseIds(key []byte)           // Обработка ИД одного элемента
-	GetIndex() string              // index (manticore), bucket (bolt, minio), table (postgres, mysql ...)
-	GetIds() [][]byte              // Получение идентификаторов (для работы со связями в bbolt)
+type TxStats struct {
+	PageCount     int `json:"PageCount"`
+	PageAlloc     int `json:"PageAlloc"`
+	CursorCount   int `json:"CursorCount"`
+	NodeCount     int `json:"NodeCount"`
+	NodeDeref     int `json:"NodeDeref"`
+	Rebalance     int `json:"Rebalance"`
+	RebalanceTime int `json:"RebalanceTime"`
+	Split         int `json:"Split"`
+	Spill         int `json:"Spill"`
+	SpillTime     int `json:"SpillTime"`
+	Write         int `json:"Write"`
+	WriteTime     int `json:"WriteTime"`
 }

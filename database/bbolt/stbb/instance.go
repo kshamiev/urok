@@ -6,6 +6,7 @@ import (
 	"errors"
 	"os"
 	"path"
+	"time"
 
 	"go.etcd.io/bbolt"
 )
@@ -23,7 +24,7 @@ func (self *Instance) DeleteRelation(obj Modeler, indexRel string, ids [][]byte)
 
 		// связь от родителя
 		var i int
-		idx := obj.GetIndex() + ":" + indexRel + ":" + string(obj.GetID()) + ":"
+		idx := obj.GetIndex() + ":" + indexRel + ":" + string(obj.GetBID()) + ":"
 		for i = range ids {
 			err = bRel.Delete([]byte(idx + string(ids[i])))
 			if err != nil {
@@ -33,7 +34,7 @@ func (self *Instance) DeleteRelation(obj Modeler, indexRel string, ids [][]byte)
 
 		// связь от потомка
 		idx = indexRel + ":" + obj.GetIndex() + ":"
-		id := string(obj.GetID())
+		id := string(obj.GetBID())
 		for i = range ids {
 			err = bRel.Delete([]byte(idx + string(ids[i]) + ":" + id))
 			if err != nil {
@@ -57,10 +58,11 @@ func (self *Instance) LoadRelation(obj Modeler, objSlice Modelers, isLoad bool) 
 		}
 
 		// связь от родителя
-		idx := obj.GetIndex() + ":" + objSlice.GetIndex() + ":" + string(obj.GetID()) + ":"
+		var res, k, v []byte
+		idx := obj.GetIndex() + ":" + objSlice.GetIndex() + ":" + string(obj.GetBID()) + ":"
 		c := bRel.Cursor()
-		for k, v := c.Seek([]byte(idx)); k != nil && bytes.HasPrefix(k, []byte(idx)); k, v = c.Next() {
-			res := bObj.Get(v)
+		for k, v = c.Seek([]byte(idx)); k != nil && bytes.HasPrefix(k, []byte(idx)); k, v = c.Next() {
+			res = bObj.Get(v)
 			if res == nil {
 				return errors.New(errNil + string(k))
 			}
@@ -68,7 +70,7 @@ func (self *Instance) LoadRelation(obj Modeler, objSlice Modelers, isLoad bool) 
 				return errors.New(errEmpty + objSlice.GetIndex() + "/" + string(v))
 			}
 			if isLoad {
-				objSlice.ParseObject(v, res)
+				objSlice.ParseObject(res)
 			} else {
 				objSlice.ParseIds(v)
 			}
@@ -90,7 +92,7 @@ func (self *Instance) SaveRelation(obj Modeler, indexRel string, ids [][]byte) e
 
 		// связь от родителя
 		var i int
-		idx := obj.GetIndex() + ":" + indexRel + ":" + string(obj.GetID()) + ":"
+		idx := obj.GetIndex() + ":" + indexRel + ":" + string(obj.GetBID()) + ":"
 		for i = range ids {
 			err = bRel.Put([]byte(idx+string(ids[i])), ids[i])
 			if err != nil {
@@ -100,9 +102,9 @@ func (self *Instance) SaveRelation(obj Modeler, indexRel string, ids [][]byte) e
 
 		// связь от потомка
 		idx = indexRel + ":" + obj.GetIndex() + ":"
-		id := string(obj.GetID())
+		id := string(obj.GetBID())
 		for i = range ids {
-			err = bRel.Put([]byte(idx+string(ids[i])+":"+id), obj.GetID())
+			err = bRel.Put([]byte(idx+string(ids[i])+":"+id), obj.GetBID())
 			if err != nil {
 				return err
 			}
@@ -133,7 +135,7 @@ func (self *Instance) SelectRange(objSlice Modelers, min, max string, isLoad boo
 		c := bObj.Cursor()
 		if isLoad {
 			for k, v = c.Seek([]byte(min)); k != nil && bytes.Compare(k, []byte(max)) < 0; k, v = c.Next() {
-				objSlice.ParseObject(k, v)
+				objSlice.ParseObject(v)
 			}
 		} else {
 			for k, _ = c.Seek([]byte(min)); k != nil && bytes.Compare(k, []byte(max)) < 0; k, _ = c.Next() {
@@ -159,7 +161,7 @@ func (self *Instance) SelectPrefix(objSlice Modelers, prefix string, isLoad bool
 		c := bObj.Cursor()
 		if isLoad {
 			for k, v = c.Seek([]byte(prefix)); k != nil && bytes.HasPrefix(k, []byte(prefix)); k, v = c.Next() {
-				objSlice.ParseObject(k, v)
+				objSlice.ParseObject(v)
 			}
 		} else {
 			for k, _ = c.Seek([]byte(prefix)); k != nil && bytes.HasPrefix(k, []byte(prefix)); k, _ = c.Next() {
@@ -183,7 +185,7 @@ func (self *Instance) Select(objSlice Modelers, isLoad bool) error {
 		c := bObj.Cursor()
 		if isLoad {
 			for k, v = c.First(); k != nil; k, v = c.Next() {
-				objSlice.ParseObject(k, v)
+				objSlice.ParseObject(v)
 			}
 		} else {
 			for k, _ = c.First(); k != nil; k, _ = c.Next() {
@@ -196,7 +198,7 @@ func (self *Instance) Select(objSlice Modelers, isLoad bool) error {
 }
 
 func (self *Instance) Delete(obj Modeler) error {
-	return self.DeleteByID(obj, string(obj.GetID()))
+	return self.DeleteByID(obj, string(obj.GetBID()))
 }
 
 func (self *Instance) DeleteByID(obj Modeler, id string) error {
@@ -243,7 +245,7 @@ func (self *Instance) DeleteByID(obj Modeler, id string) error {
 }
 
 func (self *Instance) Load(obj Modeler) error {
-	return self.LoadByID(obj, string(obj.GetID()))
+	return self.LoadByID(obj, string(obj.GetBID()))
 }
 
 func (self *Instance) LoadByID(obj Modeler, id string) error {
@@ -273,15 +275,15 @@ func (self *Instance) Save(obj Modeler) error {
 		if err != nil {
 			return err
 		}
-		if bytes.Equal(Itob(0), obj.GetID()) {
+		if bytes.Equal(Itob(0), obj.GetBID()) {
 			id, _ := bObj.NextSequence()
-			obj.SetID(Itob(id))
+			obj.SetBID(Itob(id))
 		}
 		buf, err := json.Marshal(obj)
 		if err != nil {
 			return err
 		}
-		err = bObj.Put(obj.GetID(), buf)
+		err = bObj.Put(obj.GetBID(), buf)
 		if err != nil {
 			return err
 		}
@@ -305,6 +307,25 @@ func (self *Instance) SaveByID(obj Modeler, id string) error {
 		}
 		return nil
 	})
+}
+
+func (self *Instance) Stats() {
+	// Grab the initial stats.
+	prev := self.db.Stats()
+	for {
+		// Wait for 10s.
+		time.Sleep(10 * time.Second)
+
+		// Grab the current stats and diff them.
+		stats := self.db.Stats()
+		diff := stats.Sub(&prev)
+
+		// Encode stats to JSON and print to STDERR.
+		json.NewEncoder(os.Stderr).Encode(diff)
+
+		// Save stats for the next loop.
+		prev = stats
+	}
 }
 
 func (self *Instance) Close() {

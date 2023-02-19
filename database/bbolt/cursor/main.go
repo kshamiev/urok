@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	bolt "go.etcd.io/bbolt"
+	"go.etcd.io/bbolt"
 )
 
 // Используется для определения пустых значений
@@ -14,7 +14,7 @@ import (
 const null = "nil"
 
 func main() {
-	db, err := bolt.Open("database/bbolt/data.db", 0666, nil)
+	db, err := bbolt.Open("database/bbolt/data.db", 0666, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,8 +27,8 @@ func main() {
 }
 
 // Cursor Итерация данных с помощью курсора
-func Cursor(db *bolt.DB) error {
-	return db.Update(func(tx *bolt.Tx) error {
+func Cursor(db *bbolt.DB) error {
+	return db.Update(func(tx *bbolt.Tx) error {
 
 		// Создание и удаление "таблицы"
 		b, err := tx.CreateBucketIfNotExists([]byte("MyBucket"))
