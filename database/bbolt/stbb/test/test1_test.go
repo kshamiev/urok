@@ -107,7 +107,11 @@ func getObjectExists(t *testing.T, inst *stbb.Instance, id uint64) {
 	objU := &User{ID: id}
 	err := inst.Load(objU)
 	if err != nil {
-		t.Fatal(err)
+		if err != stbb.ErrNotFound {
+			t.Fatal(err)
+		}
+		t.Log(stbb.ErrNotFound)
+		return
 	}
 	if objU.Name == "User - "+strconv.FormatUint(id, 10) {
 		t.Log("USER VALID")

@@ -4,7 +4,7 @@ timeout: 10s
 noGrowSync: false
 noFreelistSync: false
 preLoadFreelist: false
-freelistType: "hashmap"
+freelistType: "array"
 readOnly: false
 mmapFlags: 0
 initialMmapSize: 0

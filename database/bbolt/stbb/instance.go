@@ -11,6 +11,8 @@ import (
 	"go.etcd.io/bbolt"
 )
 
+// DeleteRelation
+// Если objSlice пустой то удаляются все связи с объектами типа objSlice.GetIndex()
 func (self *Instance) DeleteRelation(obj Modeler, objSlice Modelers) error {
 	return self.db.Update(func(tx *bbolt.Tx) error {
 		bRel := tx.Bucket([]byte(bucketRelation))
@@ -146,7 +148,7 @@ func (self *Instance) SelectRange(objSlice Modelers, min, max string) error {
 
 // SelectPrefix Поиск и получение значений по префиксу ключа
 // Sample:
-// prefix := []byte("1234")
+// prefix := "1234"
 func (self *Instance) SelectPrefix(objSlice Modelers, prefix string) error {
 	return self.db.View(func(tx *bbolt.Tx) error {
 		bObj := tx.Bucket([]byte(objSlice.GetIndex()))
@@ -294,6 +296,8 @@ func (self *Instance) SaveByID(obj Modeler, id string) error {
 	})
 }
 
+// Stats Снятие статистики работы БД
+// TODO Нужно доработать для логирования в систему мониторинга
 func (self *Instance) Stats() {
 	// Grab the initial stats.
 	prev := self.db.Stats()
