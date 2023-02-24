@@ -1,18 +1,10 @@
 package main
 
-import (
-	"encoding/json"
-	"fmt"
-)
+import "fmt"
 
 func main() {
 
-	obj := Model(0)
-
-	d, _ := json.Marshal(obj)
-
-	fmt.Println(string(d))
-	fmt.Println(d)
+	fmt.Println("OK")
 
 }
 

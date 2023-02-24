@@ -1,15 +1,36 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"os"
+)
 
 func main() {
-	a()
-	b()
-	fmt.Println()
-	fmt.Println(c())
-	fmt.Println(cc())
-	f()
-	fmt.Println("Returned normally from f.")
+	err := Work()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("OK")
+	// a()
+	// b()
+	// fmt.Println()
+	// fmt.Println(c())
+	// fmt.Println(cc())
+	// f()
+	// fmt.Println("Returned normally from f.")
+}
+
+func Work() error {
+	fp, err := os.OpenFile("test.txt", os.O_CREATE|os.O_RDWR|os.O_APPEND, 0o666)
+	if err != nil {
+		return err
+	}
+	defer fp.Close()
+
+	fp.WriteString("Фиалка Губоцветная\n")
+	// It`s Work
+	return nil
 }
 
 func a() {

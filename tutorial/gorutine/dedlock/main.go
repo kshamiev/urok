@@ -7,12 +7,13 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 )
 
 func pinger(c chan string) {
 	for i := 0; ; i++ {
-		c <- "ping"
+		c <- "ping: " + strconv.Itoa(i)
 	}
 }
 

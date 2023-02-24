@@ -6,7 +6,26 @@
 // go tool cover -func=cover.out - покрытие по функциям
 package function
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
+
+func Test_Closure(t *testing.T) {
+
+	Closure()
+
+}
+
+func Test_Parameter(t *testing.T) {
+
+	ParameterSum1(45, 55, Parameter)
+
+	ParameterSum2(5, 7, func(x, y int) {
+		fmt.Println(x * y)
+	})
+
+}
 
 func Test_Add(t *testing.T) {
 	type args struct {
