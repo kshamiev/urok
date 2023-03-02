@@ -12,13 +12,6 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println("OK")
-	// a()
-	// b()
-	// fmt.Println()
-	// fmt.Println(c())
-	// fmt.Println(cc())
-	// f()
-	// fmt.Println("Returned normally from f.")
 }
 
 func Work() error {

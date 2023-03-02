@@ -1,16 +1,20 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"runtime"
+)
 
 func main() {
-
-	fmt.Println("OK")
-
+	fmt.Println(runtime.NumGoroutine())
+	f := fib()
+	fmt.Println(f(), f(), f(), f(), f(), f(), f(), f())
 }
 
-type Item struct {
-	Model
-	ID int64
+func fib() func() int {
+	a, b := 0, 1
+	return func() int {
+		a, b = b, a+b
+		return a
+	}
 }
-
-type Model int

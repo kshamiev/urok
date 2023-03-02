@@ -5,12 +5,14 @@ go 1.19
 require (
 	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.7.2
 	github.com/boombuler/barcode v1.0.1
+	github.com/diamondburned/gotk4/pkg v0.0.4
 	github.com/disintegration/imaging v1.6.2
 	github.com/go-redis/cache/v8 v8.4.3
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.3.0
+	github.com/gotk3/gotk3 v0.6.1
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/llgcode/draw2d v0.0.0-20210904075650-80aa0a2a901d
 	github.com/manticoresoftware/go-sdk v0.0.0-20200819180014-70a49dc3179d
@@ -32,6 +34,7 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v0.31.0
 	go.opentelemetry.io/otel/trace v1.8.0
 	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -68,6 +71,7 @@ require (
 	github.com/xuri/efp v0.0.0-20210322160811-ab561f5b45e3 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d // indirect
 	go.opentelemetry.io/otel/metric v0.31.0 // indirect
+	go4.org/unsafe/assume-no-moving-gc v0.0.0-20220617031537-928513b29760 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 	golang.org/x/exp v0.0.0-20210916165020-5cb4fee858ee // indirect
 	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb // indirect
@@ -75,5 +79,4 @@ require (
 	golang.org/x/sys v0.4.0 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

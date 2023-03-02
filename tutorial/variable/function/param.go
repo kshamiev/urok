@@ -12,6 +12,10 @@ func ParameterSum1(x, y int, n FuncParameter) {
 	n(x, y)
 }
 
-func ParameterSum2(x, y int, n func(int, int)) {
-	n(x, y)
+func ParameterSum2(x, y int, n func(int, int) int) (int, bool) {
+	res := n(x, y)
+	if res == 35 {
+		return res, true
+	}
+	return res, false
 }
