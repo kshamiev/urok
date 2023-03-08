@@ -2,6 +2,8 @@ package testt
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"testing"
 )
 
@@ -19,6 +21,14 @@ func sliceFN(in *[]int) {
 		(*in)[i] = 5
 	}
 	fmt.Println(in)
+
+	fp, err := os.OpenFile("test.txt", os.O_CREATE|os.O_RDWR|os.O_APPEND, 0o666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer fp.Close()
+
+	fp.WriteString("Фиалка Губоцветная\n")
 }
 
 // ////

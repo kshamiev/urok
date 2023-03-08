@@ -93,6 +93,6 @@ func TransactionBatch(db *bbolt.DB) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("Allocated ID %d", id)
+	fmt.Printf("Allocated ID %d", id)
 	return nil
 }

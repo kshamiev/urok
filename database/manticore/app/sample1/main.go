@@ -16,7 +16,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("\nREAL TIME INDEX\n")
+	fmt.Println("\nREAL TIME INDEX")
 	tmunix := int(time.Now().Unix())
 	fmt.Println(tmunix)
 	tm := strconv.Itoa(tmunix)
@@ -42,7 +42,7 @@ func main() {
 	res2, err2 := cl.Query("more", index)
 	fmt.Println(res2, err2)
 
-	fmt.Println("\nPLAIN INDEX\n")
+	fmt.Println("\nPLAIN INDEX")
 
 	res3, err3 := cl.Query("PRIDE")
 	fmt.Println(res3, err3)
