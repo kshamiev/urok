@@ -3,6 +3,7 @@ module github.com/kshamiev/urok
 go 1.19
 
 require (
+	bou.ke/monkey v1.0.2
 	fyne.io/fyne/v2 v2.3.1
 	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.7.2
 	github.com/boombuler/barcode v1.0.1
