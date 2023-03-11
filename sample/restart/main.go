@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"runtime"
@@ -15,7 +16,7 @@ var wg sync.WaitGroup
 func main() {
 	fmt.Println("PROGRAM START")
 
-	t1 := time.NewTimer(time.Second * 10)
+	t1 := time.NewTimer(time.Second * 5)
 	wg.Add(1)
 
 	// you can handle to restart programmatically
@@ -23,7 +24,10 @@ func main() {
 		defer wg.Done()
 		<-t1.C
 		fmt.Println("Timer expired")
-		RestartSelf()
+		err := RestartSelf()
+		if err != nil {
+			log.Fatal(err)
+		}
 	}()
 
 	// fmt.Println(time.Now().Format("2006-Jan-02 ( 15:04:05)"))
