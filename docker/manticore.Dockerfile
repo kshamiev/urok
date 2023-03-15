@@ -3,8 +3,8 @@ FROM ubuntu:22.04 as build1
 RUN apt-get update \
     && apt-get -y install wget \
     && cd /tmp \
-    && wget https://go.dev/dl/go1.17.13.linux-amd64.tar.gz \
-    && rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.13.linux-amd64.tar.gz
+    && wget https://go.dev/dl/go1.20.2.linux-amd64.tar.gz \
+    && rm -rf /usr/local/go && tar -C /usr/local -xzf go1.20.2.linux-amd64.tar.gz
 
 ENV PATH=$PATH:/usr/local/go/bin
 
