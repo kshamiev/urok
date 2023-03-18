@@ -4,8 +4,6 @@ import (
 	"time"
 
 	"github.com/shopspring/decimal"
-
-	"gitlab.tn.ru/golang/app/scheduler"
 )
 
 type Config struct {
@@ -19,7 +17,6 @@ type Config struct {
 	DecimalDot      int             `yaml:"decimalDot"`      // Точность дробных чисел (к. знаков после запятой)
 	DotDecimal      decimal.Decimal `yaml:"-"`               // Точность дробных чисел (к. знаков после запятой)
 	// Следующие конфигурации только для сервиса индексатора
-	DataDir      string              `yaml:"dataDir"`      // Хранилище проиндексированных данных (маппинг, репликации)
-	SearchConfig string              `yaml:"searchConfig"` // Конфигурация для мантикоры
-	TaskIndexes  []scheduler.Crontab `yaml:"taskIndexes"`  // Настройки индексов
+	DataDir      string `yaml:"dataDir"`      // Хранилище проиндексированных данных (маппинг, репликации)
+	SearchConfig string `yaml:"searchConfig"` // Конфигурация для мантикоры
 }

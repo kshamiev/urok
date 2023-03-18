@@ -4,10 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"reflect"
 	"strconv"
-
-	"gitlab.tn.ru/golang/app/logger"
 )
 
 func (inst *Instance) Select(ctx context.Context, object Index) error {
@@ -19,7 +18,7 @@ func (inst *Instance) Select(ctx context.Context, object Index) error {
 	// запрос
 	qu := "select * from " + object.GetIndexName() + " where id = "
 	qu += strconv.FormatInt(objValue.FieldByName("ID").Int(), 10)
-	logger.Get(ctx).Debug(qu)
+	fmt.Println(qu)
 	rows, err := inst.DB.QueryContext(ctx, qu)
 	if err != nil {
 		return err
@@ -55,8 +54,8 @@ func (inst *Instance) Select(ctx context.Context, object Index) error {
 }
 
 func (inst *Instance) SelectCount(ctx context.Context, qu string, args ...interface{}) (int, error) {
-	logger.Get(ctx).Debug(qu)
-	logger.Get(ctx).Debug(args)
+	fmt.Println(qu)
+	fmt.Println(args)
 	var cnt int
 	row := inst.DB.QueryRowContext(ctx, qu, args...)
 	if row.Err() != nil {
@@ -94,8 +93,8 @@ func (inst *Instance) SelectSlice(ctx context.Context, result interface{}, qu st
 	}
 
 	// запрос
-	logger.Get(ctx).Debug(qu)
-	logger.Get(ctx).Debug(args)
+	fmt.Println(qu)
+	fmt.Println(args)
 	rows, err := inst.DB.QueryContext(ctx, qu, args...)
 	if err != nil {
 		return err
@@ -139,8 +138,8 @@ func (inst *Instance) SelectSlice(ctx context.Context, result interface{}, qu st
 
 func (inst *Instance) SelectParser(ctx context.Context, result Parser, qu string, args ...interface{}) error {
 	// запрос
-	logger.Get(ctx).Debug(qu)
-	logger.Get(ctx).Debug(args)
+	fmt.Println(qu)
+	fmt.Println(args)
 	rows, err := inst.DB.QueryContext(ctx, qu, args...)
 	if err != nil {
 		return err
