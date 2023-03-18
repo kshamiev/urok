@@ -10,7 +10,9 @@ docker login — вход в реестр Docker (https://hub.docker.com).
 Удаление образа
 	docker rmi Image1 Image2
 	docker rmi $(docker images -f dangling=true -q)
+		— удаление всех безымянных образов
 	docker rmi $(docker images -aq)
+		— удаление всех образов
 	docker system prune -a
 	    — удаление всех неиспользуемых контейнеров, сетей и образов, которым не назначено имя и тег.
 	docker system prune -a --volumes
