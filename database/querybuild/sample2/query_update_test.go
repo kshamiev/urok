@@ -7,9 +7,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var qu = sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
-
 func TestUpdate(t *testing.T) {
+	qu := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
+
 	sql, args, err := qu.
 		Update("orders").
 		Set("productcount", sq.Expr("products.productcount")).
