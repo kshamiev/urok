@@ -20,10 +20,10 @@ func main() {
 			sq.Eq{"col1": 1, "col2": 2},
 			sq.Eq{"col1": 3, "col2": 4},
 		}).
-		Where(
+		Where(sq.And{
 			sq.Eq{"col1": 1, "col2": 2},
 			sq.Eq{"col1": 3, "col2": 4},
-		).
+		}).
 		Limit(3).
 		ToSql()
 	debug.Dumper(sql, args, err)
