@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	sq "github.com/Masterminds/squirrel"
 
 	"github.com/kshamiev/urok/debug"
@@ -15,17 +13,17 @@ func main() {
 		From("users").
 		Join("emails USING (email_id)").
 		Where(sq.Eq{"deleted_at": nil}).
-		Where("name LIKE ?", fmt.Sprint("%", "QWERTY", "%")).
+		Where(sq.Like{"name": "%QWERTY%"}).
 		Where(sq.Eq{"username": []string{"moe", "larry", "curly", "shemp"}}).
 		Where(sq.Eq{"age": 45}).
 		Where(sq.Or{
 			sq.Eq{"col1": 1, "col2": 2},
 			sq.Eq{"col1": 3, "col2": 4},
 		}).
-		Where(sq.And{
+		Where(
 			sq.Eq{"col1": 1, "col2": 2},
 			sq.Eq{"col1": 3, "col2": 4},
-		}).
+		).
 		Limit(3).
 		ToSql()
 	debug.Dumper(sql, args, err)
