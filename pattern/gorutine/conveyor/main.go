@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"sync"
 )
 
 func main() {
@@ -14,15 +13,13 @@ func main() {
 	// при закрытии входящего канала все последующие (каналы и горутины)
 	// закрываются по завершении обработки последнего элемента автоматически
 	out := work(square(in))
-
-	var wg sync.WaitGroup
-	wg.Add(1)
+	done := make(chan bool)
 	go func() {
 		for val := range out {
 			fmt.Println("ответ конвейера: ", val)
 		}
 		fmt.Println("Концерт окончен")
-		wg.Done()
+		done <- true
 	}()
 
 	fmt.Println("Введите целое число либо слово exit (ctrl+D) для выхода")
@@ -42,7 +39,7 @@ func main() {
 		}
 	}
 	close(in)
-	wg.Wait()
+	<-done
 }
 
 func square(in <-chan int) <-chan int {
