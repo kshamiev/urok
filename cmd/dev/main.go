@@ -5,6 +5,7 @@ package main
 import (
 	"fmt"
 
+	sq "github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -17,4 +18,18 @@ func main() {
 	// select * from articles where avtor_id IN (?, ?, ?, ?, ?) and avtor_id IN (?, ?, ?, ?, ?) and status = true
 	// [1 2 3 4 5 11 12 13 14 15] <nil>
 	// <nil>
+	qu1 := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
+
+	q, arg, err := qu1.Select("*").
+		From("articles").
+		Where(sq.Eq{
+			"avtor_id":    args1,
+			"redaktor_id": args2,
+		}).
+		ToSql()
+	fmt.Println(q, arg, err)
+	// SELECT * FROM articles WHERE avtor_id IN ($1,$2,$3,$4,$5) AND redaktor_id IN ($6,$7,$8,$9,$10)
+	// [1 2 3 4 5 11 12 13 14 15]
+	// <nil>
+
 }
