@@ -1,3 +1,6 @@
+// go get github.com/golang/mock/gomock
+// go get github.com/golang/mock/mockgen
+
 package users
 
 import (
@@ -6,8 +9,8 @@ import (
 
 	"github.com/golang/mock/gomock"
 
-	"github.com/kshamiev/urok/codegen/06_mock/mocks"
 	"github.com/kshamiev/urok/codegen/06_mock/users"
+	"github.com/kshamiev/urok/codegen/06_mock/users/mocks"
 )
 
 func doSomeWork(u users.UserInterface) {

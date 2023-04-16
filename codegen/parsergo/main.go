@@ -9,7 +9,7 @@ import (
 
 func main() {
 	fset := token.NewFileSet()
-	f, err := parser.ParseFile(fset, "codegen/doc.go", nil, parser.ParseComments)
+	f, err := parser.ParseFile(fset, "codegen/parsergo/tp/users.go", nil, parser.ParseComments)
 	if err != nil {
 		log.Fatalln(err)
 	}

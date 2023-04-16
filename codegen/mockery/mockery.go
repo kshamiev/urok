@@ -4,7 +4,7 @@ package mockery
 
 import "context"
 
-//go:generate mockery  --dir . --name IOAuthProvider --output mockerytest
+//go:generate mockery  --dir . --name IOAuthProvider --output mockerytestb
 type IOAuthProvider interface {
 	GetConfig() Employee
 	GetAuthURL() string
