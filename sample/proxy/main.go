@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 	"time"
 
@@ -23,6 +24,8 @@ import (
 
 type Service struct {
 	store []string
+	mu    sync.Mutex
+	pos   int
 }
 
 func NewService() *Service {
@@ -35,8 +38,19 @@ func NewService() *Service {
 	}
 }
 
+func (s *Service) iterationServer() string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.pos++
+	if s.pos == len(s.store) {
+		s.pos = 0
+	}
+	// здесь можно реализовать проверку, что сервер в рабочем состоянии
+	return s.store[s.pos]
+}
+
 func (s *Service) Proxy(w http.ResponseWriter, r *http.Request) {
-	req, err := http.NewRequest(r.Method, s.store[0]+r.URL.String(), r.Body)
+	req, err := http.NewRequest(r.Method, s.iterationServer()+r.URL.String(), r.Body)
 	if err != nil {
 		http.Error(w, "Error: "+err.Error(), http.StatusBadRequest)
 		return
