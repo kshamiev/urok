@@ -32,5 +32,10 @@ func main() {
 	go printer(c)
 
 	var input string
-	_, _ = fmt.Scanln(&input)
+	for {
+		_, _ = fmt.Scanln(&input)
+		if input == "exit" {
+			break
+		}
+	}
 }

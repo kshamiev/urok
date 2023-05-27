@@ -9,6 +9,7 @@ require (
 	github.com/boombuler/barcode v1.0.1
 	github.com/disintegration/imaging v1.6.2
 	github.com/friendsofgo/errors v0.9.2
+	github.com/go-chi/chi v1.5.4
 	github.com/go-redis/cache/v8 v8.4.3
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/go-sql-driver/mysql v1.6.0
