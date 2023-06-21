@@ -125,7 +125,7 @@
 		"postgres-jdbc-18784d4b70f-353232ac0f55d3f": {
 			"provider": "postgresql",
 			"driver": "postgres-jdbc",
-			"name": "postgres",
+			"name": "docker",
 			"save-password": true,
 			"configuration": {
 				"host": "localhost",

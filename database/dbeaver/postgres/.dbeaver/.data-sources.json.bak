@@ -68,7 +68,7 @@
 						"save-password": true,
 						"properties": {
 							"host": "81.177.25.118",
-							"port": 22,
+							"port": 22.0,
 							"authType": "PASSWORD",
 							"implementation": "jsch",
 							"localHost": "",
@@ -120,6 +120,32 @@
 						}
 					}
 				}
+			}
+		},
+		"postgres-jdbc-18784d4b70f-353232ac0f55d3f": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "docker",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "5433",
+				"database": "postgres",
+				"url": "jdbc:postgresql://localhost:5433/postgres",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"provider-properties": {
+					"@dbeaver-show-non-default-db@": "false",
+					"@dbeaver-show-template-db@": "false",
+					"@dbeaver-show-unavailable-db@": "false",
+					"show-database-statistics": "false",
+					"@dbeaver-read-all-data-types-db@": "false",
+					"read-keys-with-columns": "false",
+					"@dbeaver-use-prepared-statements-db@": "false",
+					"postgresql.dd.plain.string": "false",
+					"postgresql.dd.tag.string": "false"
+				},
+				"auth-model": "native"
 			}
 		}
 	},
