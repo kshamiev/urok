@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram version="1" name="parser.erd">
+	<entities>
+		<data-source id="postgres-jdbc-17f7dd99231-76f87489cb11a201">
+			<entity id="1" name="fuel" fq-name="public.fuel" order="3" x="120" y="390">
+				<path name="public"/>
+				<path name="parser"/>
+			</entity>
+			<entity id="2" name="petrol_station" fq-name="public.petrol_station" order="1" x="150" y="210">
+				<path name="public"/>
+				<path name="parser"/>
+			</entity>
+			<entity id="3" name="company" fq-name="public.company" order="2" x="165" y="60">
+				<path name="public"/>
+				<path name="parser"/>
+			</entity>
+		</data-source>
+	</entities>
+	<notes>
+		<note id="4" order="0" color-bg="246,245,244" x="30" y="30" w="406" h="571">Note</note>
+	</notes>
+	<relations>
+		<relation name="fuel_fk" fq-name="public.fuel.fuel_fk" type="fk" pk-ref="2" fk-ref="1"/>
+		<relation name="petrol_station_fk" fq-name="public.petrol_station.petrol_station_fk" type="fk" pk-ref="3" fk-ref="2"/>
+	</relations>
+</diagram>

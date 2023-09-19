@@ -133,6 +133,27 @@ ORDER BY
 ;
 
 
+SELECT
+	i.*
+FROM
+	instructionfile i
+INNER JOIN 
+(
+	SELECT
+		i."FileName",
+		max(i."ChangingDate") AS actual
+	FROM
+		instructionfile i
+	GROUP BY
+		1
+) AS a ON
+	i."ChangingDate" = a.actual AND i."FileName" = a."FileName"
+WHERE
+	i."InstructionId" = 1
+ORDER BY
+	i."ChangingDate";
+
+
 
 
 

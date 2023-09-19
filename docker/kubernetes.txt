@@ -1,0 +1,30 @@
+Просмотр работающих контейнеров
+
+kubectl get pods
+
+Просмотр на каких портах работают контейнеры, сервисы, ноды, поды...)
+
+kubectl -n tn-directive-dev get svc
+kubectl get svc
+
+Проброс портов
+
+kubectl port-forward -n nameSpace nodeName-5bc57c7b79-zjqlb portLocal:portRemote
+kubectl port-forward -n tn-directive-dev service/be 8080:8080 # пробросить grpc порт backend
+kubectl port-forward -n tn-directive-dev service/be 8080:8081 # пробросить http порт backend
+kubectl port-forward -n tn-directive-dev service/postgres 8080:5432 # пробросить порт postgres
+kubectl port-forward -n tn-directive-dev service/envoy 8080:443 # пробросить порт envoy
+kubectl port-forward -n tn-directive-dev service/maildev 8000:80
+kubectl port-forward deployment/yarg 4567:4567
+
+kubectl port-forward service/maildev 8000:80
+
+Просмотр логов
+
+kubectl logs be-56677fc4d6-rkvc2 -f --tail 100 | head
+kubectl logs be-56677fc4d6-rkvc2 -f --tail 10
+
+Войти в работающий контейнер
+
+kubectl exec -it containerName-bc9fdff6c-td52j bash
+kubectl exec -it service/maildev bash

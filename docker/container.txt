@@ -75,11 +75,3 @@
 
     расположение томов
     /var/lib/docker/volumes
-
-KUBERNETES
-	kubectl logs -f nodeName-5bc57c7b79-zjqlb --namespace project-develop --context abp-dev --tail 100 | head
-    kubectl exec -it containerName-bc9fdff6c-td52j --namespace project-develop --context dev bash
-    kubectl get pods --namespace project_name-dev --context dev
-    kubectl port-forward postgresql-0 5434:5432  --namespace project-develop --context dev
-    kubectl port-forward minio-0 9000:9000  --namespace project-develop --context dev
-    kubectl port-forward deployment/yarg 4567:4567  --namespace project-develop --context dev

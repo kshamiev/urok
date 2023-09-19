@@ -66,3 +66,34 @@ WHERE
 	tt.firstname = 'Sam'
 	AND tt.company = 'HTC'
 ;
+
+UPDATE orders
+SET
+	(productcount, price) = 
+(
+SELECT 50, 50.50 
+FROM orders AS o
+	INNER JOIN customers ON o.customerid = customers.id 
+	INNER JOIN products ON o.productid = products.id 
+WHERE
+	customers.firstname = 'Sam'
+	AND products.company = 'HTC'
+)
+;
+		
+
+UPDATE orders
+SET
+	productcount = tt.productcount,
+	price = tt.price
+FROM (
+SELECT 70 productcount, 70.70 price, customers.firstname, products.company
+FROM orders AS o
+	INNER JOIN customers ON o.customerid = customers.id 
+	INNER JOIN products ON o.productid = products.id 
+) AS tt
+WHERE
+	tt.firstname = 'Sam'
+	AND tt.company = 'HTC'
+;
+

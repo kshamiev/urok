@@ -49,3 +49,23 @@ CREATE TABLE public.documents (
 );
 CREATE INDEX documents_deleted_at_idx10 ON public.documents USING btree (deleted_at);
 CREATE INDEX documents_updated_at_idx2 ON public.documents USING btree (updated_at);
+
+
+
+SELECT * FROM documents_main WHERE id = 2
+;
+
+SELECT * FROM documents_pl WHERE id = 1
+;
+
+
+SELECT * FROM Manticore.documents_delta
+;
+
+SHOW META;
+
+DESCRIBE documents_main;
+
+
+
+
