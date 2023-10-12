@@ -27,7 +27,7 @@ func main() {
 	copy(SlTest3, SlTest2)
 }
 
-// передача по значению
+// Передача по значению
 func sampleSlice(sl []int) {
 	sl[3] = 888
 	sl = append(sl, 100)
@@ -36,7 +36,7 @@ func sampleSlice(sl []int) {
 	fmt.Println(sl)
 }
 
-// передача по ссылке
+// Передача по ссылке
 func sampleSliceLink(sl *[]int) {
 	(*sl)[3] = 555
 	*sl = append(*sl, 100)
