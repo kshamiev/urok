@@ -10,20 +10,14 @@ import (
 
 func main() {
 	myApp := app.New()
-	var content *fyne.Container
-
-	// фиксированные размеры виджетов указанной в параметрах (50 на 50)
-	// Равномерное заполнение всего окна сверху в низ и слева на право
-	content = container.New(layout.NewGridWrapLayout(fyne.NewSize(50, 50)),
+	content := container.New(layout.NewGridWrapLayout(fyne.NewSize(50, 50)),
 		newWidget(20)...,
 	)
 	myWindow := myApp.NewWindow("GridWrapLayout")
 	myWindow.Resize(fyne.NewSize(600.0, 400.0))
 	myWindow.CenterOnScreen()
 	myWindow.SetContent(content)
-	myWindow.Show()
-
-	myApp.Run()
+	myWindow.ShowAndRun()
 }
 
 func newWidget(count int) []fyne.CanvasObject {
