@@ -129,18 +129,18 @@
 			"save-password": true,
 			"configuration": {
 				"host": "localhost",
-				"port": "5433",
+				"port": "49150",
 				"database": "postgres",
-				"url": "jdbc:postgresql://localhost:5433/postgres",
+				"url": "jdbc:postgresql://localhost:49150/postgres",
 				"configurationType": "MANUAL",
 				"type": "dev",
 				"provider-properties": {
-					"@dbeaver-show-non-default-db@": "false",
+					"@dbeaver-show-non-default-db@": "true",
 					"@dbeaver-show-template-db@": "false",
 					"@dbeaver-show-unavailable-db@": "false",
 					"show-database-statistics": "false",
-					"@dbeaver-read-all-data-types-db@": "false",
-					"read-keys-with-columns": "false",
+					"@dbeaver-read-all-data-types-db@": "true",
+					"read-keys-with-columns": "true",
 					"@dbeaver-use-prepared-statements-db@": "false",
 					"postgresql.dd.plain.string": "false",
 					"postgresql.dd.tag.string": "false"
