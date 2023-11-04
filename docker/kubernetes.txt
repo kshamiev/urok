@@ -16,8 +16,8 @@ kubectl port-forward -n tn-directive-dev service/postgres 8080:5432 # пробр
 kubectl port-forward -n tn-directive-dev service/envoy 8080:443 # пробросить порт envoy
 kubectl port-forward -n tn-directive-dev service/maildev 8000:80
 kubectl port-forward deployment/yarg 4567:4567
-
 kubectl port-forward service/maildev 8000:80
+kubectl port-forward postgres-0 5433:5432
 
 Просмотр логов
 
