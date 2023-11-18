@@ -2,22 +2,25 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"time"
-
-	uuidn "github.com/gofrs/uuid/v5"
-	"github.com/google/uuid"
 )
 
+func randNumsGenerator(n int) <-chan int {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	out := make(chan int)
+	go func() {
+		for i := 0; i < n; i++ {
+			out <- r.Intn(n)
+		}
+		close(out)
+	}()
+	return out
+}
+
 func main() {
-	fmt.Println("V4")
-	for i := 0; i < 10; i++ {
-		fmt.Println(uuid.New().String())
-		time.Sleep(time.Millisecond)
-	}
-	fmt.Println("V7")
-	for i := 0; i < 10; i++ {
-		u, _ := uuidn.NewV7()
-		fmt.Println(u.String())
-		time.Sleep(time.Millisecond)
+	for num := range randNumsGenerator(10) {
+		fmt.Println(num)
 	}
 }

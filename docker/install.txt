@@ -1,4 +1,4 @@
-Установка и удаление докера (https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+Установка и удаление докера (https://docs.docker.com/engine/install/ubuntu/)
 
 sudo systemctl enable docker.service
 sudo systemctl start docker.service
