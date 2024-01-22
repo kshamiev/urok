@@ -12,12 +12,17 @@ kubectl get svc
 kubectl port-forward -n nameSpace nodeName-5bc57c7b79-zjqlb portLocal:portRemote
 kubectl port-forward -n tn-directive-dev service/be 8080:8080 # пробросить grpc порт backend
 kubectl port-forward -n tn-directive-dev service/be 8080:8081 # пробросить http порт backend
-kubectl port-forward -n tn-directive-dev service/postgres 8080:5432 # пробросить порт postgres
+kubectl port-forward -n tn-directive-dev service/postgres 5435:5432 # пробросить порт postgres
 kubectl port-forward -n tn-directive-dev service/envoy 8080:443 # пробросить порт envoy
 kubectl port-forward -n tn-directive-dev service/maildev 8000:80
 kubectl port-forward deployment/yarg 4567:4567
 kubectl port-forward service/maildev 8000:80
-kubectl port-forward postgres-0 5433:5432
+kubectl port-forward postgres-0 5435:5432
+
+
+kubectl port-forward -n tn-directive-dev service/maildev 8000:80
+kubectl port-forward -n tn-directive-dev service/postgres 5435:5432
+
 
 Просмотр логов
 
