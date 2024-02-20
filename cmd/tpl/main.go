@@ -10,6 +10,8 @@ import (
 	"gitlab.tn.ru/golang/kit/tpl"
 )
 
+// go install github.com/kshamiev/urok/cmd/tpl@latest
+
 func main() {
 	f := map[string]interface{}{
 		"TplTest": func(name string) string {
