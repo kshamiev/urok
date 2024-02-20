@@ -11,6 +11,7 @@ import (
 )
 
 // install
+// go install github.com/kshamiev/urok/cmd/tpl@v1.0.4
 // go install github.com/kshamiev/urok/cmd/tpl@latest
 
 // use:
