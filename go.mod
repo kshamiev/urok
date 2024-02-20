@@ -5,7 +5,7 @@ go 1.21
 require (
 	bou.ke/monkey v1.0.2
 	github.com/Masterminds/squirrel v1.5.4
-	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.7.2
+	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.9.1
 	github.com/boombuler/barcode v1.0.1
 	github.com/disintegration/imaging v1.6.2
 	github.com/friendsofgo/errors v0.9.2
@@ -26,7 +26,8 @@ require (
 	github.com/volatiletech/null/v8 v8.1.2
 	github.com/volatiletech/sqlboiler/v4 v4.8.6
 	github.com/volatiletech/strmangle v0.0.1
-	github.com/xuri/excelize/v2 v2.5.0
+	github.com/xuri/excelize/v2 v2.8.0
+	gitlab.tn.ru/golang/kit v1.1.11
 	go.etcd.io/bbolt v1.3.7
 	go.mongodb.org/mongo-driver v1.8.4
 	go.opencensus.io v0.23.0
@@ -56,15 +57,20 @@ require (
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/snappy v0.0.3 // indirect
+	github.com/hhrutter/lzw v1.0.0 // indirect
+	github.com/hhrutter/tiff v1.0.1 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/lann/builder v0.0.0-20180802200727-47ae307949d0 // indirect
 	github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0 // indirect
 	github.com/lib/pq v1.10.2 // indirect
+	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
+	github.com/pdfcpu/pdfcpu v0.5.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/richardlehane/mscfb v1.0.3 // indirect
-	github.com/richardlehane/msoleps v1.0.1 // indirect
+	github.com/richardlehane/mscfb v1.0.4 // indirect
+	github.com/richardlehane/msoleps v1.0.3 // indirect
+	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
 	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/vmihailenco/go-tinylfu v0.2.2 // indirect
@@ -75,7 +81,8 @@ require (
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.0.2 // indirect
 	github.com/xdg-go/stringprep v1.0.2 // indirect
-	github.com/xuri/efp v0.0.0-20210322160811-ab561f5b45e3 // indirect
+	github.com/xuri/efp v0.0.0-20230802181842-ad255f2331ca // indirect
+	github.com/xuri/nfp v0.0.0-20230819163627-dc951e3ffe1a // indirect
 	github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d // indirect
 	go.opentelemetry.io/otel/metric v0.31.0 // indirect
 	golang.org/x/crypto v0.12.0 // indirect
@@ -83,6 +90,7 @@ require (
 	golang.org/x/image v0.11.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.11.0 // indirect
-	golang.org/x/text v0.12.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
