@@ -10,7 +10,12 @@ import (
 	"gitlab.tn.ru/golang/kit/tpl"
 )
 
+// install
 // go install github.com/kshamiev/urok/cmd/tpl@latest
+
+// use:
+// tpl -h
+// tpl -json data.json -in page_in.html -out page_out.html
 
 func main() {
 	f := map[string]interface{}{
