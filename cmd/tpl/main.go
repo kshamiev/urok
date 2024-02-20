@@ -14,6 +14,7 @@ import (
 // go install github.com/kshamiev/urok/cmd/tpl@latest
 
 // use:
+// Если пути относительные то отправной точкой считается директория из которой запущена программа
 // tpl -h
 // tpl -json data.json -in page_in.html -out page_out.html
 
@@ -31,7 +32,7 @@ func main() {
 
 	data, err := os.ReadFile(*fileJson)
 	if err != nil {
-		fmt.Println("ошибка json файла, данные ошибочны")
+		fmt.Println("ошибка json файла, данные ошибочны либо файл не найден")
 		log.Fatalln(err)
 	}
 	variable := map[string]interface{}{}
@@ -43,7 +44,7 @@ func main() {
 
 	res, err := tpl.ExecuteFile(*fileIn, f, variable)
 	if err != nil {
-		fmt.Println("ошибка компиляции шаблона")
+		fmt.Println("ошибка компиляции шаблона, возможно файл не найден")
 		log.Fatalln(err)
 	}
 
