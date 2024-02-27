@@ -7,11 +7,11 @@ import (
 	"log"
 	"os"
 
-	"gitlab.tn.ru/golang/kit/tpl"
+	"github.com/kshamiev/urok/tpl"
 )
 
 // install
-// go install github.com/kshamiev/urok/cmd/tpl@v1.0.4
+// go install github.com/kshamiev/urok/cmd/tpl@v1.0.5
 // go install github.com/kshamiev/urok/cmd/tpl@latest
 
 // use:
