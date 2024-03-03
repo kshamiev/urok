@@ -1,13 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
 	"os"
-
-	"github.com/kshamiev/urok/tpl"
+	"path/filepath"
+	"text/template"
 )
 
 // install
@@ -43,7 +44,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	res, err := tpl.ExecuteFile(*fileIn, f, variable)
+	res, err := ExecuteFile(*fileIn, f, variable)
 	if err != nil {
 		fmt.Println("ошибка компиляции шаблона, возможно файл не найден")
 		log.Fatalln(err)
@@ -54,4 +55,17 @@ func main() {
 		fmt.Println("ошибка сохранения результирующей страницы")
 		log.Fatalln(err)
 	}
+}
+
+// ExecuteFile компиляция html шаблона из указанного файла и сборка контента
+func ExecuteFile(viewPath string, funcS, variables map[string]interface{}) (*bytes.Buffer, error) {
+	t, err := template.New(filepath.Base(viewPath)).Funcs(funcS).ParseFiles(viewPath)
+	if err != nil {
+		return nil, err
+	}
+	ret := &bytes.Buffer{}
+	if err = t.Execute(ret, variables); err != nil {
+		return ret, err
+	}
+	return ret, nil
 }
