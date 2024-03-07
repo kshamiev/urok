@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"os"
 
@@ -19,16 +18,14 @@ func main() {
 	_ = os.WriteFile("cmd/dev/example.txt", []byte(s), os.ModePerm)
 
 	// Декодировка в UTF-8
-	f, e := os.Open("cmd/dev/example.txt")
+	f, e := os.ReadFile("cmd/dev/example.txt")
+	if e != nil {
+		log.Fatal(e)
+	}
+	decoder := charmap.Windows1251.NewDecoder()
+	b, e := decoder.Bytes(f)
 	if e != nil {
 		panic(e)
-	}
-	defer f.Close()
-	decoder := charmap.Windows1251.NewDecoder()
-	reader := decoder.Reader(f)
-	b, err := io.ReadAll(reader)
-	if err != nil {
-		panic(err)
 	}
 	fmt.Println(string(b))
 }
