@@ -14,10 +14,11 @@ import (
 func main() {
 	obj := Instant{}
 	sampleIF(obj)
+	sampleFOR()
 }
 
 // IF
-func sampleIF(obj Facer) {
+func sampleIF(obj Face) {
 	if _, ok := HashControl["qwerty1"]; ok {
 		fmt.Println("IF  Хеш index qwerty1 OK")
 	} else {
@@ -42,10 +43,11 @@ func sampleFOR() {
 
 	sl := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	for i := 0; i < len(sl); i++ {
-		// 1 инициализация индекса
+		// 1 инициализация индекса (i)
 		// 2 проверка условия
 		// 3 итерация
 		// 4 увеличение индекса
+		// далее пункт 1 для версии 1.22 и выше
 		fmt.Print(sl[i], " ")
 	}
 	fmt.Println()
@@ -60,10 +62,14 @@ func sampleFOR() {
 	}
 	fmt.Println()
 
+	for i := range 10 {
+		fmt.Print(10 - i)
+	}
+	fmt.Println()
 }
 
 // SWITCH
-func sampleSWITCH(obj Facer) {
+func sampleSWITCH(obj Face) {
 
 	switch t := obj.(type) {
 	default:
@@ -130,7 +136,7 @@ func (Instant) Load() {
 	fmt.Println("implement method LOAD")
 }
 
-type Facer interface {
+type Face interface {
 	Load()
 }
 

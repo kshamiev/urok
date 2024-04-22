@@ -1,6 +1,6 @@
 module github.com/kshamiev/urok
 
-go 1.21
+go 1.22
 
 require (
 	bou.ke/monkey v1.0.2
@@ -39,6 +39,7 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v0.31.0
 	go.opentelemetry.io/otel/trace v1.8.0
 	golang.org/x/net v0.14.0
+	golang.org/x/text v0.13.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -85,6 +86,5 @@ require (
 	golang.org/x/image v0.11.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.11.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 )

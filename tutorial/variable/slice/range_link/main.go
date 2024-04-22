@@ -18,7 +18,6 @@ func main() {
 	time.Sleep(5 * time.Second)
 }
 
-// что отобразится после вызова?
 func testData1() {
 	data := []string{"one", "two", "three"}
 	for _, v := range data {
@@ -28,7 +27,16 @@ func testData1() {
 	}
 }
 
-// что отобразится после вызова?
+// v 1.21
+// three
+// three
+// three
+
+// v 1.22
+// three
+// two
+// one
+
 func testData2() {
 	a := []int{1, 2, 3, 4}
 	result := make([]*int, len(a))
@@ -46,7 +54,14 @@ func testData2() {
 	fmt.Println()
 }
 
-// что отобразится после вызова?
+// v 1.21
+// 4 4 4 4
+// 8 8 8 8
+
+// v 1.22
+// 1 2 3 4
+// 2 2 3 4
+
 func testData3() {
 	a := []int{1, 2, 3, 4, 5, 6, 7, 8}
 	for i := range a {
@@ -55,3 +70,9 @@ func testData3() {
 		}()
 	}
 }
+
+// v 1.21
+// 7 8 8 8 8 8 8 8
+
+// v 1.22
+// 1 4 2 3 5 8 7 6
