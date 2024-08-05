@@ -11,6 +11,7 @@ import (
 // https://pkg.go.dev/plugin@master
 
 // Сначала нужно подготовить плагин
+// go build -buildmode=plugin
 
 // curl 'http://localhost:9999/example?name=Yuriy'
 // curl 'http://localhost:9999/reload'
