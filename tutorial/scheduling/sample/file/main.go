@@ -19,7 +19,7 @@ func main() {
 	docs := generateList(1e3)
 
 	fmt.Println(find("Go", docs))
-	fmt.Println(findConcurrent(runtime.NumCPU(), "Go", docs))
+	fmt.Println(findConcurrentOrParallel(runtime.NumCPU(), "Go", docs))
 }
 
 func generateList(totalDocs int) []string {
@@ -55,7 +55,7 @@ func find(topic string, docs []string) int {
 	return found
 }
 
-func findConcurrent(goroutines int, topic string, docs []string) int {
+func findConcurrentOrParallel(goroutines int, topic string, docs []string) int {
 	var found int64
 
 	ch := make(chan string, len(docs))
