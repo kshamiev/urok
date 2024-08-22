@@ -6,7 +6,7 @@ import (
 
 var ballastSet []byte
 
-// ps -eo pmem,comm,pid,maj_flt,min_flt,rss,vsz --sort -rss | numfmt --header --to=iec --field 4-5 | numfmt --header --from-unit=1024 --to=iec --field 6-7 | column -t | egrep "ballast.*"
+// ps -eo pmem,comm,pid,maj_flt,min_flt,rss,vsz --sort -rss | numfmt --header --from-unit=1024 --to=iec --field 6-7 | column -t | egrep "ballast.*"
 // VSZ выделенная виртуальная память
 // RSS выделенная физическая память
 func main() {
@@ -21,7 +21,4 @@ func main() {
 	// блокировка (процессоры отдыхают)
 	<-time.After(time.Hour)
 
-	// печка (печём блины на процессоре)
-	// for {
-	// }
 }
