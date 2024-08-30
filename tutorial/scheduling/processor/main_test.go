@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-// GOGC=off go test ./tutorial/scheduling/sample/processor/. -run none -bench . -benchtime=10x -count 1 -cpu 1
-// GOGC=off go test ./tutorial/scheduling/sample/processor/. -run none -bench . -benchtime=10x -count 1 -cpu 16
+// GOGC=off go test ./tutorial/scheduling/processor/. -run none -bench . -benchtime=10x -count 1 -cpu 1
+// GOGC=off go test ./tutorial/scheduling/processor/. -run none -bench . -benchtime=10x -count 1 -cpu 16
 
 var numbers = generateList(1e9)
 
