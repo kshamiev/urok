@@ -1,32 +1,19 @@
 package main
 
 import (
-	"fmt"
 	"time"
 )
+
+var ballast []byte
 
 // go build
 // GODEBUG=gctrace=1 ./trace
 func main() {
-	fmt.Println("start")
-
-	fmt.Println("1")
+	// ballast = make([]byte, 10<<30)
 	add(100000)
-	time.Sleep(time.Second)
-
-	fmt.Println("2")
 	add(100000)
-	time.Sleep(time.Second)
-
-	fmt.Println("3")
 	add(100000)
-	time.Sleep(time.Second)
-
-	fmt.Println("4")
 	add(100000)
-	time.Sleep(time.Second)
-
-	fmt.Println("5")
 	add(100000)
 	time.Sleep(time.Hour)
 }
