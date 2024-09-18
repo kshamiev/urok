@@ -2,7 +2,7 @@
 // (в канал никто не пишет)
 // или наоборот бесконечно пишем в канал который никто не будет читать.
 // Это справедливо в работе основной горутине (main).
-// В порожденных (дочерних) горутинах дедлока не будет. Так порождаются зомбо процессы. )))
+// В порожденных (дочерних) горутинах дедлока не будет. Так порождаются зомбо процессы и утечки.
 package main
 
 import (
@@ -26,7 +26,7 @@ func printer(c chan string) {
 }
 
 func main() {
-	var c chan string = make(chan string)
+	var c = make(chan string)
 
 	// c <- "ping"
 	// fatal error: all goroutines are asleep - deadlock!
@@ -38,5 +38,4 @@ func main() {
 
 	var input string
 	_, _ = fmt.Scanln(&input)
-	fmt.Println(input)
 }
