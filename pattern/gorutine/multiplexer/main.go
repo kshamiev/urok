@@ -26,7 +26,7 @@ func main() {
 	chMulti := multiplexer(ctx, ch1, ch2, ch3)
 
 	go func() {
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 3)
 		c()
 	}()
 
@@ -35,27 +35,22 @@ func main() {
 	}
 }
 
-type TTT interface {
-	~int | ~int8 | ~int16 | ~int32 | ~int64 | ~float32 | ~float64 | ~string
-}
-
-// func multiplexer[T TTT](ctx context.Context, fetchers ...<-chan T) <-chan interface{} {
 func multiplexer(ctx context.Context, fetchers ...<-chan interface{}) <-chan interface{} {
 	combinedFetcher := make(chan interface{})
 	var wg sync.WaitGroup
 	wg.Add(len(fetchers))
-	for _, f := range fetchers {
-		go func(f <-chan interface{}) {
+	for i := range fetchers {
+		go func(i int) {
 			for {
 				select {
-				case res := <-f:
+				case res := <-fetchers[i]:
 					combinedFetcher <- res
 				case <-ctx.Done():
 					wg.Done()
 					return
 				}
 			}
-		}(f)
+		}(i)
 	}
 	go func() {
 		wg.Wait()
