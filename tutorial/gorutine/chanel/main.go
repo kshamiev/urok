@@ -6,13 +6,13 @@ import (
 )
 
 func pinger(c chan string) {
-	for i := 0; ; i++ {
+	for {
 		c <- "ping"
 	}
 }
 
 func ponger(c chan string) {
-	for i := 0; ; i++ {
+	for {
 		c <- "pong"
 	}
 }
@@ -25,7 +25,7 @@ func printer(c chan string) {
 }
 
 func main() {
-	var c chan string = make(chan string)
+	var c = make(chan string)
 
 	go pinger(c)
 	go ponger(c)

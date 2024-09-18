@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-// go run -race main.go
+// go run -race ./race/main.go
 func main() {
 	Race()
 }

@@ -6,9 +6,9 @@ import (
 
 func main() {
 	ch := make(chan string, 20)
-	ch <- "popcorn"
-	ch <- "qwerty"
-	ch <- "vasya"
+	ch <- "echo"
+	ch <- "case,"
+	ch <- "if,"
 	close(ch)
 
 	for i := 0; i < 10; i++ {
@@ -16,18 +16,20 @@ func main() {
 		// 	fmt.Println("---" + v + "---")
 		// }
 
-		fmt.Println("!!!" + <-ch + "!!!")
+		fmt.Println(<-ch)
 
 		select {
+		// case val := <-ch:
+		// 	fmt.Println("select", val)
 		case val, ok := <-ch:
-			fmt.Println("+++"+val+"+++", ok)
+			fmt.Println("select", val, ok)
 		}
 
 		if val, ok := <-ch; ok {
-			fmt.Println("..." + val + "...")
+			fmt.Println(val, ok)
 		} else {
 			break
 		}
 	}
-	fmt.Println("ok")
+	fmt.Println("finish")
 }
