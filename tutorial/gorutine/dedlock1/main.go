@@ -17,8 +17,8 @@ func main() {
 	go player("ping", table)
 	go player("pong", table)
 
-	// table <- new(Ball) // Запуска мяча в игру (мяч не запускаем и все будут ждать...)
-	time.Sleep(1 * time.Second)
+	table <- new(Ball) // Запуска мяча в игру (мяч не запускаем и все будут ждать...)
+	time.Sleep(3 * time.Second)
 	<-table // Конец игры, забираем мяч
 }
 
