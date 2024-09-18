@@ -44,7 +44,6 @@ func multiplexer(ctx context.Context, fetchers ...<-chan interface{}) <-chan int
 	combinedFetcher := make(chan interface{})
 	var wg sync.WaitGroup
 	wg.Add(len(fetchers))
-
 	for _, f := range fetchers {
 		go func(f <-chan interface{}) {
 			for {
@@ -58,9 +57,6 @@ func multiplexer(ctx context.Context, fetchers ...<-chan interface{}) <-chan int
 			}
 		}(f)
 	}
-
-	// 4
-	// Удаление каналов
 	go func() {
 		wg.Wait()
 		close(combinedFetcher)
