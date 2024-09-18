@@ -1,5 +1,5 @@
 // nolint
-package layer_one
+package layer_two
 
 import (
 	"crypto/rand"
@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/kshamiev/urok/tutorial/gorutine/dtbus"
-	"github.com/kshamiev/urok/tutorial/gorutine/dtbus/sample/typs"
+	"github.com/kshamiev/urok/pattern/gorutine/producerconsumer/dtbus"
+	"github.com/kshamiev/urok/pattern/gorutine/producerconsumer/dtbus/sample/typs"
 )
 
 func ActionSend() {
@@ -18,7 +18,7 @@ func ActionSend() {
 		for {
 			i++
 			dtbus.Gist().SendData(&typs.General{
-				Name:   "send_layer_one_type_General" + strconv.Itoa(i),
+				Name:   "send_layer_two_type_General" + strconv.Itoa(i),
 				Amount: 1,
 			})
 			time.Sleep(time.Millisecond)
@@ -28,8 +28,8 @@ func ActionSend() {
 		var i int
 		for {
 			i++
-			dtbus.Gist().SendData(&typs.LayerOne{
-				Name:   "send_layer_one_type_LayerOne" + strconv.Itoa(i),
+			dtbus.Gist().SendData(&typs.LayerTwo{
+				Name:   "send_layer_two_type_LayerTwo" + strconv.Itoa(i),
 				Amount: 1,
 			})
 			time.Sleep(time.Millisecond)
@@ -43,8 +43,8 @@ func ActionConsumer() {
 		for {
 			ch := dtbus.Gist().Subscribe(&typs.General{})
 			go consumerGeneral(ch, genInt(100000))
-			ch = dtbus.Gist().Subscribe(&typs.LayerTwo{})
-			go consumerLayerTwo(ch, genInt(100000))
+			ch = dtbus.Gist().Subscribe(&typs.LayerOne{})
+			go consumerLayerOne(ch, genInt(100000))
 			time.Sleep(time.Second * 3)
 		}
 	}()
@@ -76,19 +76,19 @@ func consumerGeneral(ch chan interface{}, limit int) {
 	close(ch)
 }
 
-func consumerLayerTwo(ch chan interface{}, limit int) {
+func consumerLayerOne(ch chan interface{}, limit int) {
 	var i int
 	var ok bool
 	defer func() {
 		if rvr := recover(); rvr != nil {
 			// log.Println(fmt.Errorf("%+v", rvr))
 			close(ch)
-			ch = dtbus.Gist().Subscribe(&typs.LayerTwo{})
-			go consumerLayerTwo(ch, limit)
+			ch = dtbus.Gist().Subscribe(&typs.LayerOne{})
+			go consumerLayerOne(ch, limit)
 		}
 	}()
 	for obj := range ch {
-		_, ok = obj.(*typs.LayerTwo)
+		_, ok = obj.(*typs.LayerOne)
 		if !ok || limit == i {
 			break
 		}
