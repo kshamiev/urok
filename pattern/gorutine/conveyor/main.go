@@ -1,3 +1,4 @@
+// Конвейер
 package main
 
 import (
@@ -12,7 +13,7 @@ func main() {
 	// собственно сам конвейер (функции можно добавлять и вкладывать далее друг в друга
 	// при закрытии входящего канала все последующие (каналы и горутины)
 	// закрываются по завершении обработки последнего элемента автоматически
-	out := work(square(in))
+	out := mul(add(square(in)))
 	done := make(chan bool)
 	go func() {
 		for val := range out {
@@ -54,7 +55,19 @@ func square(in <-chan int) <-chan int {
 	return out
 }
 
-func work(in <-chan int) <-chan int {
+func add(in <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		var val int
+		for val = range in {
+			out <- val + val
+		}
+		close(out)
+	}()
+	return out
+}
+
+func mul(in <-chan int) <-chan int {
 	out := make(chan int)
 	go func() {
 		var val int
