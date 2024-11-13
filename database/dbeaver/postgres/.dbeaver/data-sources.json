@@ -1,38 +1,6 @@
 {
 	"folders": {},
 	"connections": {
-		"postgres-jdbc-17f7dd99231-76f87489cb11a201": {
-			"provider": "postgresql",
-			"driver": "postgres-jdbc",
-			"name": "localhost",
-			"save-password": true,
-			"show-system-objects": true,
-			"configuration": {
-				"host": "localhost",
-				"port": "5432",
-				"url": "jdbc:postgresql://localhost:5432/",
-				"configurationType": "MANUAL",
-				"type": "dev",
-				"properties": {
-					"connectTimeout": "20",
-					"loginTimeout": "20"
-				},
-				"provider-properties": {
-					"@dbeaver-show-non-default-db@": "true",
-					"@dbeaver-show-template-db@": "false",
-					"@dbeaver-show-unavailable-db@": "false",
-					"show-database-statistics": "true",
-					"@dbeaver-read-all-data-types-db@": "true",
-					"@dbeaver-use-prepared-statements-db@": "false",
-					"postgresql.dd.plain.string": "false",
-					"postgresql.dd.tag.string": "false"
-				},
-				"auth-model": "native"
-			},
-			"custom-properties": {
-				"database.props.expensive": "true"
-			}
-		},
 		"postgres-jdbc-18038c8d41e-18ad5a557678b2f7": {
 			"provider": "postgresql",
 			"driver": "postgres-jdbc",
@@ -45,6 +13,7 @@
 				"url": "jdbc:postgresql://localhost:5432/postgres",
 				"configurationType": "MANUAL",
 				"type": "dev",
+				"closeIdleConnection": false,
 				"properties": {
 					"connectTimeout": "20",
 					"loginTimeout": "20"
@@ -58,7 +27,8 @@
 					"@dbeaver-use-prepared-statements-db@": "false",
 					"postgresql.dd.plain.string": "false",
 					"postgresql.dd.tag.string": "false",
-					"read-keys-with-columns": "false"
+					"read-keys-with-columns": "false",
+					"@dbeaver-chosen-role@": ""
 				},
 				"auth-model": "native",
 				"handlers": {
@@ -67,10 +37,12 @@
 						"enabled": true,
 						"save-password": true,
 						"properties": {
-							"host": "81.177.25.118",
-							"port": 22.0,
-							"authType": "PASSWORD",
+							"host": "81.177.25.46",
+							"port": 22,
+							"authType": "PUBLIC_KEY",
+							"keyPath": "/home/konstantin/home/access/ssh/id_rsa",
 							"implementation": "jsch",
+							"shareTunnels": true,
 							"localHost": "",
 							"remoteHost": ""
 						}
@@ -88,38 +60,8 @@
 				"database": "/home/konstantin/.local/share/DBeaverData/workspace6/.metadata/sample-database-sqlite-1/Chinook.db",
 				"url": "jdbc:sqlite:/home/konstantin/.local/share/DBeaverData/workspace6/.metadata/sample-database-sqlite-1/Chinook.db",
 				"configurationType": "MANUAL",
-				"type": "dev"
-			}
-		},
-		"mysql8-18286ee85f2-23156986e502898d": {
-			"provider": "mysql",
-			"driver": "mysql8",
-			"name": "shamiev",
-			"save-password": true,
-			"configuration": {
-				"host": "localhost",
-				"port": "3306",
-				"url": "jdbc:mysql://localhost:3306/",
-				"configurationType": "MANUAL",
 				"type": "dev",
-				"auth-model": "native",
-				"handlers": {
-					"ssh_tunnel": {
-						"type": "TUNNEL",
-						"enabled": true,
-						"save-password": true,
-						"properties": {
-							"jumpServer0.authType": "PASSWORD",
-							"implementation": "jsch",
-							"bypassHostVerification": false,
-							"jumpServer0.port": 22.0,
-							"port": 22.0,
-							"jumpServer0.enabled": false,
-							"host": "81.177.25.46",
-							"authType": "PASSWORD"
-						}
-					}
-				}
+				"closeIdleConnection": false
 			}
 		},
 		"postgres-jdbc-18784d4b70f-353232ac0f55d3f": {
@@ -129,11 +71,16 @@
 			"save-password": true,
 			"configuration": {
 				"host": "localhost",
-				"port": "5433",
-				"database": "postgres",
-				"url": "jdbc:postgresql://localhost:5433/postgres",
+				"port": "5435",
+				"url": "jdbc:postgresql://localhost:5435/",
 				"configurationType": "MANUAL",
 				"type": "dev",
+				"closeIdleConnection": false,
+				"properties": {
+					"connectTimeout": "20",
+					"loginTimeout": "20",
+					"escapeSyntaxCallMode": "callIfNoReturn"
+				},
 				"provider-properties": {
 					"@dbeaver-show-non-default-db@": "true",
 					"@dbeaver-show-template-db@": "false",
@@ -143,9 +90,15 @@
 					"read-keys-with-columns": "true",
 					"@dbeaver-use-prepared-statements-db@": "false",
 					"postgresql.dd.plain.string": "false",
-					"postgresql.dd.tag.string": "false"
+					"postgresql.dd.tag.string": "false",
+					"@dbeaver-chosen-role@": ""
 				},
-				"auth-model": "native"
+				"auth-model": "native",
+				"handlers": {}
+			},
+			"custom-properties": {
+				"SQLEditor.format.keywordCaseAuto": "false",
+				"sql.proposals.insert.table.alias": "EXTENDED"
 			}
 		}
 	},
@@ -158,9 +111,11 @@
 			"confirm-execute": false,
 			"confirm-data-change": false,
 			"smart-commit": false,
-			"smart-commit-recover": false,
+			"smart-commit-recover": true,
 			"auto-close-transactions": true,
-			"close-transactions-period": 1800
+			"close-transactions-period": 1800,
+			"auto-close-connections": true,
+			"close-connections-period": 14400
 		}
 	}
 }

@@ -3,15 +3,19 @@ package main
 import "fmt"
 
 func main() {
-	newSlice()
+	fmt.Println("origin")
 	copySlice()
-}
-
-func newSlice() {
-	index := 3
-	list := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
-	listNew := append(list[0:index], list[index+1:]...)
-	fmt.Println(listNew)
+	fmt.Println("cut")
+	cutSlice()
+	fmt.Println("paste")
+	pasteSlice()
+	fmt.Println("paste vector")
+	res := Insert([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}, 5, 1, 2, 3)
+	fmt.Println(res)
+	res = Insert(nil, 5, 1, 2, 3)
+	fmt.Println(res)
+	res = Insert([]int{1, 2, 3}, 5, 1, 2, 3)
+	fmt.Println(res)
 }
 
 func copySlice() {
@@ -20,3 +24,40 @@ func copySlice() {
 	copy(SlTest3, SlTest2)
 	fmt.Println(SlTest3)
 }
+
+func cutSlice() {
+	index := 3
+	list := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+	listNew := append(list[:index-1], list[index:]...)
+	fmt.Println(listNew)
+}
+
+func pasteSlice() {
+	n := 0
+	index := 3
+	list := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+	listNew := append(list[:index+1], list[index:]...)
+	listNew[index] = n
+	fmt.Println(listNew)
+}
+
+func Insert(a []int, index int, b ...int) []int {
+	if n := len(a) + len(b); n <= cap(a) {
+		s2 := a[:n]
+		copy(s2[index+len(b):], a[index:])
+		copy(s2[index:], b)
+		return s2
+	}
+	s2 := make([]int, len(a)+len(b))
+
+	if index > len(a) {
+		index = len(a)
+	}
+
+	copy(s2, a[:index])
+	copy(s2[index:], b)
+	copy(s2[index+len(b):], a[index:])
+	return s2
+}
+
+// a = Insert(a, i, b...)
