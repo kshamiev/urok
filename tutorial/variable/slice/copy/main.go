@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"slices"
+)
 
 func main() {
 	fmt.Println("origin")
@@ -12,12 +15,18 @@ func main() {
 	fmt.Println("paste vector")
 	res := Insert([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}, 5, 1, 2, 3)
 	fmt.Println(res)
-	res = Insert(nil, 5, 1, 2, 3)
-	fmt.Println(res)
 	res = Insert([]int{1, 2, 3}, 5, 1, 2, 3)
 	fmt.Println(res)
 	res1 := Insert([]string{"1", "2", "3"}, 5, "1", "2", "3")
 	fmt.Println(res1)
+
+	res10 := slices.Insert([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}, 5, 1, 2, 3)
+	fmt.Println(res10)
+	res10 = slices.Insert([]int{1, 2, 3}, 3, 1, 2, 3)
+	fmt.Println(res10)
+	res11 := slices.Insert([]string{"1", "2", "3"}, 2, "1", "2", "3")
+	fmt.Println(res11)
+
 }
 
 func copySlice() {
