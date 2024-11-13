@@ -16,6 +16,8 @@ func main() {
 	fmt.Println(res)
 	res = Insert([]int{1, 2, 3}, 5, 1, 2, 3)
 	fmt.Println(res)
+	res1 := Insert([]string{"1", "2", "3"}, 5, "1", "2", "3")
+	fmt.Println(res1)
 }
 
 func copySlice() {
@@ -41,19 +43,17 @@ func pasteSlice() {
 	fmt.Println(listNew)
 }
 
-func Insert(a []int, index int, b ...int) []int {
+func Insert[T any](a []T, index int, b ...T) []T {
 	if n := len(a) + len(b); n <= cap(a) {
 		s2 := a[:n]
 		copy(s2[index+len(b):], a[index:])
 		copy(s2[index:], b)
 		return s2
 	}
-	s2 := make([]int, len(a)+len(b))
-
+	s2 := make([]T, len(a)+len(b))
 	if index > len(a) {
 		index = len(a)
 	}
-
 	copy(s2, a[:index])
 	copy(s2[index:], b)
 	copy(s2[index+len(b):], a[index:])
