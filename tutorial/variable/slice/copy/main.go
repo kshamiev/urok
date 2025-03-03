@@ -27,6 +27,8 @@ func main() {
 	res11 := slices.Insert([]string{"1", "2", "3"}, 2, "1", "2", "3")
 	fmt.Println(res11)
 
+	res10 = slices.Insert([]int{1, 2, 3}, 1, 9)
+	fmt.Println(res10)
 }
 
 func copySlice() {
