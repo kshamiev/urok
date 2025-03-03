@@ -26,6 +26,7 @@ require (
 	github.com/volatiletech/null/v8 v8.1.2
 	github.com/volatiletech/sqlboiler/v4 v4.8.6
 	github.com/volatiletech/strmangle v0.0.1
+	github.com/webnice/dic v1.3.1
 	github.com/xuri/excelize/v2 v2.8.0
 	go.etcd.io/bbolt v1.3.7
 	go.mongodb.org/mongo-driver v1.8.4

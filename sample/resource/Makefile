@@ -9,6 +9,6 @@ embed:
 	@if [ -d "www" ]; then \
 	export EMBEDDER_STATIC_BASE_DIR="${DIR}"; \
 	export EMBEDDER_STATIC_RESOURCES="www:www"; \
-	go run internal/resource/embedder/main.go; \
+	go run embedder/main.go; \
 	fi
 .PHONY: embed

@@ -558,6 +558,8 @@ github.com/volatiletech/sqlboiler/v4 v4.8.6 h1:Nn0SZOT/BZqwGaIQ6SMKmM0KyoPWsgWuq
 github.com/volatiletech/sqlboiler/v4 v4.8.6/go.mod h1:iJ1ENC0t2TToKM0wQkVcRgK+FnEDg1QrHkjsdY4Yp+k=
 github.com/volatiletech/strmangle v0.0.1 h1:UKQoHmY6be/R3tSvD2nQYrH41k43OJkidwEiC74KIzk=
 github.com/volatiletech/strmangle v0.0.1/go.mod h1:F6RA6IkB5vq0yTG4GQ0UsbbRcl3ni9P76i+JrTBKFFg=
+github.com/webnice/dic v1.3.1 h1:o//K7C5UjrGu40pl3O8PeFjSKIrHsBTH+t2jPPwdPjg=
+github.com/webnice/dic v1.3.1/go.mod h1:1eM1bn5o2yKM5hlpGZ+LJDHihK1Iuk/VSvcAq0dHQk0=
 github.com/xdg-go/pbkdf2 v1.0.0 h1:Su7DPu48wXMwC3bs7MCNG+z4FhcyEuz5dlvchbq0B0c=
 github.com/xdg-go/pbkdf2 v1.0.0/go.mod h1:jrpuAogTd400dnrH08LKmI/xc1MbPOebTwRqcT5RDeI=
 github.com/xdg-go/scram v1.0.2 h1:akYIkZ28e6A96dkWNJQu3nmCzH3YfwMPQExUYDaRv7w=
