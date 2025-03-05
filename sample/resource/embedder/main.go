@@ -53,8 +53,6 @@ type (
 	configuration struct {
 		Package string                   // Название пакета.
 		Path    string                   // Директория размещения создаваемых файлов.
-		WorkDir string                   // Текущая рабочая директория.
-		BaseDir string                   // Корневая директория статических ресурсов.
 		Sources map[string]resourceGroup // Встраиваемые ресурсы.
 	}
 	resourceGroup struct {
@@ -104,16 +102,8 @@ func main() {
 }
 
 // Загрузка конфигурации из аргументов командной строки и переменных окружения.
-func getArg() (cfg *configuration, err error) {
-	const envEmbedderStaticBaseDir, envEmbedderStaticResources = "EMBEDDER_STATIC_BASE_DIR", "EMBEDDER_STATIC_RESOURCES"
-	var (
-		abs      func(string, string) string
-		source   string
-		src, tmp []string
-		n        int
-	)
-
-	abs = func(wd, p string) string {
+func getArg() (*configuration, error) {
+	abs := func(wd, p string) string {
 		if p == "" || (p != "" && p[0] != '/') {
 			p = path.Join(wd, p)
 		}
@@ -121,27 +111,24 @@ func getArg() (cfg *configuration, err error) {
 	}
 	_, filePath, _, _ := runtime.Caller(0)
 	filePath = path.Dir(path.Dir(filePath))
-	cfg = &configuration{
+	cfg := &configuration{
 		Package: path.Base(filePath),
 		Path:    filePath,
 		Sources: make(map[string]resourceGroup),
 	}
-	if cfg.WorkDir, err = os.Getwd(); err != nil {
-		err = fmt.Errorf("ошибка получения текущей директории: %w", err)
-		return
+	workDir, err := os.Getwd()
+	if err != nil {
+		return nil, fmt.Errorf("ошибка получения текущей директории: %w", err)
 	}
-	cfg.BaseDir, source = os.Getenv(envEmbedderStaticBaseDir), os.Getenv(envEmbedderStaticResources)
-	cfg.BaseDir, src = path.Join(abs(cfg.WorkDir, cfg.BaseDir), "."), strings.Split(source, ",")
-	for n = range src {
-		if tmp = strings.Split(src[n], ":"); len(tmp) != 2 {
+	src := strings.Split(os.Getenv("EMBED_STATIC_RESOURCES"), ",")
+	for n := range src {
+		tmp := strings.Split(src[n], ":") // tmp[0] - группа, tmp[1] - папка с файлами
+		if len(tmp) != 2 {
 			continue
 		}
-		source = strings.ToLower(tmp[0])
-		tmp[1] = abs(cfg.BaseDir, tmp[1])
-		cfg.Sources[source] = resourceGroup{Path: tmp[1]}
+		cfg.Sources[strings.ToLower(tmp[0])] = resourceGroup{Path: abs(workDir, tmp[1])}
 	}
-
-	return
+	return cfg, nil
 }
 
 // Получение списка всех файлов ресурсов с необходимыми атрибутами.

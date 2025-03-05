@@ -11,9 +11,9 @@ import (
 
 // Генератор кода встраиваемых ресурсов. Аргументы:
 // Ожидаются переменные окружения:
-// EMBEDDER_STATIC_BASE_DIR  - Корневая директория статических ресурсов.
-// EMBEDDER_STATIC_RESOURCES - Группы ресурсов и папками самих ресурсов.
-//                             Формат: group_name1:path/to/folder1,group_name2:path/to/folder2
+// EMBED_STATIC_RESOURCES - Группы ресурсов и папками самих ресурсов.
+//     Формат: group_name1:path/to/folder1,group_name2:/absolut/path/to/folder2
+// Относительные пути берутся от текущей рабочей директории
 //
 // Создаются .go файлы по следующему шаблону:
 // resource_{{ groupName }}_{{ resourceNumber }}.go
