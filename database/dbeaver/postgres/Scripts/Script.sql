@@ -1,1 +1,1 @@
-select * from gopg_migrations order by created_at desc limit 1;
+SELECT * from users order by id ASC limit 3

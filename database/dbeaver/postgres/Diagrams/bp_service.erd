@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram version="1" name="bp_service.erd">
+	<entities>
+		<data-source id="postgres-jdbc-195bdeb57a6-42c980016b823375">
+			<entity id="1" name="action_parameter_fields" fq-name="public.action_parameter_fields" order="0" font="Segoe UI:9:0" x="579" y="557">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="2" name="action_parameters" fq-name="public.action_parameters" order="1" font="Segoe UI:9:0" x="336" y="536">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="3" name="action_template_on_steps" fq-name="public.action_template_on_steps" order="2" font="Segoe UI:9:0" x="579" y="1351">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="4" name="action_template_user_actions" fq-name="public.action_template_user_actions" order="3" font="Segoe UI:9:0" x="289" y="846">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="5" name="action_templates" fq-name="public.action_templates" order="4" border-width="3" font="Segoe UI:9:0" x="890" y="1034">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="6" name="assigned_user_actions" fq-name="public.assigned_user_actions" order="5" font="Segoe UI:9:0" x="289" y="293">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="7" name="completed_user_actions" fq-name="public.completed_user_actions" order="6" font="Segoe UI:9:0" x="40" y="430">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="8" name="group_on_actions" fq-name="public.group_on_actions" order="7" font="Segoe UI:9:0" x="289" y="990">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="9" name="groups" fq-name="public.&quot;groups&quot;" order="8" font="Segoe UI:9:0" x="579" y="742">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="10" name="process_step_action_groups" fq-name="public.process_step_action_groups" order="9" font="Segoe UI:9:0" x="1131" y="532">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="11" name="process_step_relations" fq-name="public.process_step_relations" order="10" font="Segoe UI:9:0" x="1049" y="51">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="12" name="process_step_user_action_fields" fq-name="public.process_step_user_action_fields" order="11" font="Segoe UI:9:0" x="662" y="86">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="13" name="process_step_user_actions" fq-name="public.process_step_user_actions" order="12" font="Segoe UI:9:0" x="1063" y="241">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="14" name="process_steps" fq-name="public.process_steps" order="13" font="Segoe UI:9:0" x="1383" y="40">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="15" name="processes" fq-name="public.processes" order="14" font="Segoe UI:9:0" x="1404" y="665">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="16" name="route_fields" fq-name="public.route_fields" order="15" font="Segoe UI:9:0" x="1672" y="390">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="17" name="route_steps" fq-name="public.route_steps" order="16" font="Segoe UI:9:0" x="1582" y="933">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="18" name="route_versions" fq-name="public.route_versions" order="17" font="Segoe UI:9:0" x="1651" y="678">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="19" name="routes" fq-name="public.routes" order="18" font="Segoe UI:9:0" x="1888" y="650">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="20" name="statuses" fq-name="public.statuses" order="19" font="Segoe UI:9:0" x="1423" y="380">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="21" name="user_action_on_steps" fq-name="public.user_action_on_steps" order="20" font="Segoe UI:9:0" x="289" y="1263">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+			<entity id="22" name="user_actions" fq-name="public.user_actions" order="21" font="Segoe UI:9:0" x="579" y="1046">
+				<path name="public"/>
+				<path name="bp_service"/>
+			</entity>
+		</data-source>
+	</entities>
+	<relations>
+		<relation name="fk_action_parameter_fields_action_parameter_id" fq-name="public.action_parameter_fields.fk_action_parameter_fields_action_parameter_id" type="fk" pk-ref="2" fk-ref="1"/>
+		<relation name="fk_action_template_user_actions_template_id" fq-name="public.action_template_user_actions.fk_action_template_user_actions_template_id" type="fk" pk-ref="2" fk-ref="4"/>
+		<relation name="fk_user_actions_action_parameter_id" fq-name="public.user_actions.fk_user_actions_action_parameter_id" type="fk" pk-ref="2" fk-ref="22"/>
+		<relation name="fk_action_template_on_steps_template_id" fq-name="public.action_template_on_steps.fk_action_template_on_steps_template_id" type="fk" pk-ref="5" fk-ref="3"/>
+		<relation name="fk_completed_user_actions_assign_id" fq-name="public.completed_user_actions.fk_completed_user_actions_assign_id" type="fk" pk-ref="6" fk-ref="7"/>
+		<relation name="fk_group_on_actions_group_id" fq-name="public.group_on_actions.fk_group_on_actions_group_id" type="fk" pk-ref="9" fk-ref="8"/>
+		<relation name="fk_process_step_action_groups_user_group_id" fq-name="public.process_step_action_groups.fk_process_step_action_groups_user_group_id" type="fk" pk-ref="9" fk-ref="10"/>
+		<relation name="fk_assigned_user_actions_action_id" fq-name="public.assigned_user_actions.fk_assigned_user_actions_action_id" type="fk" pk-ref="13" fk-ref="6"/>
+		<relation name="fk_completed_user_actions_action_id" fq-name="public.completed_user_actions.fk_completed_user_actions_action_id" type="fk" pk-ref="13" fk-ref="7"/>
+		<relation name="fk_process_step_action_groups_user_action_id" fq-name="public.process_step_action_groups.fk_process_step_action_groups_user_action_id" type="fk" pk-ref="13" fk-ref="10"/>
+		<relation name="fk_process_step_relations_user_action_id" fq-name="public.process_step_relations.fk_process_step_relations_user_action_id" type="fk" pk-ref="13" fk-ref="11"/>
+		<relation name="fk_process_step_action_fields_user_action_id" fq-name="public.process_step_user_action_fields.fk_process_step_action_fields_user_action_id" type="fk" pk-ref="13" fk-ref="12"/>
+		<relation name="fk_process_step_relations_source_id" fq-name="public.process_step_relations.fk_process_step_relations_source_id" type="fk" pk-ref="14" fk-ref="11"/>
+		<relation name="fk_process_step_relations_target_id" fq-name="public.process_step_relations.fk_process_step_relations_target_id" type="fk" pk-ref="14" fk-ref="11"/>
+		<relation name="fk_process_step_user_actions_step_id" fq-name="public.process_step_user_actions.fk_process_step_user_actions_step_id" type="fk" pk-ref="14" fk-ref="13"/>
+		<relation name="fk_action_template_on_steps_route_step_id" fq-name="public.action_template_on_steps.fk_action_template_on_steps_route_step_id" type="fk" pk-ref="17" fk-ref="3"/>
+		<relation name="fk_user_action_on_steps_route_step_id" fq-name="public.user_action_on_steps.fk_user_action_on_steps_route_step_id" type="fk" pk-ref="17" fk-ref="21"/>
+		<relation name="fk_action_templates_route_id" fq-name="public.action_templates.fk_action_templates_route_id" type="fk" pk-ref="18" fk-ref="5"/>
+		<relation name="fk_groups_route_id" fq-name="public.&quot;groups&quot;.fk_groups_route_id" type="fk" pk-ref="18" fk-ref="9">
+			<bend type="abs" x="890" y="955"/>
+			<bend type="abs" x="1194" y="955"/>
+		</relation>
+		<relation name="fk_processes_route_id" fq-name="public.processes.fk_processes_route_id" type="fk" pk-ref="18" fk-ref="15"/>
+		<relation name="fk_route_fields_route_id" fq-name="public.route_fields.fk_route_fields_route_id" type="fk" pk-ref="18" fk-ref="16"/>
+		<relation name="fk_route_steps_route_id" fq-name="public.route_steps.fk_route_steps_route_id" type="fk" pk-ref="18" fk-ref="17"/>
+		<relation name="fk_statuses_route_id" fq-name="public.statuses.fk_statuses_route_id" type="fk" pk-ref="18" fk-ref="20"/>
+		<relation name="fk_route_versions_route_id" fq-name="public.route_versions.fk_route_versions_route_id" type="fk" pk-ref="19" fk-ref="18"/>
+		<relation name="fk_action_parameters_status_id" fq-name="public.action_parameters.fk_action_parameters_status_id" type="fk" pk-ref="20" fk-ref="2"/>
+		<relation name="fk_process_step_user_next_status_id" fq-name="public.process_step_user_actions.fk_process_step_user_next_status_id" type="fk" pk-ref="20" fk-ref="13"/>
+		<relation name="fk_process_steps_last_status_id" fq-name="public.process_steps.fk_process_steps_last_status_id" type="fk" pk-ref="20" fk-ref="14"/>
+		<relation name="fk_process_steps_start_status_id" fq-name="public.process_steps.fk_process_steps_start_status_id" type="fk" pk-ref="20" fk-ref="14"/>
+		<relation name="fk_processes_status_id" fq-name="public.processes.fk_processes_status_id" type="fk" pk-ref="20" fk-ref="15"/>
+		<relation name="fk_route_steps_status_id" fq-name="public.route_steps.fk_route_steps_status_id" type="fk" pk-ref="20" fk-ref="17"/>
+		<relation name="fk_action_template_user_actions_action_id" fq-name="public.action_template_user_actions.fk_action_template_user_actions_action_id" type="fk" pk-ref="22" fk-ref="4"/>
+		<relation name="fk_group_on_actions_user_action_id" fq-name="public.group_on_actions.fk_group_on_actions_user_action_id" type="fk" pk-ref="22" fk-ref="8"/>
+		<relation name="fk_user_action_on_steps_user_action_id" fq-name="public.user_action_on_steps.fk_user_action_on_steps_user_action_id" type="fk" pk-ref="22" fk-ref="21"/>
+	</relations>
+</diagram>

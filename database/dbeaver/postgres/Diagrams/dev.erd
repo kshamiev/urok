@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram version="1" name="dev">
+	<entities>
+		<data-source id="postgres-jdbc-18784d4b70f-353232ac0f55d3f">
+			<entity id="1" name="carrying_capacities" fq-name="public.carrying_capacities">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="2" name="cc_business_units" fq-name="public.cc_business_units">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="3" name="counterparties" fq-name="public.counterparties">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="4" name="counterparty_consignees" fq-name="public.counterparty_consignees">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="5" name="counterparty_contracts" fq-name="public.counterparty_contracts">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="6" name="counterparty_managers" fq-name="public.counterparty_managers">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="7" name="counterparty_sources" fq-name="public.counterparty_sources">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="8" name="counterparty_types" fq-name="public.counterparty_types">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="9" name="countries" fq-name="public.countries">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="10" name="csc_permission_transport_types" fq-name="public.csc_permission_transport_types">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="11" name="csc_to_okses" fq-name="public.csc_to_okses">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="12" name="currencies" fq-name="public.currencies">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="13" name="customer_service_centers" fq-name="public.customer_service_centers">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="14" name="departments" fq-name="public.departments">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="15" name="discount_groups" fq-name="public.discount_groups">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="16" name="gar_regions" fq-name="public.gar_regions">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="17" name="geo_regions" fq-name="public.geo_regions">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="18" name="gopg_migrations" fq-name="public.gopg_migrations">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="19" name="lines_of_activity" fq-name="public.lines_of_activity">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="20" name="managers" fq-name="public.managers">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="21" name="measure_units" fq-name="public.measure_units">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="22" name="okses" fq-name="public.okses">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="23" name="organizations" fq-name="public.organizations">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="24" name="partners" fq-name="public.partners">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="25" name="pref_loading_intervals" fq-name="public.pref_loading_intervals">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="26" name="production_division_global_parameters" fq-name="public.production_division_global_parameters">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="27" name="production_divisions" fq-name="public.production_divisions">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="28" name="railway_stations" fq-name="public.railway_stations">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="29" name="regions" fq-name="public.regions">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="30" name="sales_regions" fq-name="public.sales_regions">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="31" name="seller_loading_points" fq-name="public.seller_loading_points">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="32" name="slp_to_cscs" fq-name="public.slp_to_cscs">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="33" name="slp_to_global_pd" fq-name="public.slp_to_global_pd">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="34" name="slp_to_orgs" fq-name="public.slp_to_orgs">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="35" name="sources" fq-name="public.sources">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="36" name="state_contracts" fq-name="public.state_contracts">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="37" name="strategic_business_units" fq-name="public.strategic_business_units">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="38" name="time_zone_region" fq-name="public.time_zone_region">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="39" name="transport_types" fq-name="public.transport_types">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+			<entity id="40" name="union_local_parameters" fq-name="public.union_local_parameters">
+				<path name="public"/>
+				<path name="nsi"/>
+			</entity>
+		</data-source>
+	</entities>
+	<relations>
+		<relation name="counterparty_managers_counterparty_id_fkey" fq-name="public.counterparty_managers.counterparty_managers_counterparty_id_fkey" type="fk" pk-ref="3" fk-ref="6"/>
+		<relation name="counterparty_sources_counterparty_id_fkey" fq-name="public.counterparty_sources.counterparty_sources_counterparty_id_fkey" type="fk" pk-ref="3" fk-ref="7"/>
+		<relation name="counterparties_type_id_fkey" fq-name="public.counterparties.counterparties_type_id_fkey" type="fk" pk-ref="8" fk-ref="3"/>
+		<relation name="counterparty_types_parent_id_fkey" fq-name="public.counterparty_types.counterparty_types_parent_id_fkey" type="fk" pk-ref="8" fk-ref="8"/>
+		<relation name="csc_permission_transport_type_customer_service_center_guid_fkey" fq-name="public.csc_permission_transport_types.csc_permission_transport_type_customer_service_center_guid_fkey" type="fk" pk-ref="13" fk-ref="10"/>
+		<relation name="countries_geo_region_guid_fkey" fq-name="public.countries.countries_geo_region_guid_fkey" type="fk" pk-ref="17" fk-ref="9"/>
+		<relation name="geo_regions_parent_guid_fkey" fq-name="public.geo_regions.geo_regions_parent_guid_fkey" type="fk" pk-ref="17" fk-ref="17"/>
+		<relation name="counterparty_managers_manager_id_fkey" fq-name="public.counterparty_managers.counterparty_managers_manager_id_fkey" type="fk" pk-ref="20" fk-ref="6"/>
+		<relation name="okses_parent_guid_fkey" fq-name="public.okses.okses_parent_guid_fkey" type="fk" pk-ref="22" fk-ref="22"/>
+		<relation name="counterparties_partner_id_fkey" fq-name="public.counterparties.counterparties_partner_id_fkey" type="fk" pk-ref="24" fk-ref="3"/>
+		<relation name="gar_regions_region_guid_fkey" fq-name="public.gar_regions.gar_regions_region_guid_fkey" type="fk" pk-ref="29" fk-ref="16"/>
+		<relation name="regions_parent_guid_fkey" fq-name="public.regions.regions_parent_guid_fkey" type="fk" pk-ref="29" fk-ref="29"/>
+		<relation name="counterparties_sales_region_guid_fkey" fq-name="public.counterparties.counterparties_sales_region_guid_fkey" type="fk" pk-ref="30" fk-ref="3"/>
+		<relation name="sales_regions_parent_guid_fkey" fq-name="public.sales_regions.sales_regions_parent_guid_fkey" type="fk" pk-ref="30" fk-ref="30"/>
+		<relation name="counterparty_sources_source_id_fkey" fq-name="public.counterparty_sources.counterparty_sources_source_id_fkey" type="fk" pk-ref="35" fk-ref="7"/>
+		<relation name="carrying_capacities_transport_type_guid_fkey" fq-name="public.carrying_capacities.carrying_capacities_transport_type_guid_fkey" type="fk" pk-ref="39" fk-ref="1"/>
+		<relation name="csc_permission_transport_types_transport_type_guid_fkey" fq-name="public.csc_permission_transport_types.csc_permission_transport_types_transport_type_guid_fkey" type="fk" pk-ref="39" fk-ref="10"/>
+	</relations>
+</diagram>

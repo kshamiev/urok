@@ -38,7 +38,7 @@
 						"save-password": true,
 						"properties": {
 							"host": "81.177.25.46",
-							"port": 22,
+							"port": 22.0,
 							"authType": "PUBLIC_KEY",
 							"keyPath": "/home/konstantin/home/access/ssh/id_rsa",
 							"implementation": "jsch",
@@ -93,12 +93,59 @@
 					"postgresql.dd.tag.string": "false",
 					"@dbeaver-chosen-role@": ""
 				},
-				"auth-model": "native",
-				"handlers": {}
+				"auth-model": "native"
 			},
 			"custom-properties": {
 				"SQLEditor.format.keywordCaseAuto": "false",
 				"sql.proposals.insert.table.alias": "EXTENDED"
+			}
+		},
+		"postgres-jdbc-195bdeb57a6-42c980016b823375": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "temporal",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "5436",
+				"url": "jdbc:postgresql://localhost:5436/",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"properties": {
+					"connectTimeout": "20",
+					"loginTimeout": "20",
+					"escapeSyntaxCallMode": "callIfNoReturn"
+				},
+				"provider-properties": {
+					"@dbeaver-show-non-default-db@": "true",
+					"@dbeaver-chosen-role@": "",
+					"@dbeaver-show-template-db@": "false",
+					"@dbeaver-show-unavailable-db@": "false",
+					"show-database-statistics": "true",
+					"@dbeaver-read-all-data-types-db@": "true",
+					"read-keys-with-columns": "true",
+					"replace-legacy-timezone": "false",
+					"@dbeaver-use-prepared-statements-db@": "false",
+					"postgresql.dd.plain.string": "false",
+					"postgresql.dd.tag.string": "false"
+				},
+				"auth-model": "native"
+			}
+		},
+		"elastic_search_jdbc-197019061cb-3b74112d696737be": {
+			"provider": "elasticsearch",
+			"driver": "elastic_search_jdbc",
+			"name": "localhost",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "9200",
+				"url": "jdbc:es://localhost:9200/",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
 			}
 		}
 	},
