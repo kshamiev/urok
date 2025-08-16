@@ -1,7 +1,6 @@
 package raszdel1
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/shopspring/decimal"
@@ -29,21 +28,18 @@ func Euclid(a, b float64) bool {
 		d1 = decimal.NewFromFloat(b)
 		d2 = decimal.NewFromFloat(a)
 	}
-	d3 = d1.Mod(d2)
-	fmt.Println("d3 остаток от деления:", d3)
-	if d3.Equal(decimal.NewFromInt(0)) {
-		return true
+	for {
+		d3 = d1.Mod(d2)
+		// fmt.Println("d3 остаток от деления:", d1, d2, d3)
+		if d3.Equal(decimal.NewFromInt(0)) {
+			return true
+		}
+		if d3.LessThan(decimal.NewFromInt(1)) {
+			return false // дошли до конца деления
+		}
+		d1 = d2
+		d2 = d3
 	}
-
-	n1 := d1.Div(d2).Truncate(9)
-	n1 = n1.Sub(n1.Floor())
-	fmt.Println("n1 пропорциональный остаток от деления:", n1)
-
-	n2 := d2.Div(d3).Truncate(9)
-	n2 = n2.Sub(n2.Floor())
-	fmt.Println("n2 пропорциональный остаток от следующего деления:", n2)
-
-	return n1.Equal(n2)
 }
 
 // 3

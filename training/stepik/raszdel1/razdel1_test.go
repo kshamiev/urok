@@ -21,10 +21,12 @@ func TestEuclid(t *testing.T) {
 	c = Euclid(math.Sqrt(2), 1)
 	t.Log(c)
 
+	c = Euclid(2.5, 1)
+	t.Log(c)
+
 	c = Euclid(24, 6)
 	t.Log(c)
 
-	// 24x18 - 18x6 - 0
 	c = Euclid(24, 18)
 	t.Log(c)
 }
