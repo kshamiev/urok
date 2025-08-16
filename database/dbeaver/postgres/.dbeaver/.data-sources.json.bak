@@ -103,12 +103,12 @@
 		"postgres-jdbc-195bdeb57a6-42c980016b823375": {
 			"provider": "postgresql",
 			"driver": "postgres-jdbc",
-			"name": "bp-service",
+			"name": "temporal",
 			"save-password": true,
 			"configuration": {
 				"host": "localhost",
-				"port": "5432",
-				"url": "jdbc:postgresql://localhost:5432/",
+				"port": "5436",
+				"url": "jdbc:postgresql://localhost:5436/",
 				"configurationType": "MANUAL",
 				"type": "dev",
 				"closeIdleConnection": true,
@@ -130,8 +130,22 @@
 					"postgresql.dd.plain.string": "false",
 					"postgresql.dd.tag.string": "false"
 				},
-				"auth-model": "native",
-				"handlers": {}
+				"auth-model": "native"
+			}
+		},
+		"elastic_search_jdbc-197019061cb-3b74112d696737be": {
+			"provider": "elasticsearch",
+			"driver": "elastic_search_jdbc",
+			"name": "localhost",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "9200",
+				"url": "jdbc:es://localhost:9200/",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
 			}
 		}
 	},

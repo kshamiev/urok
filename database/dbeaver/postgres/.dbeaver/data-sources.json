@@ -9,8 +9,7 @@
 			"configuration": {
 				"host": "localhost",
 				"port": "5432",
-				"database": "postgres",
-				"url": "jdbc:postgresql://localhost:5432/postgres",
+				"url": "jdbc:postgresql://localhost:5432/",
 				"configurationType": "MANUAL",
 				"type": "dev",
 				"closeIdleConnection": false,
@@ -38,7 +37,7 @@
 						"save-password": true,
 						"properties": {
 							"host": "81.177.25.46",
-							"port": 22.0,
+							"port": 22,
 							"authType": "PUBLIC_KEY",
 							"keyPath": "/home/konstantin/home/access/ssh/id_rsa",
 							"implementation": "jsch",
@@ -67,7 +66,7 @@
 		"postgres-jdbc-18784d4b70f-353232ac0f55d3f": {
 			"provider": "postgresql",
 			"driver": "postgres-jdbc",
-			"name": "docker",
+			"name": "docker-pg",
 			"save-password": true,
 			"configuration": {
 				"host": "localhost",
@@ -147,13 +146,28 @@
 				"closeIdleConnection": true,
 				"auth-model": "native"
 			}
+		},
+		"mariaDB-19848706c12-546bb8307f08ad76": {
+			"provider": "mysql",
+			"driver": "mariaDB",
+			"name": "docker-maria",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "9906",
+				"url": "jdbc:mariadb://localhost:9906/",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
+			}
 		}
 	},
 	"connection-types": {
 		"dev": {
-			"name": "Разработка",
+			"name": "Development",
 			"color": "255,255,255",
-			"description": "База данных для разработки",
+			"description": "Regular development database",
 			"auto-commit": true,
 			"confirm-execute": false,
 			"confirm-data-change": false,

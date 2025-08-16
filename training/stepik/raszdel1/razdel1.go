@@ -1,6 +1,7 @@
 package raszdel1
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/shopspring/decimal"
@@ -29,11 +30,20 @@ func Euclid(a, b float64) bool {
 		d2 = decimal.NewFromFloat(a)
 	}
 	d3 = d1.Mod(d2)
+	fmt.Println("d3 остаток от деления:", d3)
+	if d3.Equal(decimal.NewFromInt(0)) {
+		return true
+	}
+
 	n1 := d1.Div(d2).Truncate(9)
 	n1 = n1.Sub(n1.Floor())
+	fmt.Println("n1 пропорциональный остаток от деления:", n1)
+
 	n2 := d2.Div(d3).Truncate(9)
 	n2 = n2.Sub(n2.Floor())
-	return !n1.Equal(n2)
+	fmt.Println("n2 пропорциональный остаток от следующего деления:", n2)
+
+	return n1.Equal(n2)
 }
 
 // 3
@@ -44,8 +54,8 @@ func Gaus(n int) int {
 	return n * (n + 1) / 2
 }
 
-// Сумма подряд идущих нечётных чисел всегда является квадратом числа
-// (2n-1) = n^2
+// Сумма подряд идущих нечётных чисел всегда является квадратом их количества
+// n(count) = n^2
 // 1 = 1 = 1
 // 3 = 2 = 4
 // 5 = 3 = 9
@@ -53,8 +63,12 @@ func Gaus(n int) int {
 // 9 = 5 = 25
 // 11 = 6 = 36
 
-func SquareOfTheNumber(n int) int {
-	return (n + 1) / 2
+func SquareOfTheNumber(nList ...int) float64 {
+	var n int
+	for _, v := range nList {
+		n += v
+	}
+	return math.Sqrt(float64(n))
 }
 
 // Распределительный закон
