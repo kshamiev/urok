@@ -30,13 +30,19 @@ func Euclid(a, b float64) bool {
 	}
 	for {
 		d3 = d1.Mod(d2)
-		// fmt.Println("d3 остаток от деления:", d1, d2, d3)
+		// fmt.Println("d3 остаток от деления:", d1, d2, d3, d1.Div(d2))
 		if d3.Equal(decimal.NewFromInt(0)) {
 			return true
 		}
-		if d3.LessThan(decimal.NewFromInt(1)) {
-			return false // дошли до конца деления
+
+		n1 := d1.Div(d2).Truncate(9)
+		n1 = n1.Sub(n1.Floor())
+		n2 := d2.Div(d3).Truncate(9)
+		n2 = n2.Sub(n2.Floor())
+		if n1.Equal(n2) {
+			return false // пары чисел бесконечно пропорциональны
 		}
+
 		d1 = d2
 		d2 = d3
 	}

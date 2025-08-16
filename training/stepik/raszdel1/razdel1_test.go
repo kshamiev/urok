@@ -12,7 +12,9 @@ func TestPythagoras(t *testing.T) {
 }
 
 func TestEuclid(t *testing.T) {
-	c := Euclid(8, 5)
+	var c bool
+
+	c = Euclid(8, 5)
 	t.Log(c)
 
 	c = Euclid(53, 21)
@@ -21,7 +23,10 @@ func TestEuclid(t *testing.T) {
 	c = Euclid(math.Sqrt(2), 1)
 	t.Log(c)
 
-	c = Euclid(2.5, 1)
+	c = Euclid(math.Sqrt(3), 1)
+	t.Log(c)
+
+	c = Euclid(2.6, 1)
 	t.Log(c)
 
 	c = Euclid(24, 6)
