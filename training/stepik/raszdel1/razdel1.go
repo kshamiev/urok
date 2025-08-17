@@ -17,7 +17,14 @@ func Pythagoras(a, b int) (c float64) {
 
 // 2
 // Геометрический алгоритм Евклида
-// Соизмеримость и не соизмеримость отрезков
+// Соизмеримость и не соизмеримость отрезков.
+//
+// Я остановился на том что все иррациональные числа не соизмеримы.
+//
+// Число π (Пи): π = 3,1415926535….
+// Число Эйлера (e): e = 2,7182818284….
+// Золотое сечение (φ): φ = 1,6180339887….
+//
 
 func Euclid(a, b float64) bool {
 	var d1, d2, d3 decimal.Decimal
@@ -30,18 +37,21 @@ func Euclid(a, b float64) bool {
 	}
 	for {
 		d3 = d1.Mod(d2)
-		// fmt.Println("d3 остаток от деления:", d1, d2, d3, d1.Div(d2))
+		// fmt.Println("d3 остаток от деления:", d1, d2, d3)
 		if d3.Equal(decimal.NewFromInt(0)) {
 			return true
 		}
 
-		n1 := d1.Div(d2).Truncate(9)
-		n1 = n1.Sub(n1.Floor())
-		n2 := d2.Div(d3).Truncate(9)
-		n2 = n2.Sub(n2.Floor())
-		if n1.Equal(n2) {
+		if d3.NumDigits() > 9 {
 			return false // пары чисел бесконечно пропорциональны
 		}
+		// n1 := d1.Div(d2).Truncate(9)
+		// n1 = n1.Sub(n1.Floor())
+		// n2 := d2.Div(d3).Truncate(9)
+		// n2 = n2.Sub(n2.Floor())
+		// if n1.Equal(n2) {
+		// 	return false // пары чисел бесконечно пропорциональны
+		// }
 
 		d1 = d2
 		d2 = d3
