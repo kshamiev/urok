@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-// площадь
+// Площадь
 // S - площадь a - длина b - ширина
 
 func square(a, b int) int {
@@ -12,7 +12,7 @@ func square(a, b int) int {
 	return S
 }
 
-// периметр
+// Периметр
 // P - периметр a - длина b - ширина
 
 func perimeter(a, b int) int {
@@ -20,7 +20,7 @@ func perimeter(a, b int) int {
 	return P
 }
 
-// движение
+// Движение
 // S - путь v - скорость t - время
 
 func motion(v, t int) int {
@@ -46,7 +46,7 @@ func parallelepipedAll1(a, b, h int) int {
 
 // w угол наклона C к основанию A и B
 
-func parallelepipedAll2(a, b, c int, w float64) int {
-	V := a * b * c * int(math.Sin(w))
+func parallelepipedAll2(a, b, c, w float64) float64 {
+	V := a * b * c * math.Sin(w)
 	return V
 }
